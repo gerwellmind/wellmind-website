@@ -1685,7 +1685,7 @@ function homeView() {
   const contCard = cont ? (() => { const [j, c] = cont, pr = progressOf(j, c); return `<a class="quest" href="#${rid(j, c.n)}" style="--c:${c.hue}"><div class="orb" style="background:radial-gradient(circle at 35% 30%,#fff,${c.hue} 55%,#1d3a32);font-size:24px">${c.glyph}</div><div><div class="eyebrow">${pr.got ? 'Continue your journey' : 'Next on your journey'}</div><h3>${esc(c.title)}</h3><p>${JOURNEYS[j].title}${pr.got ? ` · ${pr.got} of ${pr.tot} prompts` : ''}</p></div></a>`; })() : '';
   const skyId = U.sky === 'uy' ? 'uy' : 'ew', J = JOURNEYS[skyId], lit = J.list.filter((c) => isLit(skyId, c.n)).length;
   return page('home', `${hero(`${greeting()}${name ? ', ' + esc(name) : ''}`, 'Your <em>Well Mind</em>', 'Space to notice. Knowledge to use. A step that fits.')}
-  <div class="levelbar" style="margin:-6px 2px 18px"><span class="pill">Level ${lv.n} · <b>${lv.name}</b></span><div class="track"><div class="fill" style="width:${Math.round(lv.pct * 100)}%"></div></div><span class="small muted">${lv.next ? `${lv.next[0] - lv.sp} ✦ to ${lv.next[1]}` : 'Every star lit'}</span></div>
+  <div class="levelbar" style="margin:-6px 2px 18px"><span class="pill"><b>Level ${lv.n}</b></span><div class="track"><div class="fill" style="width:${Math.round(lv.pct * 100)}%"></div></div><span class="small muted">${lv.next ? `${lv.next[0] - lv.sp} ✦ to Level ${lv.n + 1}` : 'Top level reached'}</span></div>
   <div class="section-h" style="margin-top:6px"><h2>Today’s quests</h2><span class="small muted">${pretty(d, { weekday: 'long', day: 'numeric', month: 'long' })}</span></div>
   <div class="quests">${quests.join('')}${contCard}</div>
   ${!checkinIsDue() && onboarded() ? `<p class="small muted" style="margin:10px 4px 0">Next weekly check-in: ${pretty(checkinDue(), { weekday: 'long', day: 'numeric', month: 'short' })}.</p>` : ''}
@@ -2030,7 +2030,7 @@ function shareView() {
 function meView() {
   const lv = level(), lit = Object.keys(U.done).length;
   const cards = (j) => JOURNEYS[j].list.map((c) => isLit(j, c.n) ? `<button class="cc got" style="--c:${c.hue}" data-act="reveal" data-j="${j}" data-n="${c.n}"><span class="g">${c.glyph}</span>${pad(c.n)}</button>` : `<a class="cc" href="#${rid(j, c.n)}" aria-label="${esc(c.title)}, not yet lit"><span class="g">${c.glyph}</span>${pad(c.n)}</a>`).join('');
-  return page('me', `${hero('This journal belongs to', firstName() ? esc(firstName()) : 'Me', `Level ${lv.n} · ${lv.name} · ${lv.sp} sparks · ${lit} star${lit === 1 ? '' : 's'} lit`)}
+  return page('me', `${hero('This journal belongs to', firstName() ? esc(firstName()) : 'Me', `Level ${lv.n} · ${lv.sp} sparks · ${lit} star${lit === 1 ? '' : 's'} lit`)}
   <div class="section-h"><h2>Insight cards</h2></div><p class="small muted" style="margin:-6px 2px 8px">Everyday Wellbeing</p><div class="collection">${cards('ew')}</div><p class="small muted" style="margin:14px 2px 8px">Understanding Yourself</p><div class="collection">${cards('uy')}</div>
   <div class="section-h"><h2>My journal</h2></div>
   <div class="list"><a class="item" href="#profile"><span class="ic">◎</span><span><b>Profile, goals & targets</b><small>${GOALS[profile().goal]?.[0] || 'Set your goal'}</small></span><span class="go">›</span></a>
