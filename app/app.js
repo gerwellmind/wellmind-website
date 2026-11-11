@@ -286,7 +286,7 @@ function targetProposal() {
   return targetsDiffer(cur.fields, t) ? t : null;
 }
 function macroBars(date = today(), compact = false) {
-  const totals = foodTotals(date), targets = currentTargets(date);
+  const totals = dayTotals(date), targets = currentTargets(date);
   return `<div class="macro-bars ${compact ? 'compact' : ''}">${['protein', 'carbs', 'fat']
     .map((k) => {
       const v = totals[k], t = upNum(targets[k]);
@@ -297,7 +297,7 @@ function macroBars(date = today(), compact = false) {
     .join('')}</div>`;
 }
 function calorieRing(date = today()) {
-  const totals = foodTotals(date), target = upNum(currentTargets(date).calories);
+  const totals = dayTotals(date), target = upNum(currentTargets(date).calories);
   const eaten = Math.round(totals.calories.value), burned = activityCalories(date);
   const remaining = target === null ? null : target - eaten + burned;
   const pct = target ? Math.min(1, eaten / (target + burned)) : 0;
@@ -448,14 +448,14 @@ function periodSummary(end, days = 7) {
   const dailies = dates.map((d) => state.entries[`daily:${d}`]?.fields || {});
   const pick = (k) => dailies.map((f) => upNum(f[k])).filter((v) => v !== null);
   const steps = pick('steps'), sleep = pick('sleep'), mood = pick('mood'), energy = pick('energy');
-  const foodDays = dates.filter((d) => foodItems(d).length);
-  const cal = foodDays.map((d) => foodTotals(d).calories.value), prot = foodDays.map((d) => foodTotals(d).protein.value);
+  const foodDays = dates.filter((d) => dayTotals(d).calories.count);
+  const cal = foodDays.map((d) => dayTotals(d).calories.value), prot = dates.map((d) => dayTotals(d).protein).filter((t) => t.count).map((t) => t.value);
   let onTarget = 0, targetDays = 0;
   for (const d of foodDays) {
     const t = upNum(currentTargets(d).calories);
     if (t) {
       targetDays++;
-      if (Math.abs(foodTotals(d).calories.value - t) <= t * 0.1) onTarget++;
+      if (Math.abs(dayTotals(d).calories.value - t) <= t * 0.1) onTarget++;
     }
   }
   const acts = dates.flatMap((d) => activityItems(d).map((a) => ({ ...a, date: d })));
@@ -605,7 +605,7 @@ function homeView() {
   const banner = due || draft
     ? `<a class="checkin-banner due" href="#checkin">${I('calendar')}<span><strong>${draft ? 'Finish your weekly check-in' : 'Your weekly check-in is ready'}</strong><small>About two minutes. Your logged days fill in the numbers.</small></span>${I('arrow')}</a>`
     : `<div class="checkin-banner">${I('calendar')}<span><strong>Next check-in: ${pretty(checkinDue(), { weekday: 'long', day: 'numeric', month: 'short' })}</strong><small>No need to do anything until then.</small></span></div>`;
-  return `<div class="page-heading home-heading"><div><div class="eyebrow">${I('sun')} ${pretty(today(), { weekday: 'long', day: 'numeric', month: 'long' })}</div><h1>${nowGreeting()}${p.name ? ', ' + esc(p.name) : ''}.</h1><p class="subtitle">Today first, then the bigger picture.</p></div></div>${banner}${guideCard()}${homeExerciseCard()}${proposal ? `<a class="checkin-banner" href="#profile">${I('flag')}<span><strong>Updated targets suggested</strong><small>Your profile changed. Review them before anything changes.</small></span>${I('arrow')}</a>` : ''}<div class="dash-grid"><a class="card card-pad dash-card dash-food" href="#food"><div class="dash-head"><h2>${I('food')} Today’s food</h2><span class="link-btn">Log food ${I('arrow')}</span></div>${calorieRing(today())}${macroBars(today(), true)}</a><a class="card card-pad dash-card" href="#move"><div class="dash-head"><h2>${I('activity')} Today’s activity</h2><span class="link-btn">Log activity ${I('arrow')}</span></div><div class="dash-stats"><div><strong>${steps === null ? '—' : upFmt(steps)}</strong><span>steps${stepsT ? ` of ${upFmt(stepsT)}` : ''}</span>${stepsT && steps !== null ? `<div class="bar"><i style="width:${Math.min(100, Math.round((steps / stepsT) * 100))}%"></i></div>` : ''}</div><div><strong>${minutes}</strong><span>active minutes</span></div><div><strong>${acts.length}</strong><span>${acts.length === 1 ? 'activity' : 'activities'}</span></div></div>${acts.length ? `<ul class="dash-list">${acts.slice(0, 3).map((a) => `<li>${esc(activityLabel(a))}</li>`).join('')}</ul>` : '<p class="helper-note">Nothing logged yet today.</p>'}</a><div class="card card-pad dash-card"><div class="dash-head"><h2>${I('flag')} Your goal</h2><a class="link-btn" href="#profile">Edit ${I('arrow')}</a></div><p class="dash-goal">${esc(GOALS[p.goal]?.[0] || 'Not chosen yet')}</p>${p.obstacle ? `<p class="helper-note">Working around: ${esc(p.obstacle)}</p>` : ''}${reviews('complete')[0]?.fields.priority ? `<p><strong>This week’s priority:</strong> ${esc(reviews('complete')[0].fields.priority)}</p>` : ''}${levelLine()}</div><a class="card card-pad dash-card" href="#progress"><div class="dash-head"><h2>${I('calendar')} Last 7 days</h2><span class="link-btn">Progress ${I('arrow')}</span></div><div class="dash-stats"><div><strong>${week.activeDays}</strong><span>active days${upNum(p.activeDaysTarget) ? ` of ${p.activeDaysTarget}` : ''}</span></div><div><strong>${week.foodDays}</strong><span>days food logged</span></div><div><strong>${week.sleep === null ? '—' : upFmt(week.sleep, 1)}</strong><span>avg sleep (h)</span></div></div>${recentWeightLine()}</a></div><div class="dash-links"><a class="btn secondary" href="#today">${I('sun')}Daily journal</a><a class="btn secondary" href="#explore">${I('book')}Learn</a><a class="btn secondary" href="#plan">${I('flag')}Weekly plan</a><a class="btn secondary" href="#exercise">${I('activity')}Pain Solution programme</a><a class="btn secondary mobile-only" href="#progress">${I('chart')}Progress</a><a class="btn secondary mobile-only" href="#journal">${I('journal')}My journal</a><a class="btn secondary" href="#share">${I('mail')}Send my journal to Ger</a></div><p class="feedback-line">Trying out the online journal? Tell Ger what works and what doesn’t: <a class="text-link" href="mailto:ger@wellmind.ie?subject=Online%20journal%20feedback">ger@wellmind.ie</a></p>${support()}`;
+  return `<div class="page-heading home-heading"><div><div class="eyebrow">${I('sun')} ${pretty(today(), { weekday: 'long', day: 'numeric', month: 'long' })}</div><h1>${nowGreeting()}${p.name ? ', ' + esc(p.name) : ''}.</h1><p class="subtitle">Today first, then the bigger picture.</p></div></div>${banner}${guideCard()}${homeExerciseCard()}${proposal ? `<a class="checkin-banner" href="#profile">${I('flag')}<span><strong>Updated targets suggested</strong><small>Your profile changed. Review them before anything changes.</small></span>${I('arrow')}</a>` : ''}<div class="dash-grid"><a class="card card-pad dash-card dash-food" href="#food"><div class="dash-head"><h2>${I('food')} Today’s food</h2><span class="link-btn">${dayHasFood(today()) ? 'Update totals' : 'Add totals'} ${I('arrow')}</span></div>${calorieRing(today())}${macroBars(today(), true)}</a><a class="card card-pad dash-card" href="#move"><div class="dash-head"><h2>${I('activity')} Today’s activity</h2><span class="link-btn">Log activity ${I('arrow')}</span></div><div class="dash-stats"><div><strong>${steps === null ? '—' : upFmt(steps)}</strong><span>steps${stepsT ? ` of ${upFmt(stepsT)}` : ''}</span>${stepsT && steps !== null ? `<div class="bar"><i style="width:${Math.min(100, Math.round((steps / stepsT) * 100))}%"></i></div>` : ''}</div><div><strong>${minutes}</strong><span>active minutes</span></div><div><strong>${acts.length}</strong><span>${acts.length === 1 ? 'activity' : 'activities'}</span></div></div>${acts.length ? `<ul class="dash-list">${acts.slice(0, 3).map((a) => `<li>${esc(activityLabel(a))}</li>`).join('')}</ul>` : '<p class="helper-note">Nothing logged yet today.</p>'}</a><div class="card card-pad dash-card"><div class="dash-head"><h2>${I('flag')} Your goal</h2><a class="link-btn" href="#profile">Edit ${I('arrow')}</a></div><p class="dash-goal">${esc(GOALS[p.goal]?.[0] || 'Not chosen yet')}</p>${p.obstacle ? `<p class="helper-note">Working around: ${esc(p.obstacle)}</p>` : ''}${reviews('complete')[0]?.fields.priority ? `<p><strong>This week’s priority:</strong> ${esc(reviews('complete')[0].fields.priority)}</p>` : ''}${levelLine()}</div><a class="card card-pad dash-card" href="#progress"><div class="dash-head"><h2>${I('calendar')} Last 7 days</h2><span class="link-btn">Progress ${I('arrow')}</span></div><div class="dash-stats"><div><strong>${week.activeDays}</strong><span>active days${upNum(p.activeDaysTarget) ? ` of ${p.activeDaysTarget}` : ''}</span></div><div><strong>${week.foodDays}</strong><span>days food logged</span></div><div><strong>${week.sleep === null ? '—' : upFmt(week.sleep, 1)}</strong><span>avg sleep (h)</span></div></div>${recentWeightLine()}</a></div><div class="dash-links"><a class="btn secondary" href="#today">${I('sun')}Daily journal</a><a class="btn secondary" href="#explore">${I('book')}Learn</a><a class="btn secondary" href="#plan">${I('flag')}Weekly plan</a><a class="btn secondary" href="#exercise">${I('activity')}Pain Solution programme</a><a class="btn secondary mobile-only" href="#progress">${I('chart')}Progress</a><a class="btn secondary mobile-only" href="#journal">${I('journal')}My journal</a><a class="btn secondary" href="#share">${I('mail')}Send my journal to Ger</a></div><p class="feedback-line">Trying out the online journal? Tell Ger what works and what doesn’t: <a class="text-link" href="mailto:ger@wellmind.ie?subject=Online%20journal%20feedback">ger@wellmind.ie</a></p>${support()}`;
 }
 function recentWeightLine() {
   const pts = weightSeries();
@@ -665,6 +665,7 @@ function labelFor(k) {
 }
 const UPGRADE_BOUNDS = {
   profile: { startWeight: [20, 400], age: [10, 120], height: [100, 250], weight: [20, 400], factor: [1.4, 2], stepsTarget: [0, 100000], activeDaysTarget: [0, 7], strengthTarget: [0, 14], minutesTarget: [0, 3000] },
+  daily: { dayKcal: [0, 30000], dayProtein: [0, 2000], dayCarbs: [0, 3000], dayFat: [0, 1000] },
   review: { weight: [20, 400], wellbeing: [0, 10], mood: [0, 10], energy: [0, 10], stepsAvg: [0, 100000], sleepAvg: [0, 24] },
 };
 function upgradeFieldOk(e, k, v) {
@@ -704,6 +705,7 @@ function bindUpgrade() {
   bindFdFields(document);
   bindMove();
   bindShare();
+  bindFoodTotals();
   bindExercise();
   const manual = document.querySelector('#ob-manual');
   manual?.addEventListener('change', () => {
@@ -762,9 +764,9 @@ function upgradeExtraAction(name, el) {
 
 // Daily journal: a compact link to the dedicated Food and Movement pages, so nothing is entered twice.
 function todayFoodSummary() {
-  const acts = activityItems(currentDate), items = foodItems(currentDate);
+  const acts = activityItems(currentDate), hasFood = dayHasFood(currentDate);
   const linkDate = currentDate === today() ? '' : ` data-date="${currentDate}"`;
-  return `<div class="section-title"><div><div class="eyebrow">Alongside your daily check-in</div><h2>Food & activity for ${currentDate === today() ? 'today' : pretty(currentDate, { day: 'numeric', month: 'short' })}</h2></div></div><div class="dash-grid two"><a class="card card-pad dash-card" href="#food"${linkDate}><div class="dash-head"><h3>${I('food')} Food</h3><span class="link-btn">${items.length ? 'Open food diary' : 'Log food'} ${I('arrow')}</span></div>${items.length ? calorieRing(currentDate) + macroBars(currentDate, true) : '<p class="helper-note">Nothing logged for this date.</p>'}</a><a class="card card-pad dash-card" href="#move"${linkDate}><div class="dash-head"><h3>${I('activity')} Activity</h3><span class="link-btn">${acts.length ? 'Open activity' : 'Log activity'} ${I('arrow')}</span></div>${acts.length ? `<ul class="dash-list">${acts.map((a) => `<li>${esc(activityLabel(a))}</li>`).join('')}</ul>` : '<p class="helper-note">Nothing logged for this date.</p>'}</a></div>`;
+  return `<div class="section-title"><div><div class="eyebrow">Alongside your daily check-in</div><h2>Food & activity for ${currentDate === today() ? 'today' : pretty(currentDate, { day: 'numeric', month: 'short' })}</h2></div></div><div class="dash-grid two"><a class="card card-pad dash-card" href="#food"${linkDate}><div class="dash-head"><h3>${I('food')} Food</h3><span class="link-btn">${hasFood ? 'Open food totals' : 'Add food totals'} ${I('arrow')}</span></div>${hasFood ? calorieRing(currentDate) + macroBars(currentDate, true) : '<p class="helper-note">Nothing logged for this date.</p>'}</a><a class="card card-pad dash-card" href="#move"${linkDate}><div class="dash-head"><h3>${I('activity')} Activity</h3><span class="link-btn">${acts.length ? 'Open activity' : 'Log activity'} ${I('arrow')}</span></div>${acts.length ? `<ul class="dash-list">${acts.map((a) => `<li>${esc(activityLabel(a))}</li>`).join('')}</ul>` : '<p class="helper-note">Nothing logged for this date.</p>'}</a></div>`;
 }
 
 const MOBILE_LABELS = { home: 'Home', today: 'Journal', food: 'Food', move: 'Move', checkin: 'Check-in' };
@@ -1024,7 +1026,7 @@ function foodHistoryHtml() {
   });
   return `<div class="table-wrap"><table class="mini-table"><thead><tr><th>Day</th><th>kcal</th><th>Protein</th><th>Carbs</th><th>Fat</th></tr></thead><tbody>${rows.join('')}</tbody></table></div><p class="helper-note">“+?” means at least one food had that value missing.</p>`;
 }
-function foodView() {
+function foodLogView() {
   currentRecord = null;
   const items = foodItems(currentDate), isToday = currentDate === today();
   const groups = MEALS.map((m) => [m, items.filter((f) => mealOf(f) === m)]);
@@ -1542,7 +1544,7 @@ async function importPainSolution(ev) {
 const LEVEL_NAMES = ['Starting out', 'Showing up', 'Finding a rhythm', 'Building habits', 'Steady', 'Learning what works', 'Adapting', 'Consistent', 'Resilient', 'Self-led', 'Sustaining', 'Mentor to yourself'];
 function weekCriteria(start) {
   const days = Array.from({ length: 7 }, (_, i) => shift(start, i));
-  const logged = days.filter((d) => state.entries[`daily:${d}`] || foodItems(d).length || activityItems(d).length).length;
+  const logged = days.filter((d) => state.entries[`daily:${d}`] || dayHasFood(d) || activityItems(d).length).length;
   const moved = days.filter((d) => activityItems(d).length || upNum(state.entries[`daily:${d}`]?.fields.steps)).length;
   const learned = Object.values(state.entries).some((e) => /^(page\d+|snapshot|pause|body|weekly)$/.test(e.kind) && e.date >= days[0] && e.date <= days[6]);
   const reviewed = reviews('complete').some((r) => r.fields.completedOn >= days[0] && r.fields.completedOn <= days[6]);
@@ -1580,7 +1582,7 @@ function levelCard() {
 const GUIDE = [
   { key: 'profile', kind: 'auto', title: 'Set up your profile', blurb: 'Your goal, targets and what matters to you.', link: 'profile', icon: 'person' },
   { key: 'daily', kind: 'auto', title: 'Do your first daily check-in', blurb: 'Sleep, mood and energy in under a minute.', link: 'today', icon: 'sun' },
-  { key: 'food', kind: 'auto', title: 'Log a meal or snack', blurb: 'Search, scan or type in anything you ate today.', link: 'food', icon: 'food' },
+  { key: 'food', kind: 'auto', title: 'Add your food totals', blurb: 'Copy today’s totals from MyFitnessPal or your food app — a few seconds.', link: 'food', icon: 'food' },
   { key: 'move', kind: 'auto', title: 'Record some movement', blurb: 'Steps, a walk, or any activity counts.', link: 'move', icon: 'activity' },
   { key: 'sleep', kind: 'learn', title: 'Sleep & recovery', blurb: 'Notice your sleep and choose one small evening change.', link: 'read/8', from: 8, to: 9, legacy: 0, icon: 'moon' },
   { key: 'selfcare', kind: 'learn', title: 'Everyday self-care', blurb: 'Find a smaller, kinder version of an ordinary day.', link: 'read/10', from: 10, to: 13, legacy: 1, icon: 'heart' },
@@ -1606,7 +1608,7 @@ function guideAuto(key) {
   const entries = Object.values(state.entries);
   if (key === 'profile') return onboarded();
   if (key === 'daily') return entries.some((e) => e.kind === 'daily');
-  if (key === 'food') return entries.some((e) => e.kind === 'food');
+  if (key === 'food') return entries.some((e) => e.kind === 'food' || (e.kind === 'daily' && Object.values(DAY_KEYS).some((k) => upNum(e.fields[k]) !== null)));
   if (key === 'move') return entries.some((e) => e.kind === 'activity' || (e.kind === 'daily' && upNum(e.fields.steps) !== null));
   if (key === 'programme') return !!exerciseRecord()?.fields.programme;
   if (key === 'checkin') return reviews('complete').length > 0;
@@ -1699,7 +1701,7 @@ const SHARE_EMAIL = 'ger@wellmind.ie';
 const SHARE_PARTS = [
   ['overview', 'My goal, targets and exercise programme', true],
   ['daily', 'Daily check-ins (sleep, mood, energy, steps and notes)', true],
-  ['food', 'Food: daily totals and what I ate', true],
+  ['food', 'Food: daily calories, protein, carbs and fat', true],
   ['move', 'Movement and exercise sessions', true],
   ['checkins', 'Weekly check-ins', true],
   ['reflections', 'Written reflections from the journal pages and tools', false],
@@ -1748,15 +1750,15 @@ function shareText() {
     }
   }
   if (o.parts.food) {
-    const rows = dates.filter((d) => foodItems(d).length);
-    L.push('', 'FOOD');
+    const rows = dates.filter((d) => dayHasFood(d));
+    L.push('', 'FOOD (daily totals)');
     if (!rows.length) L.push('None recorded.');
     for (const d of rows) {
-      const t = foodTotals(d), tg = currentTargets(d);
-      const v = (k) => (t[k].value === null ? '?' : upFmt(t[k].value));
+      const t = dayTotals(d), tg = currentTargets(d);
+      const v = (k) => (t[k].count ? upFmt(t[k].value) : '—');
       L.push(`${pretty(d, { weekday: 'short', day: 'numeric', month: 'short' })}: ${v('calories')} kcal${tg.calories ? ` (target ${tg.calories})` : ''} · protein ${v('protein')} g · carbs ${v('carbs')} g · fat ${v('fat')} g`);
       const byMeal = {};
-      for (const f of foodItems(d)) (byMeal[f.meal || 'Meal'] ||= []).push(`${f.name} ${f.quantity}${f.basis === '100g' ? ' g' : f.basis === '100ml' ? ' ml' : ' serving(s)'}`);
+      if (!dayManualAny(d)) for (const f of foodItems(d)) (byMeal[f.meal || 'Meal'] ||= []).push(`${f.name} ${f.quantity}${f.basis === '100g' ? ' g' : f.basis === '100ml' ? ' ml' : ' serving(s)'}`);
       for (const [m, list] of Object.entries(byMeal)) L.push(`   ${m}: ${list.join(', ')}`);
     }
   }
@@ -1835,6 +1837,69 @@ function bindShare() {
   document.querySelectorAll('[data-share="days"]').forEach((el) => el.addEventListener('change', () => { shareState().days = el.value; renderPreservingScroll(); }));
   document.querySelectorAll('[data-share="part"]').forEach((el) => el.addEventListener('change', () => { shareState().parts[el.value] = el.checked; refresh(); }));
   document.querySelector('[data-share="note"]')?.addEventListener('input', (e) => { shareState().note = e.target.value.slice(0, 2000); refresh(); });
+}
+
+
+// ===================== Food totals (replaces the food log, Nov 2026) =====================
+// Clients log meals in MyFitnessPal or any food app and copy the day's totals here.
+// Totals live on the daily record (new keys, so older "previous-day" calories/protein stay as recorded).
+// Earlier food-log entries are kept and still count for days without typed totals.
+const DAY_KEYS = { calories: 'dayKcal', protein: 'dayProtein', carbs: 'dayCarbs', fat: 'dayFat' };
+const DAY_LIMITS = { calories: 30000, protein: 2000, carbs: 3000, fat: 1000 };
+function dayManual(d) {
+  const f = state.entries[`daily:${d}`]?.fields || {};
+  return Object.fromEntries(Object.entries(DAY_KEYS).map(([k, key]) => [k, upNum(f[key])]));
+}
+function dayManualAny(d) {
+  return Object.values(dayManual(d)).some((v) => v !== null);
+}
+function dayHasFood(d) {
+  return dayManualAny(d) || foodItems(d).length > 0;
+}
+function dayTotals(d) {
+  if (dayManualAny(d)) {
+    const m = dayManual(d);
+    return Object.fromEntries(Object.keys(DAY_KEYS).map((k) => [k, { value: m[k] ?? 0, count: m[k] === null ? 0 : 1, missing: 0 }]));
+  }
+  const t = foodTotals(d), n = foodItems(d).length;
+  return Object.fromEntries(Object.keys(DAY_KEYS).map((k) => [k, t[k] ? { ...t[k], count: n ? t[k].count : 0 } : { value: 0, count: 0, missing: 0 }]));
+}
+function setDayTotal(date, k, v) {
+  const id = `daily:${date}`;
+  const rec = state.entries[id] || { id, kind: 'daily', date, title: 'Daily check-in', fields: { trackingBasis: 'today' } };
+  if (v === '') delete rec.fields[DAY_KEYS[k]];
+  else rec.fields[DAY_KEYS[k]] = v;
+  if (Object.entries(rec.fields).some(([key, x]) => key !== 'trackingBasis' && x !== '' && x !== 'false' && x !== '[]')) saveRecordObject(rec);
+  else {
+    delete state.entries[id];
+    persist();
+  }
+}
+function foodView() {
+  currentRecord = null;
+  const isToday = currentDate === today(), m = dayManual(currentDate), legacyItems = !dayManualAny(currentDate) ? foodItems(currentDate).length : 0;
+  const targets = targetRecord(currentDate), tg = currentTargets(currentDate);
+  const nav = `<div class="date-stepper"><button class="icon-btn" data-up="food-day" data-delta="-1" aria-label="Previous day">${I('back')}</button><strong>${isToday ? 'Today' : currentDate === shift(today(), -1) ? 'Yesterday' : pretty(currentDate, { weekday: 'short', day: 'numeric', month: 'short' })}</strong><button class="icon-btn" data-up="food-day" data-delta="1" aria-label="Next day" ${isToday ? 'disabled' : ''}>${I('arrow')}</button></div>`;
+  const box = (k, label, unit, step) => `<div class="field total-field"><label for="dt-${k}">${label}</label><div class="input-unit"><input id="dt-${k}" type="number" inputmode="decimal" min="0" max="${DAY_LIMITS[k]}" step="${step}" placeholder="${tg[k] ? 'target ' + tg[k] : '—'}" value="${m[k] ?? ''}" data-daytotal="${k}"><span>${unit}</span></div></div>`;
+  const rows = Array.from({ length: 10 }, (_, i) => shift(currentDate, -i)).map((d) => {
+    const t = dayTotals(d), g = currentTargets(d);
+    const cell = (k) => (t[k].count ? `${Math.round(t[k].value)}${g[k] ? `<small>/${g[k]}</small>` : ''}` : '—');
+    return `<tr class="${d === currentDate ? 'current' : ''}"><th><a href="#food" data-date="${d}">${pretty(d, { weekday: 'short', day: 'numeric', month: 'short' })}</a></th><td>${cell('calories')}</td><td>${cell('protein')}</td><td>${cell('carbs')}</td><td>${cell('fat')}</td></tr>`;
+  });
+  return `${heading('Food', 'Your food totals.', 'Log your meals in MyFitnessPal or any food app you like. Then add the day’s totals here — it takes a few seconds, and your targets, check-ins and progress use them.', true)}<div class="food-totals-layout"><section class="card card-pad food-top">${nav}${calorieRing(currentDate)}${macroBars(currentDate)}${targets ? '' : '<p class="notice">No daily targets yet. <a class="text-link" href="#profile">Set targets in your profile</a>.</p>'}</section><section class="card card-pad totals-card"><h2>${isToday ? 'Today’s' : 'This day’s'} totals</h2><p class="helper-note">From your food app — in MyFitnessPal, the <strong>Totals</strong> line at the end of the day’s diary. Fill in what you track; blank means not recorded.</p>${legacyItems ? `<div class="notice">You logged ${legacyItems} food${legacyItems > 1 ? 's' : ''} for this day in the earlier food diary, and those are counted. Typing totals here replaces them for this day.</div>` : ''}<div class="totals-grid">${box('calories', 'Calories', 'kcal', 1)}${box('protein', 'Protein', 'g', 0.1)}${box('carbs', 'Carbs', 'g', 0.1)}${box('fat', 'Fat', 'g', 0.1)}</div><p class="helper-note saved-note" aria-live="polite">${dayManualAny(currentDate) ? `${I('check')} Saved on this device.` : 'Saves as you type.'}</p></section></div><div class="food-bottom"><section class="card card-pad"><h2>Recent days</h2><div class="table-wrap"><table class="mini-table"><thead><tr><th>Day</th><th>kcal</th><th>Protein</th><th>Carbs</th><th>Fat</th></tr></thead><tbody>${rows.join('')}</tbody></table></div></section><section class="card card-pad"><h2>Your targets</h2>${tg.calories || tg.protein ? `<ul class="dash-list">${['calories', 'protein', 'carbs', 'fat'].filter((k) => tg[k]).map((k) => `<li>${nutritionNames[k]}: <strong>${tg[k]}${k === 'calories' ? ' kcal' : ' g'}</strong> a day</li>`).join('')}</ul>` : ''}<p class="helper-note">${targets ? `In use since ${pretty(targets.date)}${targets.fields.source === 'auto' ? ', calculated from your profile' : ', set by you'}.` : 'No targets set.'} <a class="text-link" href="#profile">Review targets</a></p><p class="helper-note">Estimates to guide you, not exact requirements. Exercise calories are only added when you enter an estimate for an activity yourself. No affiliation with MyFitnessPal.</p></section></div>`;
+}
+function bindFoodTotals() {
+  document.querySelectorAll('[data-daytotal]').forEach((el) =>
+    el.addEventListener('change', () => {
+      const k = el.dataset.daytotal, raw = el.value.trim(), v = raw === '' ? '' : Number(raw);
+      if (v !== '' && (!Number.isFinite(v) || v < 0 || v > DAY_LIMITS[k])) {
+        el.value = dayManual(currentDate)[k] ?? '';
+        return toast(`Please enter a number between 0 and ${DAY_LIMITS[k]}.`);
+      }
+      setDayTotal(currentDate, k, v === '' ? '' : String(Math.round(v * 10) / 10));
+      renderPreservingScroll();
+    })
+  );
 }
 
 let selectedDates={},state={version:1,entries:{}},storageError='',pages=[],currentDate=today(),currentRecord=null,searchTerm='',historyFilter='all',bodySide='front';

@@ -308,3 +308,15 @@ a.dash-card:hover{border-color:var(--green)}
 .share-parts{display:grid;gap:4px;margin-bottom:14px}
 .share-preview{width:100%;max-width:100%;display:block;min-height:320px;font:13px/1.5 ui-monospace,SFMono-Regular,Menlo,monospace;padding:12px;border:1px solid var(--border);border-radius:12px;background:var(--soft);color:inherit;resize:vertical;white-space:pre-wrap;box-sizing:border-box}
 @media (max-width:860px){.share-layout{grid-template-columns:minmax(0,1fr)}.share-preview{min-height:240px}}
+/* v5.4 food totals */
+.food-totals-layout{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:18px;align-items:start;margin-bottom:18px}
+.food-totals-layout .food-top{margin:0}
+.totals-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:12px 0 6px}
+.total-field label{display:block;font-weight:600;font-size:14px;margin-bottom:6px}
+.total-field .input-unit{display:flex;align-items:center;border:1px solid var(--border);border-radius:12px;background:var(--white);padding:0 12px}
+.total-field .input-unit input{border:0;background:transparent;font:inherit;font-size:20px;padding:12px 0;width:100%;min-width:0;outline:none;color:inherit}
+.total-field .input-unit:focus-within{border-color:var(--green);box-shadow:0 0 0 3px rgba(44,79,64,.12)}
+.total-field .input-unit span{color:var(--muted);font-size:13px;margin-left:6px}
+.saved-note{display:flex;gap:6px;align-items:center}
+@media (max-width:860px){.food-totals-layout{grid-template-columns:minmax(0,1fr)}}
+.total-field .input-unit span{position:static;transform:none;align-self:center;line-height:1}
