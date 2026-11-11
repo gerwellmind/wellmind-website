@@ -119,7 +119,7 @@ function legacyFoodView(){currentRecord=null;return heading('Food & everyday hab
 function portionPreview(){const unit=portionUnit();if(!unit||!(Number(foodDraft.quantity)>0))return 'Choose an amount to see calories and protein here.';const amount=portionAmount(),factor=amount/(unit==='serving'?1:100);return `${nutritionNumber(amount)} ${unit==='serving'?(amount===1?'serving':'servings'):unit} · `+nutritionKeys.map(k=>`${nutritionNames[k]}: ${foodDraft[k]===''?'unknown':nutritionNumber(Number(foodDraft[k])*factor)}${k==='calories'?' kcal':' g'}`).join(' · ');}
 function legacyFoodResultHtml(){return `${foodMessage?`<p class="notice">${esc(foodMessage)}</p>`:''}<div class="product-results">${foodResults.map((p,i)=>`<button class="product-result" data-product="${i}"><strong>${esc(p.name)}</strong><span>${esc(p.brand)}${p.code?` · ${esc(p.code)}`:''}</span><small>${p.calories===null?'Calories not supplied':`${p.calories} kcal per 100 g/ml`} · Check the label and units →</small></button>`).join('')}</div>`;}
 function legacyNormaliseProduct(p){const n=p.nutriments||{};const number=k=>n[k]!==undefined&&n[k]!==null&&n[k]!==''&&Number.isFinite(Number(n[k]))&&Number(n[k])>=0?Number(n[k]):null;return {name:String(p.product_name||p.product_name_en||p.generic_name||'Unnamed product').slice(0,180),brand:String(p.brands||'').slice(0,100),code:/^\d{8,14}$/.test(String(p.code))?String(p.code):'',calories:number('energy-kcal_100g')??(number('energy-kj_100g')!==null?number('energy-kj_100g')/4.184:null),protein:number('proteins_100g'),carbs:number('carbohydrates_100g'),fat:number('fat_100g')};}
-async function searchFood(query){query=String(query||'').trim();if(!query||query.length<2){foodMessage='Enter a product name or barcode.';updateFoodResults();return;}const now=Date.now();let last=lastFoodSearch;try{last=Math.max(last,Number(sessionStorage.getItem('wellmind.off.last')||0));}catch{}if(now-last<7000){foodMessage='Please wait a few seconds between product searches.';updateFoodResults();return;}lastFoodSearch=now;try{sessionStorage.setItem('wellmind.off.last',String(now));}catch{}foodQuery=query;foodBusy=true;foodMessage='Searching Open Food Facts…';foodResults=[];updateFoodResults();const requestDate=currentDate;foodAbort?.abort();const controller=new AbortController();foodAbort=controller;const timeout=setTimeout(()=>controller.abort(),15000);const barcode=query.replace(/[\s-]/g,'');const fields='code,product_name,product_name_en,brands,nutriments,nutrition_data_per,serving_size,serving_quantity,serving_quantity_unit,quantity,product_quantity_unit';const url=/^\d{8,14}$/.test(barcode)?`https://world.openfoodfacts.org/api/v3/product/${barcode}.json?fields=${encodeURIComponent(fields)}`:`https://world.openfoodfacts.org/cgi/search.pl?search_terms=${encodeURIComponent(query)}&search_simple=1&action=process&json=1&page_size=8&fields=${encodeURIComponent(fields)}`;try{const response=await fetch(url,{headers:{'X-User-Agent':'EverydayWellbeing/3.0 (https://www.wellmind.ie)'},signal:controller.signal,credentials:'omit'});if(!response.ok)throw Error(response.status===429?'Too many requests. Please wait a minute, or use the label boxes.':'Product lookup is temporarily unavailable. You can still enter the label below.');const data=await response.json();if(foodAbort!==controller||currentDate!==requestDate)return;foodResults=(data.product?[data.product]:data.products||[]).slice(0,8).map(normaliseProduct);foodMessage=foodResults.length?'Choose a product, then check the values and label units below.':'No matching product found. Enter its label below; nothing is added until you choose Add food.';}catch(error){if(foodAbort!==controller)return;foodMessage=error.name==='AbortError'?'The product search timed out. Try again later or enter the label below.':error.name==='TypeError'?'Open Food Facts is busy or can’t be reached just now. Wait a minute and try again, or add the food under “Enter manually”.':error.message;}finally{clearTimeout(timeout);if(foodAbort===controller){foodBusy=false;updateFoodResults();}}}
+async function searchFood(query){query=String(query||'').trim();if(!query||query.length<2){foodMessage='Enter a product name or barcode.';updateFoodResults();return;}const now=Date.now();let last=lastFoodSearch;try{last=Math.max(last,Number(sessionStorage.getItem('wellmind.off.last')||0));}catch{}if(now-last<7000){foodMessage='Please wait a few seconds between product searches.';updateFoodResults();return;}lastFoodSearch=now;try{sessionStorage.setItem('wellmind.off.last',String(now));}catch{}foodQuery=query;foodBusy=true;foodMessage='Searching Open Food Facts…';foodResults=[];updateFoodResults();const requestDate=currentDate;foodAbort?.abort();const controller=new AbortController();foodAbort=controller;const timeout=setTimeout(()=>controller.abort(),15000);const barcode=query.replace(/[\s-]/g,'');const fields='code,product_name,product_name_en,brands,nutriments,nutrition_data_per,serving_size,serving_quantity,serving_quantity_unit,quantity,product_quantity_unit';const isCode=/^\d{8,14}$/.test(barcode);const q=`fields=${encodeURIComponent(fields)}&app_name=WellMindJournal`;const urls=isCode?[`https://world.openfoodfacts.org/api/v3/product/${barcode}.json?${q}`]:['world','uk','ie'].map(h=>`https://${h}.openfoodfacts.org/cgi/search.pl?search_terms=${encodeURIComponent(query)}&search_simple=1&action=process&json=1&page_size=8&${q}`);const cacheKey='wellmind.off.q.'+query.toLowerCase();try{let data=null;try{data=JSON.parse(sessionStorage.getItem(cacheKey)||'null');}catch{}let lastErr=null;for(const url of data?[]:urls){try{const response=await fetch(url,{signal:controller.signal,credentials:'omit'});if(response.status===404&&isCode){data={};break;}if(!response.ok)throw Error(response.status===429?'Too many requests. Please wait a minute, or use the label boxes.':'Product lookup is temporarily unavailable. You can still enter the label below.');data=await response.json();break;}catch(err){if(err.name==='AbortError')throw err;lastErr=err;}}if(!data)throw lastErr||TypeError('Failed to fetch');if(!isCode&&(data.products||[]).length){try{sessionStorage.setItem(cacheKey,JSON.stringify({products:data.products.slice(0,8)}));}catch{}}if(foodAbort!==controller||currentDate!==requestDate)return;foodResults=(data.product?[data.product]:data.products||[]).slice(0,8).map(normaliseProduct);foodMessage=foodResults.length?'Choose a product, then check the values and label units below.':'No matching product found. Enter its label below; nothing is added until you choose Add food.';}catch(error){if(foodAbort!==controller)return;foodMessage=error.name==='AbortError'?'The product search timed out. Try again later or enter the label below.':error.name==='TypeError'?'Open Food Facts is busy or can’t be reached just now. Wait a minute and try again, or add the food under “Enter manually”.':error.message;}finally{clearTimeout(timeout);if(foodAbort===controller){foodBusy=false;updateFoodResults();}}}
 function updateFoodResults(){const el=document.querySelector('#food-results');if(el){el.innerHTML=foodResultHtml();el.querySelectorAll('[data-product]').forEach(b=>b.addEventListener('click',()=>selectProduct(Number(b.dataset.product))));}const b=document.querySelector('#food-search-form button[type=submit]');if(b){b.disabled=foodBusy;b.textContent=foodBusy?'Searching…':'Search';}}
 function legacySelectProduct(index){const p=foodResults[index];if(!p)return;foodDraft={name:p.name,basis:'',lookupPer100:true,quantity:'',meal:foodMealDefault(),source:'Open Food Facts',code:p.code,...Object.fromEntries(nutritionKeys.map(k=>[k,p[k]==null?'':String(Math.round(p[k]*100)/100)]))};fillFoodDraft();document.querySelector('#food-editor')?.scrollIntoView({behavior:'smooth',block:'start'});toast('Choose Grams or Millilitres, check the label values, and enter your amount.');}
 function fillFoodDraft(){document.querySelectorAll('[data-food]').forEach(el=>{if(el.dataset.food!=='portionUnit')el.value=foodDraft[el.dataset.food]??'';});updatePortionControls();}
@@ -163,6 +163,7 @@ function revisionAction(name){if(name==='apply-targets'){const m=targetEstimate(
 
 nutritionKeys.push('carbs', 'fat');
 iconPaths.home = '<path d="M3 11 12 3l9 8M5 9.5V21h5v-6h4v6h5V9.5"/>';
+iconPaths.mail = '<path d="M3 6h18v12H3zM3 7l9 6 9-6"/>';
 iconPaths.chart = '<path d="M4 20V10m6 10V4m6 16v-7m5 7H3"/>';
 Object.assign(nutritionNames, { carbs: 'Carbs', fat: 'Fat' });
 
@@ -317,10 +318,10 @@ function activityItems(date) {
 }
 
 // ---------- Onboarding ----------
-const OB_STEPS = ['About you', 'Your goal', 'What matters', 'Your targets'];
+const OB_STEPS = ['About you', 'Your goal', 'What matters', 'Your exercises', 'Your targets'];
 function obStep() {
   const s = Number(profile().onboardingStep || recordDrafts[profileRecord()?.id]?.fields.onboardingStep || 1);
-  return s >= 1 && s <= 4 ? s : 1;
+  return s >= 1 && s <= 5 ? s : 1;
 }
 function profileFields(part) {
   if (part === 1)
@@ -341,11 +342,12 @@ function onboardingView() {
     body = `<h1>Welcome${p.name ? ', ' + esc(p.name) : ''}.</h1><p class="subtitle">A few questions to set up your journal. You’ll only be asked once; you can change anything later in your profile.</p>${profileFields(1)}`;
   else if (step === 2) body = `<h1>What would you like to work towards?</h1><p class="subtitle">This sets your daily targets and what your dashboard shows first.</p>${profileFields(2)}`;
   else if (step === 3) body = `<h1>What’s in the way, and what do you carry?</h1><p class="subtitle">This helps your weekly check-in and goals fit real life.</p>${profileFields(3)}`;
+  else if (step === 4) body = `<h1>Your exercises.</h1><p class="subtitle">Pain Solution exercise programmes are part of your journal. Choose one, and your Home page shows your programme, your level and today’s session.</p>${exerciseChooser()}`;
   else {
     const t = autoTargets(p);
     body = `<h1>Your daily targets.</h1><p class="subtitle">${t.blocked ? 'You can set your own targets now or later.' : 'Calculated from your answers. Use them as a starting point.'}</p>${t.blocked ? `<p class="notice">${esc(t.blocked)}</p>` : `<div class="target-tiles">${['calories', 'protein', 'carbs', 'fat'].map((k) => `<div><span>${nutritionNames[k]}</span><strong>${upFmt(t[k])}</strong><small>${MACRO_UNITS[k]} / day</small></div>`).join('')}</div>${targetsExplain(t)}`}<label class="checkbox-row"><input type="checkbox" id="ob-manual" ${t.blocked ? 'checked' : ''}>I’d rather enter my own targets</label><div id="ob-manual-box" ${t.blocked ? '' : 'hidden'}>${manualTargetInputs(t.blocked ? currentTargets() : t)}</div><div class="notice warning small-print">Estimates for adults, not prescriptions. Seek individual advice with low weight, unintended weight loss, an eating-disorder history, kidney disease, diabetes medicines or a prescribed diet.</div>`;
   }
-  const nav = `<div class="ob-nav">${step > 1 ? `<button class="btn secondary" data-up="ob-back">${I('back')}Back</button>` : `<a class="link-btn" href="#settings">Moving from another device? Restore a backup</a>`}<button class="btn" data-up="${step < 4 ? 'ob-next' : 'ob-finish'}">${step < 4 ? 'Continue' : 'Go to my dashboard'}${I('arrow')}</button></div><p class="helper-note ob-saved">Your answers save as you type, so you can leave and return here.</p>`;
+  const nav = `<div class="ob-nav">${step > 1 ? `<button class="btn secondary" data-up="ob-back">${I('back')}Back</button>` : `<a class="link-btn" href="#settings">Moving from another device? Restore a backup</a>`}<button class="btn" data-up="${step < 5 ? 'ob-next' : 'ob-finish'}">${step < 5 ? 'Continue' : 'Go to my dashboard'}${I('arrow')}</button></div><p class="helper-note ob-saved">Your answers save as you type, so you can leave and return here.</p>`;
   return `<div class="onboarding">${progress}<section class="card card-pad ob-card">${body}${nav}</section></div>`;
 }
 function manualTargetInputs(values = {}) {
@@ -492,7 +494,7 @@ function checkinView() {
   if (!rec && !due && !param && !checkinView.early) {
     const last = reviews('complete')[0];
     currentRecord = null;
-    return `${heading('Weekly check-in', 'You’re up to date.', `Your next check-in opens on ${pretty(dueDate, { weekday: 'long', day: 'numeric', month: 'long' })}.`)}<section class="card card-pad">${last ? `<p>Last completed on <strong>${pretty(last.fields.completedOn)}</strong>${last.fields.priority ? ` · Priority: “${esc(last.fields.priority)}”` : ''}.</p>` : `<p>Your first check-in is seven days after you started (${pretty(p.onboardedAt || today())}).</p>`}<div class="button-row"><a class="btn secondary" href="#progress">See past check-ins</a>${!last || last.fields.completedOn !== today() ? '<button class="btn subtle" data-up="checkin-early">Do a check-in early</button>' : ''}</div></section>${summaryBlock(today(), 'So far this week')}`;
+    return `${heading('Weekly check-in', 'You’re up to date.', `Your next check-in opens on ${pretty(dueDate, { weekday: 'long', day: 'numeric', month: 'long' })}.`)}<section class="card card-pad">${last ? `<p>Last completed on <strong>${pretty(last.fields.completedOn)}</strong>${last.fields.priority ? ` · Priority: “${esc(last.fields.priority)}”` : ''}.</p>` : `<p>Your first check-in is seven days after you started (${pretty(p.onboardedAt || today())}).</p>`}<div class="button-row"><a class="btn secondary" href="#progress">See past check-ins</a><a class="btn secondary" href="#share">${I('mail')}Send to Ger</a>${!last || last.fields.completedOn !== today() ? '<button class="btn subtle" data-up="checkin-early">Do a check-in early</button>' : ''}</div></section>${summaryBlock(today(), 'So far this week')}`;
   }
   if (!rec) {
     const id = `review:${today()}`;
@@ -603,7 +605,7 @@ function homeView() {
   const banner = due || draft
     ? `<a class="checkin-banner due" href="#checkin">${I('calendar')}<span><strong>${draft ? 'Finish your weekly check-in' : 'Your weekly check-in is ready'}</strong><small>About two minutes. Your logged days fill in the numbers.</small></span>${I('arrow')}</a>`
     : `<div class="checkin-banner">${I('calendar')}<span><strong>Next check-in: ${pretty(checkinDue(), { weekday: 'long', day: 'numeric', month: 'short' })}</strong><small>No need to do anything until then.</small></span></div>`;
-  return `<div class="page-heading home-heading"><div><div class="eyebrow">${I('sun')} ${pretty(today(), { weekday: 'long', day: 'numeric', month: 'long' })}</div><h1>${nowGreeting()}${p.name ? ', ' + esc(p.name) : ''}.</h1><p class="subtitle">Today first, then the bigger picture.</p></div></div>${banner}${guideCard()}${proposal ? `<a class="checkin-banner" href="#profile">${I('flag')}<span><strong>Updated targets suggested</strong><small>Your profile changed. Review them before anything changes.</small></span>${I('arrow')}</a>` : ''}<div class="dash-grid"><a class="card card-pad dash-card dash-food" href="#food"><div class="dash-head"><h2>${I('food')} Today’s food</h2><span class="link-btn">Log food ${I('arrow')}</span></div>${calorieRing(today())}${macroBars(today(), true)}</a><a class="card card-pad dash-card" href="#move"><div class="dash-head"><h2>${I('activity')} Today’s activity</h2><span class="link-btn">Log activity ${I('arrow')}</span></div><div class="dash-stats"><div><strong>${steps === null ? '—' : upFmt(steps)}</strong><span>steps${stepsT ? ` of ${upFmt(stepsT)}` : ''}</span>${stepsT && steps !== null ? `<div class="bar"><i style="width:${Math.min(100, Math.round((steps / stepsT) * 100))}%"></i></div>` : ''}</div><div><strong>${minutes}</strong><span>active minutes</span></div><div><strong>${acts.length}</strong><span>${acts.length === 1 ? 'activity' : 'activities'}</span></div></div>${acts.length ? `<ul class="dash-list">${acts.slice(0, 3).map((a) => `<li>${esc(activityLabel(a))}</li>`).join('')}</ul>` : '<p class="helper-note">Nothing logged yet today.</p>'}${programmeTodayLine()}</a><div class="card card-pad dash-card"><div class="dash-head"><h2>${I('flag')} Your goal</h2><a class="link-btn" href="#profile">Edit ${I('arrow')}</a></div><p class="dash-goal">${esc(GOALS[p.goal]?.[0] || 'Not chosen yet')}</p>${p.obstacle ? `<p class="helper-note">Working around: ${esc(p.obstacle)}</p>` : ''}${reviews('complete')[0]?.fields.priority ? `<p><strong>This week’s priority:</strong> ${esc(reviews('complete')[0].fields.priority)}</p>` : ''}${levelLine()}</div><a class="card card-pad dash-card" href="#progress"><div class="dash-head"><h2>${I('calendar')} Last 7 days</h2><span class="link-btn">Progress ${I('arrow')}</span></div><div class="dash-stats"><div><strong>${week.activeDays}</strong><span>active days${upNum(p.activeDaysTarget) ? ` of ${p.activeDaysTarget}` : ''}</span></div><div><strong>${week.foodDays}</strong><span>days food logged</span></div><div><strong>${week.sleep === null ? '—' : upFmt(week.sleep, 1)}</strong><span>avg sleep (h)</span></div></div>${recentWeightLine()}</a></div><div class="dash-links"><a class="btn secondary" href="#today">${I('sun')}Daily journal</a><a class="btn secondary" href="#explore">${I('book')}Learn</a><a class="btn secondary" href="#plan">${I('flag')}Weekly plan</a><a class="btn secondary" href="#exercise">${I('activity')}Pain Solution programme</a><a class="btn secondary mobile-only" href="#progress">${I('chart')}Progress</a><a class="btn secondary mobile-only" href="#journal">${I('journal')}My journal</a></div><p class="feedback-line">Trying out the online journal? Tell Ger what works and what doesn’t: <a class="text-link" href="mailto:ger@wellmind.ie?subject=Online%20journal%20feedback">ger@wellmind.ie</a></p>${support()}`;
+  return `<div class="page-heading home-heading"><div><div class="eyebrow">${I('sun')} ${pretty(today(), { weekday: 'long', day: 'numeric', month: 'long' })}</div><h1>${nowGreeting()}${p.name ? ', ' + esc(p.name) : ''}.</h1><p class="subtitle">Today first, then the bigger picture.</p></div></div>${banner}${guideCard()}${homeExerciseCard()}${proposal ? `<a class="checkin-banner" href="#profile">${I('flag')}<span><strong>Updated targets suggested</strong><small>Your profile changed. Review them before anything changes.</small></span>${I('arrow')}</a>` : ''}<div class="dash-grid"><a class="card card-pad dash-card dash-food" href="#food"><div class="dash-head"><h2>${I('food')} Today’s food</h2><span class="link-btn">Log food ${I('arrow')}</span></div>${calorieRing(today())}${macroBars(today(), true)}</a><a class="card card-pad dash-card" href="#move"><div class="dash-head"><h2>${I('activity')} Today’s activity</h2><span class="link-btn">Log activity ${I('arrow')}</span></div><div class="dash-stats"><div><strong>${steps === null ? '—' : upFmt(steps)}</strong><span>steps${stepsT ? ` of ${upFmt(stepsT)}` : ''}</span>${stepsT && steps !== null ? `<div class="bar"><i style="width:${Math.min(100, Math.round((steps / stepsT) * 100))}%"></i></div>` : ''}</div><div><strong>${minutes}</strong><span>active minutes</span></div><div><strong>${acts.length}</strong><span>${acts.length === 1 ? 'activity' : 'activities'}</span></div></div>${acts.length ? `<ul class="dash-list">${acts.slice(0, 3).map((a) => `<li>${esc(activityLabel(a))}</li>`).join('')}</ul>` : '<p class="helper-note">Nothing logged yet today.</p>'}</a><div class="card card-pad dash-card"><div class="dash-head"><h2>${I('flag')} Your goal</h2><a class="link-btn" href="#profile">Edit ${I('arrow')}</a></div><p class="dash-goal">${esc(GOALS[p.goal]?.[0] || 'Not chosen yet')}</p>${p.obstacle ? `<p class="helper-note">Working around: ${esc(p.obstacle)}</p>` : ''}${reviews('complete')[0]?.fields.priority ? `<p><strong>This week’s priority:</strong> ${esc(reviews('complete')[0].fields.priority)}</p>` : ''}${levelLine()}</div><a class="card card-pad dash-card" href="#progress"><div class="dash-head"><h2>${I('calendar')} Last 7 days</h2><span class="link-btn">Progress ${I('arrow')}</span></div><div class="dash-stats"><div><strong>${week.activeDays}</strong><span>active days${upNum(p.activeDaysTarget) ? ` of ${p.activeDaysTarget}` : ''}</span></div><div><strong>${week.foodDays}</strong><span>days food logged</span></div><div><strong>${week.sleep === null ? '—' : upFmt(week.sleep, 1)}</strong><span>avg sleep (h)</span></div></div>${recentWeightLine()}</a></div><div class="dash-links"><a class="btn secondary" href="#today">${I('sun')}Daily journal</a><a class="btn secondary" href="#explore">${I('book')}Learn</a><a class="btn secondary" href="#plan">${I('flag')}Weekly plan</a><a class="btn secondary" href="#exercise">${I('activity')}Pain Solution programme</a><a class="btn secondary mobile-only" href="#progress">${I('chart')}Progress</a><a class="btn secondary mobile-only" href="#journal">${I('journal')}My journal</a><a class="btn secondary" href="#share">${I('mail')}Send my journal to Ger</a></div><p class="feedback-line">Trying out the online journal? Tell Ger what works and what doesn’t: <a class="text-link" href="mailto:ger@wellmind.ie?subject=Online%20journal%20feedback">ger@wellmind.ie</a></p>${support()}`;
 }
 function recentWeightLine() {
   const pts = weightSeries();
@@ -615,13 +617,14 @@ function recentWeightLine() {
 
 // ---------- Routing hooks ----------
 function upgradeViews() {
-  return { home: homeView, onboarding: onboardingView, profile: profileView, checkin: checkinView, progress: progressView, move: moveView, exercise: exerciseView };
+  return { home: homeView, onboarding: onboardingView, profile: profileView, checkin: checkinView, progress: progressView, move: moveView, exercise: exerciseView, share: shareView };
 }
 function section() {
   const r = route().split('/')[0];
   if (['profile', 'onboarding'].includes(r)) return 'home';
   if (r === 'exercise') return 'move';
   if (r === 'week') return 'progress';
+  if (r === 'share') return 'share';
   return legacySection();
 }
 function shell(body) {
@@ -700,6 +703,7 @@ function bindUpgrade() {
   );
   bindFdFields(document);
   bindMove();
+  bindShare();
   bindExercise();
   const manual = document.querySelector('#ob-manual');
   manual?.addEventListener('change', () => {
@@ -749,6 +753,7 @@ function upgradeAction(name, el) {
   return upgradeExtraAction(name, el);
 }
 function upgradeExtraAction(name, el) {
+  if (shareAction(name) !== false) return;
   if (guideAction(name, el) !== false) return;
   if (foodAction(name, el) !== false) return;
   if (moveAction(name, el) !== false) return;
@@ -1246,6 +1251,7 @@ function moveAction(name, el) {
     renderPreservingScroll();
     return toast('Activity removed.');
   }
+  if (exerciseChoiceAction(name, el) !== false) return;
   return programmeAction(name, el);
 }
 function bindMove() {
@@ -1290,7 +1296,7 @@ function loadProgrammes() {
     .then((r) => (r.ok ? r.json() : Promise.reject()))
     .then((d) => {
       programmes = Array.isArray(d) ? d : [];
-      if (['move', 'exercise', 'home'].includes(route().split('/')[0])) renderPreservingScroll();
+      if (['move', 'exercise', 'home', 'onboarding'].includes(route().split('/')[0])) renderPreservingScroll();
     })
     .catch(() => {
       programmes = [];
@@ -1364,6 +1370,62 @@ function programmeCard(date = today()) {
   if (!c) return `<h3>Pain Solution programme</h3><p class="helper-note">Choose your programme and level once; your planned sessions then appear here to tick off.</p><a class="btn secondary" href="#exercise">Choose my programme ${I('arrow')}</a>`;
   const s = sessionFor(date);
   return `<div class="eyebrow">Pain Solution · ${esc(c.p.id === 'full-body' ? 'Full Body · ' + c.l.stage : c.p.name)}</div><h3>Level ${c.l.number}: ${esc(c.l.title)}</h3>${s ? `<label class="session-tick ${sessionDone(s.key, date) ? 'done' : ''}"><input type="checkbox" data-session-tick="${s.key}" data-session-name="${esc(s.label)}" ${sessionDone(s.key, date) ? 'checked' : ''} ${date > today() ? 'disabled' : ''}><span><strong>${esc(s.name)}</strong><small>${esc(s.detail)}</small></span></label>` : '<p class="helper-note">Rest day in your programme — your usual activity.</p>'}<div class="button-row"><a class="btn small" href="${esc(c.l.url)}" target="_blank" rel="noopener noreferrer">Open exercises ${I('external')}</a><span class="code-chip">Code <code>${esc(c.l.code)}</code></span></div><a class="link-btn small" href="#exercise">Week plan, levels & programmes ${I('arrow')}</a>`;
+}
+// ---------- Exercise choice (onboarding step and Home card) ----------
+let exMode = null;
+const AREA_ORDER = ['neck', 'shoulders', 'back', 'hips', 'feet', 'sciatica'];
+function exerciseChooser() {
+  loadProgrammes();
+  if (!programmes) return '<p class="helper-note">Loading the exercise programmes…</p>';
+  if (!programmes.length) return '<p class="notice">The exercise programmes could not load just now. Continue, and choose later from Home.</p>';
+  const c = currentProgramme();
+  const mode = exMode || (c ? (c.p.id === 'full-body' ? 'full' : 'area') : exerciseRecord()?.fields.choice === 'later' ? 'later' : '');
+  const full = programmes.find((p) => p.id === 'full-body');
+  const areas = AREA_ORDER.map((id) => programmes.find((p) => p.id === id)).filter(Boolean);
+  const opt = (m, title, desc) => `<button type="button" class="goal-option ex-mode ${mode === m ? 'chosen' : ''}" data-up="ex-mode" data-mode="${m}" aria-pressed="${mode === m}"><span><strong>${title}</strong><small>${desc}</small></span></button>`;
+  let html = `<div class="goal-options ex-modes">${opt('full', 'My whole body', `One programme in ${full ? full.levels.length : 12} levels, from first movements to full strength. A good choice for general fitness and staying strong.`)}${opt('area', 'One area of my body', `Focused programmes for ${areas.map((a) => a.name).join(', ')}. Each has ${Math.min(...areas.map((a) => a.levels.length))}–${Math.max(...areas.map((a) => a.levels.length))} levels.`)}</div><button type="button" class="link-btn small ${mode === 'later' ? 'chosen' : ''}" data-up="ex-mode" data-mode="later">${mode === 'later' ? '✓ ' : ''}Not now — I’ll choose later</button>`;
+  const levelList = (p) => `${p.caution ? `<div class="notice warning">${esc(p.caution)}</div>` : ''}<p class="helper-note">Start at Level 1, or at the level your therapist suggested. You move up when a level feels comfortable — there is no deadline.</p><div class="ex-levels">${p.levels.map((l) => { const on = c && c.p.id === p.id && c.l.number === l.number; return `<button type="button" class="ex-level ${on ? 'chosen' : ''}" data-up="ex-pick" data-programme="${p.id}" data-level="${l.number}" aria-pressed="${!!on}"><b>Level ${l.number}</b><span>${esc(l.title)}${p.id === 'full-body' && l.stage ? `<small>${esc(l.stage)}</small>` : ''}</span>${on ? '<i>✓ Chosen</i>' : ''}</button>`; }).join('')}</div>`;
+  if (mode === 'full' && full) html += `<h3 class="sub-h">Choose your level</h3>${levelList(full)}`;
+  if (mode === 'area') {
+    const area = programmes.find((p) => p.id === (browseProgramme && AREA_ORDER.includes(browseProgramme) ? browseProgramme : c && c.p.id !== 'full-body' ? c.p.id : ''));
+    html += `<h3 class="sub-h">Which area?</h3><div class="ex-areas">${areas.map((a) => `<button type="button" class="ex-area ${area?.id === a.id ? 'chosen' : ''}" data-up="ex-area" data-programme="${a.id}" aria-pressed="${area?.id === a.id}"><strong>${esc(a.name)}</strong><small>${esc(a.tagline)}</small></button>`).join('')}</div>`;
+    if (area) html += `<h3 class="sub-h">Choose your ${esc(area.name)} level</h3>${levelList(area)}`;
+  }
+  if (c && mode !== 'later') html += `<p class="ex-summary">${I('activity')} Your choice: <strong>${esc(c.p.name)} · Level ${c.l.number}: ${esc(c.l.title)}</strong></p>`;
+  return html + '<p class="helper-note">You can change your programme or level at any time from Home or the Pain Solution programme page.</p>';
+}
+function exerciseChoiceAction(name, el) {
+  if (name === 'ex-mode') {
+    exMode = el.dataset.mode;
+    if (exMode === 'later') saveExercise({ programme: '', level: '', choice: 'later' });
+    return renderPreservingScroll();
+  }
+  if (name === 'ex-area') {
+    browseProgramme = el.dataset.programme;
+    return renderPreservingScroll();
+  }
+  if (name === 'ex-pick') {
+    const p = programmes?.find((x) => x.id === el.dataset.programme), n = Number(el.dataset.level);
+    if (!p?.levels.some((l) => l.number === n)) return;
+    const c = currentProgramme();
+    if (!(c && c.p.id === p.id && c.l.number === n)) saveExercise({ programme: p.id, level: String(n), levelSince: today(), choice: '' });
+    exMode = p.id === 'full-body' ? 'full' : 'area';
+    renderPreservingScroll();
+    return toast(`${p.name} Level ${n} is your programme.`);
+  }
+  return false;
+}
+function homeExerciseCard() {
+  loadProgrammes();
+  if (!programmes) return '';
+  const c = currentProgramme();
+  if (!c) {
+    if (!programmes.length) return '';
+    return `<section class="card card-pad home-exercise empty"><div class="dash-head"><h2>${I('activity')} Your exercises</h2></div><p>Choose Pain Solution exercises for your whole body (Levels 1–12) or for one area — neck, shoulders, back, hips, knee and foot, or disc and sciatica.</p><a class="btn" href="#exercise">Choose my exercises ${I('arrow')}</a></section>`;
+  }
+  const total = c.p.levels.length, s = sessionFor(today()), done = s && sessionDone(s.key, today());
+  const dots = c.p.levels.map((l) => `<i class="${l.number < c.l.number ? 'past' : l.number === c.l.number ? 'now' : ''}" title="Level ${l.number}"></i>`).join('');
+  return `<section class="card card-pad home-exercise"><div class="dash-head"><h2>${I('activity')} Your exercises</h2><a class="link-btn" href="#exercise">Week plan & levels ${I('arrow')}</a></div><div class="eyebrow">${esc(c.p.name)}${c.p.id === 'full-body' && c.l.stage ? ' · ' + esc(c.l.stage) : ''}</div><h3>Level ${c.l.number} of ${total}: ${esc(c.l.title)}</h3><div class="level-dots" aria-label="Level ${c.l.number} of ${total}">${dots}</div>${s ? `<label class="session-tick ${done ? 'done' : ''}"><input type="checkbox" data-session-tick="${s.key}" data-session-name="${esc(s.label)}" ${done ? 'checked' : ''}><span><strong>Today: ${esc(s.name)}</strong><small>${done ? 'Done — well done.' : esc(s.detail)}</small></span></label>` : '<p class="helper-note">Today is a rest day in your programme — your usual activity.</p>'}<div class="button-row"><a class="btn small" href="${esc(c.l.url)}" target="_blank" rel="noopener noreferrer">Open my exercises ${I('external')}</a><span class="code-chip">Code <code>${esc(c.l.code)}</code></span></div></section>`;
 }
 function programmeTodayLine() {
   if (!programmes) loadProgrammes();
@@ -1522,7 +1584,7 @@ const GUIDE = [
   { key: 'move', kind: 'auto', title: 'Record some movement', blurb: 'Steps, a walk, or any activity counts.', link: 'move', icon: 'activity' },
   { key: 'sleep', kind: 'learn', title: 'Sleep & recovery', blurb: 'Notice your sleep and choose one small evening change.', link: 'read/8', from: 8, to: 9, legacy: 0, icon: 'moon' },
   { key: 'selfcare', kind: 'learn', title: 'Everyday self-care', blurb: 'Find a smaller, kinder version of an ordinary day.', link: 'read/10', from: 10, to: 13, legacy: 1, icon: 'heart' },
-  { key: 'programme', kind: 'auto', optional: true, title: 'Choose your Pain Solution programme', blurb: 'Optional — pick the level your therapist suggested.', link: 'exercise', icon: 'activity' },
+  { key: 'programme', kind: 'auto', optional: true, title: 'Choose your exercises', blurb: 'Optional — whole body or one area, at the level that suits you.', link: 'exercise', icon: 'activity' },
   { key: 'foodcare', kind: 'learn', title: 'Food & body care', blurb: 'Nourishment, practical choices and optional tracking.', link: 'read/14', from: 14, to: 28, legacy: 2, icon: 'food' },
   { key: 'checkin', kind: 'auto', title: 'Your first weekly check-in', blurb: 'A two-minute look back at your week.', link: 'checkin', icon: 'calendar' },
   { key: 'screens', kind: 'learn', title: 'Screen time & attention', blurb: 'Make a little more room for what matters to you.', link: 'read/29', from: 29, to: 30, legacy: 3, icon: 'phone' },
@@ -1629,12 +1691,158 @@ function injectChapterGuide() {
   );
 }
 
+
+// ===================== Send my journal to Ger =====================
+// Nothing leaves the device unless the client chooses to: the client's own email app opens
+// with the summary filled in, and they read, edit and send it themselves.
+const SHARE_EMAIL = 'ger@wellmind.ie';
+const SHARE_PARTS = [
+  ['overview', 'My goal, targets and exercise programme', true],
+  ['daily', 'Daily check-ins (sleep, mood, energy, steps and notes)', true],
+  ['food', 'Food: daily totals and what I ate', true],
+  ['move', 'Movement and exercise sessions', true],
+  ['checkins', 'Weekly check-ins', true],
+  ['reflections', 'Written reflections from the journal pages and tools', false],
+];
+let shareOpts = null;
+function shareState() {
+  if (!shareOpts) shareOpts = { days: '7', parts: Object.fromEntries(SHARE_PARTS.map(([k, , on]) => [k, on])), note: '' };
+  return shareOpts;
+}
+const SHARE_SKIP = new Set(['trackingBasis', 'onboardingStep', 'guide', 'guideHidden', 'items', 'foods', 'meals', 'log', 'completed', 'status', 'levels', 'special', 'choice', 'levelSince', 'source']);
+function shareText() {
+  const o = shareState(), p = profile(), end = today();
+  const days = o.days === 'all' ? null : Number(o.days);
+  const firstDate = Object.values(state.entries).map((e) => e.date).sort()[0] || end;
+  const from = days ? shift(end, 1 - days) : firstDate;
+  const inRange = (d) => d >= from && d <= end;
+  const dates = [];
+  for (let d = end; d >= from && dates.length < 400; d = shift(d, -1)) dates.push(d);
+  const n = (v, dp = 0) => (v === null || v === undefined || v === '' ? '—' : upFmt(Number(v), dp));
+  const L = [];
+  L.push(`Well Mind journal — ${p.name || 'client'}`);
+  L.push(`Period: ${pretty(from)} to ${pretty(end)}${days ? ` (last ${days} days)` : ' (everything recorded)'}`);
+  if (o.note.trim()) L.push('', 'MESSAGE', o.note.trim());
+  if (o.parts.overview) {
+    L.push('', 'OVERVIEW');
+    L.push(`Main goal: ${GOALS[p.goal]?.[0] || 'not chosen'}`);
+    if (p.obstacle) L.push(`Biggest obstacle: ${p.obstacle}`);
+    const w = lastWeight();
+    if (w) L.push(`Weight: ${n(w.value, 1)} kg (${pretty(w.date)})${upNum(p.startWeight) !== null ? ` · started at ${n(p.startWeight, 1)} kg` : ''}`);
+    const t = currentTargets(end);
+    if (t.calories || t.protein) L.push(`Daily targets: ${['calories', 'protein', 'carbs', 'fat'].filter((k) => t[k]).map((k) => `${nutritionNames[k]} ${t[k]}${MACRO_UNITS[k] === 'kcal' ? ' kcal' : ' g'}`).join(', ')}`);
+    const c = typeof currentProgramme === 'function' ? currentProgramme() : null;
+    if (c) L.push(`Exercise programme: ${c.p.name}, Level ${c.l.number} of ${c.p.levels.length} (${c.l.title})`);
+    const s = periodSummary(end, Math.min(days || dates.length, 400));
+    L.push(`Averages: sleep ${s.sleep === null ? '—' : n(s.sleep, 1) + ' h'} · mood ${n(s.mood, 1)}/10 · energy ${n(s.energy, 1)}/10 · steps ${n(s.steps)} · calories ${n(s.calories)} on ${s.foodDays} logged day(s) · ${s.sessions} ${s.sessions === 1 ? 'activity' : 'activities'}, ${n(s.minutes)} active min`);
+  }
+  if (o.parts.daily) {
+    const rows = dates.map((d) => [d, state.entries[`daily:${d}`]?.fields]).filter(([, f]) => f && Object.values(f).some((v) => v !== ''));
+    L.push('', 'DAILY CHECK-INS');
+    if (!rows.length) L.push('None recorded.');
+    for (const [d, f] of rows) {
+      const nums = [['sleep', 'Sleep', ' h'], ['mood', 'Mood', '/10'], ['energy', 'Energy', '/10'], ['steps', 'Steps', '']].filter(([k]) => f[k] !== undefined && f[k] !== '').map(([k, l, u]) => `${l} ${f[k]}${u}`);
+      if (f.screenHours || f.screenMinutes) nums.push(`Screen time ${f.screenHours || 0}h ${f.screenMinutes || 0}m`);
+      L.push(`${pretty(d, { weekday: 'short', day: 'numeric', month: 'short' })}: ${nums.join(' · ') || '—'}`);
+      for (const [k, l] of [['mind', 'On my mind'], ['action', 'For myself today'], ['movement', 'Movement'], ['care', 'Self-care']]) if (f[k]) L.push(`   ${l}: ${f[k]}`);
+    }
+  }
+  if (o.parts.food) {
+    const rows = dates.filter((d) => foodItems(d).length);
+    L.push('', 'FOOD');
+    if (!rows.length) L.push('None recorded.');
+    for (const d of rows) {
+      const t = foodTotals(d), tg = currentTargets(d);
+      const v = (k) => (t[k].value === null ? '?' : upFmt(t[k].value));
+      L.push(`${pretty(d, { weekday: 'short', day: 'numeric', month: 'short' })}: ${v('calories')} kcal${tg.calories ? ` (target ${tg.calories})` : ''} · protein ${v('protein')} g · carbs ${v('carbs')} g · fat ${v('fat')} g`);
+      const byMeal = {};
+      for (const f of foodItems(d)) (byMeal[f.meal || 'Meal'] ||= []).push(`${f.name} ${f.quantity}${f.basis === '100g' ? ' g' : f.basis === '100ml' ? ' ml' : ' serving(s)'}`);
+      for (const [m, list] of Object.entries(byMeal)) L.push(`   ${m}: ${list.join(', ')}`);
+    }
+  }
+  if (o.parts.move) {
+    const rows = dates.filter((d) => activityItems(d).length);
+    L.push('', 'MOVEMENT & EXERCISE');
+    if (!rows.length) L.push('No activities recorded.');
+    for (const d of rows) L.push(`${pretty(d, { weekday: 'short', day: 'numeric', month: 'short' })}: ${activityItems(d).map(activityLabel).join('; ')}`);
+  }
+  if (o.parts.checkins) {
+    const list = reviews('complete').filter((r) => inRange(r.fields.completedOn || r.date)).reverse();
+    L.push('', 'WEEKLY CHECK-INS');
+    if (!list.length) L.push('None completed in this period.');
+    for (const r of list) {
+      L.push(`Check-in completed ${pretty(r.fields.completedOn || r.date)}`);
+      for (const [k, v] of Object.entries(r.fields)) if (v !== '' && !SHARE_SKIP.has(k) && k !== 'completedOn' && !k.startsWith('sum')) L.push(`   ${labelFor(k)}: ${v}`);
+    }
+  }
+  if (o.parts.reflections) {
+    const skipKinds = new Set(['profile', 'food', 'activity', 'targets', 'library', 'exercise', 'review', 'daily']);
+    const list = Object.values(state.entries).filter((e) => !skipKinds.has(e.kind) && (inRange(e.date) || inRange(String(e.updatedAt || '').slice(0, 10)))).sort((a, b) => a.date.localeCompare(b.date));
+    L.push('', 'WRITTEN REFLECTIONS');
+    let any = false;
+    for (const e of list) {
+      const rows = Object.entries(e.fields).filter(([k, v]) => v !== '' && v !== 'false' && v !== 'true' && !SHARE_SKIP.has(k) && !/^\s*[[{]/.test(v));
+      if (!rows.length) continue;
+      any = true;
+      L.push(`${e.title || 'Entry'} — ${pretty(e.date)}`);
+      for (const [k, v] of rows) L.push(`   ${labelFor(k)}: ${v}`);
+    }
+    if (!any) L.push('None written in this period.');
+  }
+  L.push('', '—', 'Sent from the Well Mind online journal. Recorded by the client; estimates, not clinical measurements.');
+  return L.join('\n');
+}
+function shareSubject() {
+  const p = profile();
+  return `My Well Mind journal${p.name ? ' — ' + p.name : ''} (${pretty(today(), { day: 'numeric', month: 'short', year: 'numeric' })})`;
+}
+function shareMailto(text) {
+  return `mailto:${SHARE_EMAIL}?subject=${encodeURIComponent(shareSubject())}&body=${encodeURIComponent(text)}`;
+}
+function shareView() {
+  currentRecord = null;
+  const o = shareState(), text = shareText(), long = shareMailto(text).length > 6000;
+  return `${heading('Share with Ger', 'Send my journal to Ger.', 'Choose what to share. Your email app opens with it filled in — you can read it and change it before you press send.')}<div class="share-layout"><section class="card card-pad"><h2>What to include</h2><fieldset class="share-period"><legend>Period</legend>${[['7', 'Last 7 days'], ['28', 'Last 4 weeks'], ['all', 'Everything']].map(([v, l]) => `<label class="filter ${o.days === v ? 'active' : ''}"><input type="radio" name="share-days" value="${v}" data-share="days" ${o.days === v ? 'checked' : ''}>${l}</label>`).join('')}</fieldset><div class="share-parts">${SHARE_PARTS.map(([k, l]) => `<label class="checkbox-row"><input type="checkbox" data-share="part" value="${k}" ${o.parts[k] ? 'checked' : ''}>${l}</label>`).join('')}</div><div class="field"><label for="share-note">A note for Ger (optional)</label><textarea id="share-note" data-share="note" rows="3" maxlength="2000" placeholder="Anything you’d like to ask or mention">${esc(o.note)}</textarea></div><div class="notice small-print">${I('lock')} Nothing is sent automatically. Email is convenient but not fully private — share only what you’re comfortable sending. Your journal stays on this device either way.</div></section><section class="card card-pad"><div class="card-heading"><div><h2>What Ger will receive</h2><p class="helper-note">To: <strong>${SHARE_EMAIL}</strong></p></div></div><textarea class="share-preview" readonly rows="16" aria-label="Summary to be sent">${esc(text)}</textarea><div class="button-row"><a class="btn" href="${esc(shareMailto(text))}" data-share-send>${I('mail')}Open in my email app</a><button class="btn secondary" data-up="share-copy">Copy summary</button><button class="btn subtle" data-up="share-download">Download as a file</button></div><p class="helper-note">${long ? '<strong>This summary is long.</strong> Some email apps cut long messages short. If that happens, choose <em>Copy summary</em> and paste it into an email to ' + SHARE_EMAIL + ', or download the file and attach it.' : 'If your email app doesn’t open, choose Copy summary and paste it into an email to ' + SHARE_EMAIL + '.'}</p></section></div>`;
+}
+function shareAction(name) {
+  if (name === 'share-copy') {
+    const text = shareText();
+    if (navigator.clipboard) navigator.clipboard.writeText(text).then(() => toast('Summary copied. Paste it into an email to ' + SHARE_EMAIL + '.'), () => toast('Copy wasn’t allowed — select the text in the box and copy it.'));
+    else toast('Select the text in the box and copy it.');
+    return;
+  }
+  if (name === 'share-download') {
+    const blob = new Blob([shareText()], { type: 'text/plain;charset=utf-8' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = `well-mind-journal-${today()}.txt`;
+    document.body.append(a);
+    a.click();
+    a.remove();
+    setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+    return toast('Saved. Attach the file to an email to ' + SHARE_EMAIL + '.');
+  }
+  return false;
+}
+function bindShare() {
+  const refresh = () => {
+    const text = shareText();
+    const box = document.querySelector('.share-preview');
+    if (box) box.value = text;
+    const send = document.querySelector('[data-share-send]');
+    if (send) send.href = shareMailto(text);
+  };
+  document.querySelectorAll('[data-share="days"]').forEach((el) => el.addEventListener('change', () => { shareState().days = el.value; renderPreservingScroll(); }));
+  document.querySelectorAll('[data-share="part"]').forEach((el) => el.addEventListener('change', () => { shareState().parts[el.value] = el.checked; refresh(); }));
+  document.querySelector('[data-share="note"]')?.addEventListener('input', (e) => { shareState().note = e.target.value.slice(0, 2000); refresh(); });
+}
+
 let selectedDates={},state={version:1,entries:{}},storageError='',pages=[],currentDate=today(),currentRecord=null,searchTerm='',historyFilter='all',bodySide='front';
 let timerLeft=60,timerEnd=0,timerTick=null,timerRunning=false;
 try{const raw=localStorage.getItem(KEY);if(raw){const x=JSON.parse(raw);if(x.version!==1||!x.entries||typeof x.entries!=='object'||Array.isArray(x.entries)||!Object.entries(x.entries).every(([id,e])=>validEntry(e,id)))throw Error('format');state=x;}}catch{storageError='Your saved journal could not be opened. Entries will stay in memory for now. Download a backup before leaving; stored data has not been overwritten.';}
 function persist(){if(storageError.includes('could not be opened'))return false;try{localStorage.setItem(KEY,JSON.stringify(state));storageError='';return true}catch{storageError='This browser cannot save your entries right now. Download a backup before leaving. Private browsing or storage limits may be the reason.';return false;}}
 function toast(message){const el=document.querySelector('#toast');el.textContent=message;el.classList.add('show');clearTimeout(toast.handle);toast.handle=setTimeout(()=>el.classList.remove('show'),3400);}
-const navs=[['home','home','Home'],['today','sun','Daily journal'],['food','food','Food'],['move','activity','Movement'],['checkin','calendar','Weekly check-in'],['progress','chart','Progress'],['explore','book','Learn'],['plan','flag','Weekly plan'],['tools','grid','Tools'],['journal','journal','My journal']];
+const navs=[['home','home','Home'],['today','sun','Daily journal'],['food','food','Food'],['move','activity','Movement'],['checkin','calendar','Weekly check-in'],['progress','chart','Progress'],['explore','book','Learn'],['plan','flag','Weekly plan'],['tools','grid','Tools'],['journal','journal','My journal'],['share','mail','Send to Ger']];
 const chapters=[
 {name:'Sleep & recovery',icon:'moon',from:8,to:9,do:9,desc:'Make room for rest that fits your real life.'},
 {name:'Everyday self-care',icon:'heart',from:10,to:13,do:13,desc:'Notice what you need. Find a smaller, kinder version.'},

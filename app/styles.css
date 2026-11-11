@@ -277,3 +277,34 @@ a.dash-card:hover{border-color:var(--green)}
 .chapter-done p{margin:0;color:var(--muted)}
 .chapter-done.done{background:var(--soft)}
 @media (max-width:640px){.guide-card{padding:18px 16px}.guide-next{padding:14px}.guide-next strong{font-size:19px}.guide-next .btn{display:none}.guide-progress{min-width:0;width:100%}}
+/* v5.2 exercise choice */
+.ex-modes{margin-bottom:8px}
+.ex-mode{text-align:left;font:inherit;color:inherit}
+.ex-mode.chosen,.ex-area.chosen,.ex-level.chosen{border-color:var(--green);background:var(--soft);box-shadow:inset 0 0 0 1px var(--green)}
+.link-btn.chosen{color:var(--green);font-weight:600}
+.ex-areas{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:6px}
+.ex-area{display:flex;flex-direction:column;gap:4px;text-align:left;padding:14px;border:1px solid var(--border);border-radius:14px;background:var(--white);font:inherit;color:inherit;cursor:pointer}
+.ex-area small{color:var(--muted);font-size:12px}
+.ex-levels{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:8px}
+.ex-level{display:flex;flex-direction:column;gap:2px;text-align:left;padding:12px 14px;border:1px solid var(--border);border-radius:12px;background:var(--white);font:inherit;color:inherit;cursor:pointer;position:relative}
+.ex-level b{font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--green)}
+.ex-level small{display:block;color:var(--muted);font-size:12px}
+.ex-level i{font-style:normal;font-size:12px;color:var(--green);font-weight:600}
+.ex-summary{margin:18px 0 6px;padding:12px 14px;border-radius:12px;background:var(--soft);display:flex;gap:8px;align-items:center}
+.home-exercise{margin:0 0 18px}
+.home-exercise h3{margin:4px 0 8px}
+.home-exercise .session-tick{margin:12px 0}
+.level-dots{display:flex;gap:4px;margin:6px 0 4px;flex-wrap:wrap}
+.level-dots i{width:18px;height:6px;border-radius:3px;background:var(--border)}
+.level-dots i.past{background:var(--green);opacity:.45}
+.level-dots i.now{background:var(--green)}
+@media (max-width:760px){.ex-areas{grid-template-columns:1fr 1fr}.ex-levels{grid-template-columns:1fr}}
+/* v5.3 share with Ger */
+.share-layout{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.2fr);gap:18px;align-items:start}
+.share-period{border:0;padding:0;margin:0 0 14px;display:flex;gap:8px;flex-wrap:wrap}
+.share-period legend{font-weight:600;font-size:13px;margin-bottom:8px}
+.share-period input{position:absolute;opacity:0;pointer-events:none}
+.share-period label{cursor:pointer;position:relative;overflow:hidden}
+.share-parts{display:grid;gap:4px;margin-bottom:14px}
+.share-preview{width:100%;max-width:100%;display:block;min-height:320px;font:13px/1.5 ui-monospace,SFMono-Regular,Menlo,monospace;padding:12px;border:1px solid var(--border);border-radius:12px;background:var(--soft);color:inherit;resize:vertical;white-space:pre-wrap;box-sizing:border-box}
+@media (max-width:860px){.share-layout{grid-template-columns:minmax(0,1fr)}.share-preview{min-height:240px}}
