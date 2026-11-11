@@ -405,7 +405,7 @@ function onboardingAction(name) {
 function profileView() {
   const rec = useProfileRecord(), p = rec.fields, t = autoTargets(p), cur = targetRecord(today());
   const proposal = targetProposal();
-  return `${heading('Profile & goals', p.name ? `${esc(p.name)}’s profile.` : 'Your profile.', 'Change anything here. Targets are never changed without your say-so.')}<div class="profile-layout"><section class="card card-pad"><h2>About you</h2>${profileFields(1)}<hr class="divider"><h2>Your goal</h2>${profileFields(2)}<hr class="divider"><h2>What matters</h2>${profileFields(3)}<hr class="divider"><h2>Weekly activity targets</h2><p class="helper-note">Used on your dashboard and weekly check-in. Leave blank for no target.</p><div class="field-grid">${field('stepsTarget', 'Daily steps', { type: 'number', min: 0, max: 100000, step: 500, placeholder: 'e.g. 7000' })}${field('activeDaysTarget', 'Active days per week', { type: 'number', min: 0, max: 7, step: 1, placeholder: 'e.g. 4' })}${field('strengthTarget', 'Strength sessions per week', { type: 'number', min: 0, max: 14, step: 1, placeholder: 'e.g. 2' })}${field('minutesTarget', 'Active minutes per week', { type: 'number', min: 0, max: 3000, step: 10, placeholder: 'e.g. 150' })}</div><span class="section-saved" data-save-status="${esc(rec.id)}">Changes save as you type.</span></section><aside class="aside-stack profile-aside"><section class="card card-pad" id="targets-card">${targetsCardHtml(t, cur, proposal)}</section></aside></div>`;
+  return `${heading('Profile & goals', p.name ? `${esc(p.name)}’s profile.` : 'Your profile.', 'Change anything here. Targets are never changed without your say-so.')}<div class="profile-layout"><section class="card card-pad"><h2>About you</h2>${profileFields(1)}<hr class="divider"><h2>Your goal</h2>${profileFields(2)}<hr class="divider"><h2>What matters</h2>${profileFields(3)}<hr class="divider"><h2>Weekly activity targets</h2><p class="helper-note">Used on your dashboard and weekly check-in. Leave blank for no target.</p><div class="field-grid">${field('stepsTarget', 'Daily steps', { type: 'number', min: 0, max: 100000, step: 500, placeholder: 'e.g. 7000' })}${field('activeDaysTarget', 'Active days per week', { type: 'number', min: 0, max: 7, step: 1, placeholder: 'e.g. 4' })}${field('strengthTarget', 'Strength sessions per week', { type: 'number', min: 0, max: 14, step: 1, placeholder: 'e.g. 2' })}${field('minutesTarget', 'Active minutes per week', { type: 'number', min: 0, max: 3000, step: 10, placeholder: 'e.g. 150' })}</div>${p.guideHidden === 'true' ? `<hr class="divider"><h2>Next to do list</h2><p class="helper-note">The step-by-step list is hidden from your Home page.</p><button class="btn secondary" data-up="guide-show">Show it again</button>` : ''}<span class="section-saved" data-save-status="${esc(rec.id)}">Changes save as you type.</span></section><aside class="aside-stack profile-aside"><section class="card card-pad" id="targets-card">${targetsCardHtml(t, cur, proposal)}</section></aside></div>`;
 }
 function targetsCardHtml(t, cur, proposal) {
   const f = cur?.fields || {};
@@ -603,7 +603,7 @@ function homeView() {
   const banner = due || draft
     ? `<a class="checkin-banner due" href="#checkin">${I('calendar')}<span><strong>${draft ? 'Finish your weekly check-in' : 'Your weekly check-in is ready'}</strong><small>About two minutes. Your logged days fill in the numbers.</small></span>${I('arrow')}</a>`
     : `<div class="checkin-banner">${I('calendar')}<span><strong>Next check-in: ${pretty(checkinDue(), { weekday: 'long', day: 'numeric', month: 'short' })}</strong><small>No need to do anything until then.</small></span></div>`;
-  return `<div class="page-heading home-heading"><div><div class="eyebrow">${I('sun')} ${pretty(today(), { weekday: 'long', day: 'numeric', month: 'long' })}</div><h1>${nowGreeting()}${p.name ? ', ' + esc(p.name) : ''}.</h1><p class="subtitle">Today first, then the bigger picture.</p></div></div>${banner}${proposal ? `<a class="checkin-banner" href="#profile">${I('flag')}<span><strong>Updated targets suggested</strong><small>Your profile changed. Review them before anything changes.</small></span>${I('arrow')}</a>` : ''}<div class="dash-grid"><a class="card card-pad dash-card dash-food" href="#food"><div class="dash-head"><h2>${I('food')} Today’s food</h2><span class="link-btn">Log food ${I('arrow')}</span></div>${calorieRing(today())}${macroBars(today(), true)}</a><a class="card card-pad dash-card" href="#move"><div class="dash-head"><h2>${I('activity')} Today’s activity</h2><span class="link-btn">Log activity ${I('arrow')}</span></div><div class="dash-stats"><div><strong>${steps === null ? '—' : upFmt(steps)}</strong><span>steps${stepsT ? ` of ${upFmt(stepsT)}` : ''}</span>${stepsT && steps !== null ? `<div class="bar"><i style="width:${Math.min(100, Math.round((steps / stepsT) * 100))}%"></i></div>` : ''}</div><div><strong>${minutes}</strong><span>active minutes</span></div><div><strong>${acts.length}</strong><span>${acts.length === 1 ? 'activity' : 'activities'}</span></div></div>${acts.length ? `<ul class="dash-list">${acts.slice(0, 3).map((a) => `<li>${esc(activityLabel(a))}</li>`).join('')}</ul>` : '<p class="helper-note">Nothing logged yet today.</p>'}${programmeTodayLine()}</a><div class="card card-pad dash-card"><div class="dash-head"><h2>${I('flag')} Your goal</h2><a class="link-btn" href="#profile">Edit ${I('arrow')}</a></div><p class="dash-goal">${esc(GOALS[p.goal]?.[0] || 'Not chosen yet')}</p>${p.obstacle ? `<p class="helper-note">Working around: ${esc(p.obstacle)}</p>` : ''}${reviews('complete')[0]?.fields.priority ? `<p><strong>This week’s priority:</strong> ${esc(reviews('complete')[0].fields.priority)}</p>` : ''}${levelLine()}</div><a class="card card-pad dash-card" href="#progress"><div class="dash-head"><h2>${I('calendar')} Last 7 days</h2><span class="link-btn">Progress ${I('arrow')}</span></div><div class="dash-stats"><div><strong>${week.activeDays}</strong><span>active days${upNum(p.activeDaysTarget) ? ` of ${p.activeDaysTarget}` : ''}</span></div><div><strong>${week.foodDays}</strong><span>days food logged</span></div><div><strong>${week.sleep === null ? '—' : upFmt(week.sleep, 1)}</strong><span>avg sleep (h)</span></div></div>${recentWeightLine()}</a></div><div class="dash-links"><a class="btn secondary" href="#today">${I('sun')}Daily journal</a><a class="btn secondary" href="#explore">${I('book')}Learn</a><a class="btn secondary" href="#plan">${I('flag')}Weekly plan</a><a class="btn secondary" href="#exercise">${I('activity')}Pain Solution programme</a><a class="btn secondary mobile-only" href="#progress">${I('chart')}Progress</a><a class="btn secondary mobile-only" href="#journal">${I('journal')}My journal</a></div><p class="feedback-line">Trying out the online journal? Tell Ger what works and what doesn’t: <a class="text-link" href="mailto:ger@wellmind.ie?subject=Online%20journal%20feedback">ger@wellmind.ie</a></p>${support()}`;
+  return `<div class="page-heading home-heading"><div><div class="eyebrow">${I('sun')} ${pretty(today(), { weekday: 'long', day: 'numeric', month: 'long' })}</div><h1>${nowGreeting()}${p.name ? ', ' + esc(p.name) : ''}.</h1><p class="subtitle">Today first, then the bigger picture.</p></div></div>${banner}${guideCard()}${proposal ? `<a class="checkin-banner" href="#profile">${I('flag')}<span><strong>Updated targets suggested</strong><small>Your profile changed. Review them before anything changes.</small></span>${I('arrow')}</a>` : ''}<div class="dash-grid"><a class="card card-pad dash-card dash-food" href="#food"><div class="dash-head"><h2>${I('food')} Today’s food</h2><span class="link-btn">Log food ${I('arrow')}</span></div>${calorieRing(today())}${macroBars(today(), true)}</a><a class="card card-pad dash-card" href="#move"><div class="dash-head"><h2>${I('activity')} Today’s activity</h2><span class="link-btn">Log activity ${I('arrow')}</span></div><div class="dash-stats"><div><strong>${steps === null ? '—' : upFmt(steps)}</strong><span>steps${stepsT ? ` of ${upFmt(stepsT)}` : ''}</span>${stepsT && steps !== null ? `<div class="bar"><i style="width:${Math.min(100, Math.round((steps / stepsT) * 100))}%"></i></div>` : ''}</div><div><strong>${minutes}</strong><span>active minutes</span></div><div><strong>${acts.length}</strong><span>${acts.length === 1 ? 'activity' : 'activities'}</span></div></div>${acts.length ? `<ul class="dash-list">${acts.slice(0, 3).map((a) => `<li>${esc(activityLabel(a))}</li>`).join('')}</ul>` : '<p class="helper-note">Nothing logged yet today.</p>'}${programmeTodayLine()}</a><div class="card card-pad dash-card"><div class="dash-head"><h2>${I('flag')} Your goal</h2><a class="link-btn" href="#profile">Edit ${I('arrow')}</a></div><p class="dash-goal">${esc(GOALS[p.goal]?.[0] || 'Not chosen yet')}</p>${p.obstacle ? `<p class="helper-note">Working around: ${esc(p.obstacle)}</p>` : ''}${reviews('complete')[0]?.fields.priority ? `<p><strong>This week’s priority:</strong> ${esc(reviews('complete')[0].fields.priority)}</p>` : ''}${levelLine()}</div><a class="card card-pad dash-card" href="#progress"><div class="dash-head"><h2>${I('calendar')} Last 7 days</h2><span class="link-btn">Progress ${I('arrow')}</span></div><div class="dash-stats"><div><strong>${week.activeDays}</strong><span>active days${upNum(p.activeDaysTarget) ? ` of ${p.activeDaysTarget}` : ''}</span></div><div><strong>${week.foodDays}</strong><span>days food logged</span></div><div><strong>${week.sleep === null ? '—' : upFmt(week.sleep, 1)}</strong><span>avg sleep (h)</span></div></div>${recentWeightLine()}</a></div><div class="dash-links"><a class="btn secondary" href="#today">${I('sun')}Daily journal</a><a class="btn secondary" href="#explore">${I('book')}Learn</a><a class="btn secondary" href="#plan">${I('flag')}Weekly plan</a><a class="btn secondary" href="#exercise">${I('activity')}Pain Solution programme</a><a class="btn secondary mobile-only" href="#progress">${I('chart')}Progress</a><a class="btn secondary mobile-only" href="#journal">${I('journal')}My journal</a></div><p class="feedback-line">Trying out the online journal? Tell Ger what works and what doesn’t: <a class="text-link" href="mailto:ger@wellmind.ie?subject=Online%20journal%20feedback">ger@wellmind.ie</a></p>${support()}`;
 }
 function recentWeightLine() {
   const pts = weightSeries();
@@ -638,6 +638,7 @@ function render() {
     if (location.hash !== h) location.hash = h;
   }
   baseRender();
+  injectChapterGuide();
 }
 function entryRoute(e) {
   if (e.kind === 'profile') return 'profile';
@@ -654,7 +655,7 @@ function entryPreview(e) {
   return legacyEntryPreview(e);
 }
 const upgradeLabels = {
-  name: 'Name', goal: 'Main goal', obstacle: 'Biggest obstacle', respSelf: 'Responsibilities to myself', respFamily: 'Responsibilities: family', respRelationships: 'Responsibilities: relationships', respWork: 'Responsibilities: work', special: 'Automatic targets switched off', levels: 'Consistency levels shown', onboardedAt: 'Journal started', onboardingStep: 'Onboarding step', weightDate: 'Weight recorded on', startWeight: 'Starting weight (kg)', stepsTarget: 'Daily steps target', activeDaysTarget: 'Active days per week', strengthTarget: 'Strength sessions per week', minutesTarget: 'Active minutes per week', status: 'Status', completedOn: 'Completed on', goalProgress: 'Progress towards goal', stepsAvg: 'Average daily steps', exercise: 'Exercise & movement', nutrition: 'Nutrition & calorie target', sleepAvg: 'Typical sleep (h)', wellbeing: 'Wellbeing /10', well: 'What went well', sumSteps: 'Average steps (logged)', sumSleep: 'Average sleep (logged)', sumCalories: 'Average calories (logged)', sumProtein: 'Average protein (logged)', sumMinutes: 'Active minutes (logged)', sumSessions: 'Activities (logged)', sumActiveDays: 'Active days', sumFoodDays: 'Days with food logged', source: 'Set by', note: 'Note', carbs: 'Carbohydrate (g)', fat: 'Fat (g)', log: 'Activities',
+  name: 'Name', goal: 'Main goal', obstacle: 'Biggest obstacle', respSelf: 'Responsibilities to myself', respFamily: 'Responsibilities: family', respRelationships: 'Responsibilities: relationships', respWork: 'Responsibilities: work', special: 'Automatic targets switched off', levels: 'Consistency levels shown', guide: 'Next-to-do items ticked off', guideHidden: 'Next-to-do list hidden', onboardedAt: 'Journal started', onboardingStep: 'Onboarding step', weightDate: 'Weight recorded on', startWeight: 'Starting weight (kg)', stepsTarget: 'Daily steps target', activeDaysTarget: 'Active days per week', strengthTarget: 'Strength sessions per week', minutesTarget: 'Active minutes per week', status: 'Status', completedOn: 'Completed on', goalProgress: 'Progress towards goal', stepsAvg: 'Average daily steps', exercise: 'Exercise & movement', nutrition: 'Nutrition & calorie target', sleepAvg: 'Typical sleep (h)', wellbeing: 'Wellbeing /10', well: 'What went well', sumSteps: 'Average steps (logged)', sumSleep: 'Average sleep (logged)', sumCalories: 'Average calories (logged)', sumProtein: 'Average protein (logged)', sumMinutes: 'Active minutes (logged)', sumSessions: 'Activities (logged)', sumActiveDays: 'Active days', sumFoodDays: 'Days with food logged', source: 'Set by', note: 'Note', carbs: 'Carbohydrate (g)', fat: 'Fat (g)', log: 'Activities',
 };
 function labelFor(k) {
   return upgradeLabels[k] || legacyLabelFor(k);
@@ -668,6 +669,14 @@ function upgradeFieldOk(e, k, v) {
   if (b && v !== '' && (!Number.isFinite(Number(v)) || Number(v) < b[0] || Number(v) > b[1])) return false;
   if (['onboardedAt', 'completedOn', 'weightDate'].includes(k) && v !== '' && !dateOk(v)) return false;
   if (k === 'log') return jsonListOk(v, validActivity, 60);
+  if (e.kind === 'profile' && k === 'guide') {
+    try {
+      const o = JSON.parse(v);
+      return !!o && typeof o === 'object' && !Array.isArray(o) && Object.entries(o).every(([gk, d]) => GUIDE.some((g) => g.key === gk) && dateOk(d));
+    } catch {
+      return false;
+    }
+  }
   if (k === 'foods') return jsonListOk(v, validLibraryFood, 500);
   if (k === 'meals') return jsonListOk(v, validSavedMeal, 200);
   return true;
@@ -740,6 +749,7 @@ function upgradeAction(name, el) {
   return upgradeExtraAction(name, el);
 }
 function upgradeExtraAction(name, el) {
+  if (guideAction(name, el) !== false) return;
   if (foodAction(name, el) !== false) return;
   if (moveAction(name, el) !== false) return;
   return false;
@@ -1499,6 +1509,124 @@ function levelCard() {
   const recent = L.weeks.slice(-4).reverse();
   const tick = (b) => (b ? '✓' : '·');
   return `<section class="card card-pad"><div class="card-heading"><div><h2>Consistency level ${L.level}: ${esc(L.name)}</h2><p>${L.good} good week${L.good === 1 ? '' : 's'} so far${L.level < 12 ? ` · ${L.toNext} more for Level ${L.level + 1}` : ''}. Separate from your exercise programme levels.</p></div></div><div class="level-track">${Array.from({ length: 12 }, (_, i) => `<span class="${i < L.level ? 'on' : ''}">${i + 1}</span>`).join('')}</div><div class="table-wrap"><table class="mini-table"><thead><tr><th>Week of</th><th>Logged 3 days</th><th>Moved 2 days</th><th>Learned</th><th>Check-in</th><th>Good week</th></tr></thead><tbody>${recent.map((w) => `<tr><th>${pretty(w.start, { day: 'numeric', month: 'short' })}</th>${w.met.map((m) => `<td>${tick(m)}</td>`).join('')}<td>${w.good ? '✓' : w.start >= monday(today()) ? 'in progress' : '—'}</td></tr>`).join('')}</tbody></table></div><p class="helper-note">Any two of the four make a good week. Take a break whenever you need one; your level waits for you. <button class="link-btn small" data-up="levels-off">Turn off</button></p></section>`;
+}
+
+// ===================== "Next to do" guide =====================
+// A gentle, optional order for exploring the journal. Set-up steps tick themselves off from
+// what the person has recorded; learning topics are ticked off by the person (or by the
+// weekly plan's "I've reviewed this topic" box). Stored in the profile as `guide` (JSON).
+const GUIDE = [
+  { key: 'profile', kind: 'auto', title: 'Set up your profile', blurb: 'Your goal, targets and what matters to you.', link: 'profile', icon: 'person' },
+  { key: 'daily', kind: 'auto', title: 'Do your first daily check-in', blurb: 'Sleep, mood and energy in under a minute.', link: 'today', icon: 'sun' },
+  { key: 'food', kind: 'auto', title: 'Log a meal or snack', blurb: 'Search, scan or type in anything you ate today.', link: 'food', icon: 'food' },
+  { key: 'move', kind: 'auto', title: 'Record some movement', blurb: 'Steps, a walk, or any activity counts.', link: 'move', icon: 'activity' },
+  { key: 'sleep', kind: 'learn', title: 'Sleep & recovery', blurb: 'Notice your sleep and choose one small evening change.', link: 'read/8', from: 8, to: 9, legacy: 0, icon: 'moon' },
+  { key: 'selfcare', kind: 'learn', title: 'Everyday self-care', blurb: 'Find a smaller, kinder version of an ordinary day.', link: 'read/10', from: 10, to: 13, legacy: 1, icon: 'heart' },
+  { key: 'programme', kind: 'auto', optional: true, title: 'Choose your Pain Solution programme', blurb: 'Optional — pick the level your therapist suggested.', link: 'exercise', icon: 'activity' },
+  { key: 'foodcare', kind: 'learn', title: 'Food & body care', blurb: 'Nourishment, practical choices and optional tracking.', link: 'read/14', from: 14, to: 28, legacy: 2, icon: 'food' },
+  { key: 'checkin', kind: 'auto', title: 'Your first weekly check-in', blurb: 'A two-minute look back at your week.', link: 'checkin', icon: 'calendar' },
+  { key: 'screens', kind: 'learn', title: 'Screen time & attention', blurb: 'Make a little more room for what matters to you.', link: 'read/29', from: 29, to: 30, legacy: 3, icon: 'phone' },
+  { key: 'pause', kind: 'learn', title: 'Pausing & meditation', blurb: 'Try a brief pause, without having to feel a certain way.', link: 'read/31', from: 31, to: 32, legacy: 4, icon: 'leaf' },
+  { key: 'goals', kind: 'learn', title: 'Your life & goal setting', blurb: 'See where you are and choose a step that feels possible.', link: 'read/33', from: 33, to: 36, legacy: 5, icon: 'wheel' },
+  { key: 'capability', kind: 'learn', title: 'Movement & everyday capability', blurb: 'Simple checks with clear set-up and stop guidance.', link: 'read/37', from: 37, to: 49, legacy: 6, icon: 'activity' },
+  { key: 'mobility', kind: 'learn', title: 'Mobility & comfort', blurb: 'Notice movement and discomfort, without a diagnosis.', link: 'read/50', from: 50, to: 60, legacy: 7, icon: 'person' },
+  { key: 'review', kind: 'learn', title: 'Review & your next direction', blurb: 'Keep what helps. Adapt what no longer fits.', link: 'read/61', from: 61, to: 62, legacy: 8, icon: 'flag' },
+];
+function guideTicks() {
+  try {
+    const o = JSON.parse(profile().guide || '{}');
+    return o && typeof o === 'object' && !Array.isArray(o) ? o : {};
+  } catch {
+    return {};
+  }
+}
+function guideAuto(key) {
+  const entries = Object.values(state.entries);
+  if (key === 'profile') return onboarded();
+  if (key === 'daily') return entries.some((e) => e.kind === 'daily');
+  if (key === 'food') return entries.some((e) => e.kind === 'food');
+  if (key === 'move') return entries.some((e) => e.kind === 'activity' || (e.kind === 'daily' && upNum(e.fields.steps) !== null));
+  if (key === 'programme') return !!exerciseRecord()?.fields.programme;
+  if (key === 'checkin') return reviews('complete').length > 0;
+  return false;
+}
+function guideStatus() {
+  const ticks = guideTicks(), plan = planRecord()?.fields || {};
+  return GUIDE.map((g) => {
+    const done = g.kind === 'auto' ? guideAuto(g.key) || !!ticks[g.key] : !!ticks[g.key] || plan['done' + g.legacy] === 'true';
+    const waiting = g.key === 'checkin' && !done && !checkinIsDue() && !reviews('draft').length ? checkinDue() : null;
+    return { ...g, done, waiting };
+  });
+}
+function guideCard() {
+  if (profile().guideHidden === 'true') return '';
+  const list = guideStatus(), doneCount = list.filter((g) => g.done).length;
+  const next = list.find((g) => !g.done && !g.waiting);
+  const after = next ? list.filter((g) => !g.done && g !== next).slice(0, 2) : [];
+  const pct = Math.round((doneCount / list.length) * 100);
+  const row = (g) =>
+    `<li class="guide-item ${g.done ? 'done' : ''} ${g === next ? 'is-next' : ''}"><button class="guide-tick" data-up="guide-tick" data-key="${g.key}" aria-pressed="${g.done}" aria-label="${g.done ? 'Untick' : 'Tick off'} ${esc(g.title)}" ${g.kind === 'auto' && guideAuto(g.key) ? 'disabled title="Ticked automatically from what you recorded"' : ''}>${g.done ? '✓' : ''}</button><a href="#${g.link}"><strong>${esc(g.title)}${g.optional ? ' <small>optional</small>' : ''}</strong><span>${g.waiting ? `Opens ${pretty(g.waiting, { weekday: 'long', day: 'numeric', month: 'short' })}` : esc(g.blurb)}</span></a></li>`;
+  return `<section class="card guide-card" aria-labelledby="guide-h"><div class="guide-head"><div><div class="eyebrow">Your journal, one step at a time</div><h2 id="guide-h">Next to do</h2></div><div class="guide-progress" aria-label="${doneCount} of ${list.length} done"><span>${doneCount} of ${list.length} done</span><div class="bar"><i style="width:${pct}%"></i></div></div></div>${
+    next
+      ? `<a class="guide-next" href="#${next.link}">${I(next.icon || 'arrow')}<span><small>Up next</small><strong>${esc(next.title)}</strong><em>${esc(next.blurb)}</em></span><span class="btn small">${next.kind === 'learn' ? 'Open' : 'Start'} ${I('arrow')}</span></a>${after.length ? `<p class="guide-after">Then: ${after.map((g) => esc(g.title) + (g.waiting ? ` (from ${pretty(g.waiting, { day: 'numeric', month: 'short' })})` : '')).join(' · ')}</p>` : ''}`
+      : `<p class="guide-alldone">${doneCount === list.length ? 'Everything on the list is ticked off. Keep coming back to the topics that help — the list is yours to reuse.' : 'You’re up to date. The next item opens soon.'}</p>`
+  }<details class="guide-all"><summary>See the full list ${I('down')}</summary><ol class="guide-list">${list.map(row).join('')}</ol><p class="helper-note">Go in any order and skip anything that doesn’t fit. Set-up steps tick themselves off; tap the circle to tick off a topic when you’ve read it and tried something. <button class="link-btn small" data-up="guide-hide">Hide this list</button></p></details></section>`;
+}
+function setGuideTick(key, on) {
+  const rec = profileRecord();
+  if (!rec) return;
+  const t = guideTicks();
+  if (on) t[key] = today();
+  else delete t[key];
+  rec.fields.guide = JSON.stringify(t);
+  saveRecordObject(rec);
+}
+function guideAction(name, el) {
+  if (name === 'guide-tick') {
+    const g = GUIDE.find((x) => x.key === el.dataset.key);
+    if (!g || (g.kind === 'auto' && guideAuto(g.key))) return;
+    const st = guideStatus().find((x) => x.key === g.key);
+    const plan = planRecord();
+    if (st.done && g.kind === 'learn' && plan?.fields['done' + g.legacy] === 'true') {
+      plan.fields['done' + g.legacy] = 'false';
+      saveRecordObject(plan);
+    }
+    setGuideTick(g.key, !st.done);
+    renderPreservingScroll();
+    if (!st.done) toast(`${g.title} ticked off.`);
+    return;
+  }
+  if (name === 'guide-hide' || name === 'guide-show') {
+    const rec = profileRecord();
+    if (!rec) return;
+    rec.fields.guideHidden = name === 'guide-hide' ? 'true' : 'false';
+    saveRecordObject(rec);
+    renderPreservingScroll();
+    return toast(name === 'guide-hide' ? 'List hidden. Bring it back any time from your profile.' : 'Your “Next to do” list is back on Home.');
+  }
+  return false;
+}
+// End-of-chapter strip on reading pages: "Tick it off" and what comes next.
+function chapterGuideStrip() {
+  const [r, n] = route().split('/');
+  if (r !== 'read') return '';
+  const num = Number(n), g = GUIDE.find((x) => x.kind === 'learn' && num >= x.from && num <= x.to);
+  if (!g) return '';
+  const list = guideStatus(), st = list.find((x) => x.key === g.key);
+  const next = list.find((x) => !x.done && !x.waiting && x.key !== g.key);
+  return `<section class="card chapter-done ${st.done ? 'done' : ''}"><div><h3>${st.done ? `✓ ${esc(g.title)} is ticked off` : `Finished with ${esc(g.title)}?`}</h3><p>${st.done ? (next ? `Next to do: <a class="text-link" href="#${next.link}">${esc(next.title)}</a>` : 'Everything on your list is ticked off.') : 'Tick it off when you’ve read it and tried one thing. You can come back any time.'}</p></div>${st.done ? `<button class="btn subtle small" data-guide-chapter="${g.key}" data-on="false">Untick</button>` : `<button class="btn" data-guide-chapter="${g.key}" data-on="true">Tick it off ${I('check')}</button>`}</section>`;
+}
+function injectChapterGuide() {
+  const html = chapterGuideStrip(), main = document.querySelector('#main');
+  if (!html || !main || typeof main.insertAdjacentHTML !== 'function') return;
+  main.insertAdjacentHTML('beforeend', html);
+  main.querySelectorAll('[data-guide-chapter]').forEach((b) =>
+    b.addEventListener('click', () => {
+      setGuideTick(b.dataset.guideChapter, b.dataset.on === 'true');
+      renderPreservingScroll();
+      if (b.dataset.on === 'true') toast('Ticked off. Nice work.');
+    }),
+  );
 }
 
 let selectedDates={},state={version:1,entries:{}},storageError='',pages=[],currentDate=today(),currentRecord=null,searchTerm='',historyFilter='all',bodySide='front';
