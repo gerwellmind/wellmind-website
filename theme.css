@@ -151,3 +151,16 @@ footer a{color:#f7e2ad}
 .app-gift .text-link{color:#f7e2ad}
 .app-gift .giftcard{text-decoration:none;transform:rotate(3deg);max-width:320px;justify-self:center}
 @media(max-width:900px){.app-gift-inner{grid-template-columns:1fr}.app-gift .giftcard{transform:none}}
+/* Christmas bar (top of site) */
+.xmas-bar{display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap;padding:10px 18px;text-align:center;text-decoration:none;font-size:.93rem;color:#fff6e6!important;background:linear-gradient(90deg,#7a2321,#a5352f 30%,#1f5a45 70%,#16302a);position:relative;z-index:60}
+.xmas-bar b{color:#ffe1a3;font-weight:700}
+.xmas-bar .xb-flake{color:#ffe9b0;font-size:1rem}
+.xmas-bar .xb-go{padding:4px 12px;border-radius:999px;background:#f5d995;color:#1e2a24;font-weight:700;font-size:.85rem;white-space:nowrap}
+.xmas-bar:hover .xb-go{background:#f8e2a8}
+@media(max-width:640px){.xmas-bar{font-size:.84rem;gap:8px;padding:9px 12px}}
+/* homepage gift section sits between hero and strip */
+#christmas-gift{margin-top:0}
+.app-cta{display:flex;flex-wrap:wrap;align-items:center;gap:18px 22px;margin-top:26px}
+#christmas-gift{border-top:0}
+#christmas-gift::after{content:"";position:absolute;left:50%;top:0;width:min(1100px,90vw);transform:translateX(-50%);height:1px;background:linear-gradient(90deg,transparent,#ecc97f88,transparent)}
+@media(max-width:640px){.xmas-bar .xb-flake{display:none}}
