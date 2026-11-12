@@ -520,6 +520,105 @@ details.explain ol{padding-left:18px;color:#33433c}
 .logo-plaque{display:grid;place-items:center;margin:0 0 16px;padding:22px;border-radius:24px;background:#fbf7ee;box-shadow:var(--shadow)}
 .logo-plaque img{width:min(300px,80%);height:auto}
 
+/* ---------- v7: focus, rhythm, booking, unlock ---------- */
+.truth{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.truth-b{border:0;padding:12px 16px;border-radius:18px;background:#efe8d9;color:#2c3c35;font-weight:600;font-size:15px;text-align:left;transition:transform .15s,background .2s}
+.truth-b.on{background:var(--c);color:#13211c;transform:scale(1.03)}
+.truth-b.on::before{content:"✓ "}
+.why-big{font-family:var(--display);font-size:30px;line-height:1.15;color:#17251f!important;margin:0 0 8px}
+.promises{list-style:none;padding:0;margin:16px 0;display:grid;gap:10px}
+.promises li{display:flex;gap:12px;align-items:center;padding:12px 14px;border-radius:16px;background:#f3eddf;font-weight:600;color:#1d2b26}
+.promises li span{flex:0 0 36px;height:36px;border-radius:50%;display:grid;place-items:center;background:var(--c);color:#13211c;font-size:17px}
+.why-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:8px}
+.why-grid div{padding:12px 10px;border-radius:14px;background:#f3eddf;text-align:center}
+.why-grid b{display:block;color:#1d2b26;font-family:var(--display);font-weight:600}
+.why-grid small{color:#5b6a63;font-size:12px;line-height:1.35;display:block;margin-top:2px}
+.focusgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:12px}
+.focus-b{border:0;text-align:left;padding:14px;border-radius:18px;background:#f3eddf;color:#1d2b26;display:grid;gap:2px;transition:transform .15s,background .2s,box-shadow .2s;position:relative}
+.focus-b .fi{font-size:20px;width:36px;height:36px;border-radius:12px;display:grid;place-items:center;background:color-mix(in srgb,var(--c) 45%,#fff);margin-bottom:4px}
+.focus-b b{font-size:14.5px;line-height:1.25}
+.focus-b small{font-size:12.5px;color:#5b6a63;line-height:1.35}
+.focus-b.on{background:color-mix(in srgb,var(--c) 32%,#fff);box-shadow:inset 0 0 0 2px var(--c);transform:scale(1.02)}
+.focus-b.on::after{content:"✓";position:absolute;top:10px;right:12px;font-weight:800;color:#1d2b26}
+.fcards{display:grid;gap:10px}
+.fcard{padding:16px;border-radius:var(--r);background:linear-gradient(135deg,color-mix(in srgb,var(--c) 18%,transparent),rgba(255,255,255,.03));box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--c) 35%,transparent)}
+.fhead{display:flex;gap:12px;align-items:center}
+.fhead .fi{flex:0 0 44px;height:44px;border-radius:14px;display:grid;place-items:center;font-size:21px;background:var(--c);color:#13211c}
+.fhead h3{margin:0;font-size:18px}
+.fnext{display:flex;gap:12px;align-items:center;margin:12px 0 8px;padding:12px 14px;border-radius:16px;background:rgba(0,0,0,.18);color:var(--ink);text-decoration:none}
+.fnext>span:first-child{font-size:22px;width:30px;text-align:center}
+.fnext b{display:block}.fnext small{color:var(--muted)}
+.fnext .go{margin-left:auto;color:var(--muted)}
+.nudge{display:block;margin-top:10px;padding:12px 16px;border-radius:16px;background:rgba(157,184,255,.1);box-shadow:inset 0 0 0 1px rgba(157,184,255,.25);color:var(--ink);text-decoration:none;font-size:14px}
+.dcard{margin-top:16px;padding:22px 20px;border-radius:var(--r);background:linear-gradient(140deg,#fbf3dc,#f1e2b8);color:#1d2b26;box-shadow:var(--shadow);position:relative;overflow:hidden}
+.dcard::after{content:"✦";position:absolute;right:16px;top:12px;font-size:22px;color:#c59a43}
+.dcard .eyebrow{color:#8a6a2a}
+.dcard p{font-family:var(--display);font-size:21px;line-height:1.35;margin:6px 0 0;color:#1d2b26}
+.memory{margin-top:16px}
+.memory q{font-family:var(--display);font-size:18px;color:var(--gold2)}
+.daypart{margin:4px 0 14px}
+.prios{display:grid;gap:8px}
+.prio{display:flex;align-items:center;gap:10px}
+.prio>span{flex:0 0 30px;height:30px;border-radius:50%;display:grid;place-items:center;background:var(--c);color:#13211c;font-weight:800;font-size:14px}
+.prio input{flex:1;min-width:0;border:0;border-radius:14px;padding:13px 15px;background:#f1ebdd;color:#1d2b26;box-shadow:inset 0 0 0 1px rgba(29,43,38,.08);font-size:16px}
+.prio input:focus{outline:none;background:#fff;box-shadow:inset 0 0 0 2px var(--c)}
+.prev{padding:12px 14px;border-radius:16px;background:#f3eddf;margin-bottom:8px}
+.prev p{margin:0;font-weight:600;color:#1d2b26}
+.prev .feel-chips{margin:8px 0 0}
+.prev .feel{padding:9px 13px;font-size:14px;background:#fff}
+.prev .feel.on{background:var(--c)}
+.med{margin-top:22px;padding:16px;border-radius:20px;background:#17251f;color:var(--ink)}
+.med-top{display:flex;gap:12px;align-items:center;margin-bottom:12px}
+.med-ic{flex:0 0 40px;height:40px;border-radius:50%;display:grid;place-items:center;background:radial-gradient(circle at 35% 30%,#fff3cf,#ecc97f 50%,#a77d2e);color:#1d2b26;font-size:19px}
+.med .eyebrow{color:var(--muted)!important}
+.med b{color:var(--ink)}
+.yt{position:relative;aspect-ratio:16/9;border-radius:14px;overflow:hidden;background:#000}
+.yt img,.yt iframe{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border:0}
+.yt-play{position:absolute;inset:0;margin:auto;width:68px;height:68px;border-radius:50%;border:0;background:rgba(236,201,127,.95);color:#1d2b26;font-size:24px;box-shadow:0 10px 30px rgba(0,0,0,.4)}
+.med-foot{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:12px;flex-wrap:wrap}
+.med .linkbtn,.cardx .med a{color:var(--gold)}
+.med .tog{background:rgba(255,255,255,.08);color:var(--ink)}
+.med .tog.on{background:var(--c);color:#13211c}
+.rhythm{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:12px 0}
+.rhythm div{padding:14px;border-radius:16px;background:#f3eddf}
+.rhythm span{font-size:22px}.rhythm b{display:block;color:#1d2b26}.rhythm small{color:#5b6a63;line-height:1.4;display:block}
+.cardx input[type=time]{width:100%;border:0;border-radius:14px;padding:13px 15px;background:#f1ebdd;color:#1d2b26;box-shadow:inset 0 0 0 1px rgba(29,43,38,.08);font-size:16px}
+.remrow{display:flex;gap:8px;flex-wrap:wrap}
+.book{display:flex;gap:16px;align-items:flex-start;margin-top:16px;padding:18px;border-radius:var(--r);background:linear-gradient(135deg,rgba(236,201,127,.2),rgba(242,167,180,.12));box-shadow:inset 0 0 0 1px rgba(236,201,127,.35)}
+.book-ic{flex:0 0 54px;height:54px;border-radius:50%;display:grid;place-items:center;background:rgba(0,0,0,.25)}
+.book-ic img{width:38px;height:38px}
+.book h3{margin:2px 0 4px;font-size:19px}
+.book p{margin:0 0 12px;color:var(--muted);font-size:14px}
+.book-btns{display:flex;gap:8px;flex-wrap:wrap}
+.book.compact{margin-top:0}
+.unlock{text-align:center;padding:6px 0 0}
+.lock-orb{width:64px;height:64px;margin:6px auto 10px;border-radius:50%;display:grid;place-items:center;font-size:28px;background:radial-gradient(circle at 35% 30%,#fff3cf,#ecc97f 50%,#a77d2e);box-shadow:0 0 30px rgba(236,201,127,.45)}
+.unlock h2{margin:0 0 6px}
+.ticks{list-style:none;padding:0;margin:14px auto;text-align:left;max-width:420px;display:grid;gap:6px}
+.ticks li{padding-left:26px;position:relative;font-size:14.5px}
+.ticks li::before{content:"✦";position:absolute;left:4px;color:#c59a43}
+.plans{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:16px 0 10px}
+.plan{position:relative;border:0;text-decoration:none;padding:18px 12px 14px;border-radius:18px;background:#f3eddf;color:#1d2b26!important;display:grid;gap:4px;box-shadow:inset 0 0 0 1px rgba(29,43,38,.1);transition:transform .15s}
+.plan:hover{transform:translateY(-2px)}
+.plan b{font-family:var(--display);font-size:19px;font-weight:600}
+.plan small{font-size:12.5px;color:#5b6a63;line-height:1.35}
+.plan.best{background:linear-gradient(135deg,#f5d995,#e3b866);box-shadow:0 10px 30px rgba(236,201,127,.35)}
+.plan.best small{color:#3d3420}
+.plan .tag{position:absolute;top:-9px;left:50%;transform:translateX(-50%);background:#1d2b26;color:#f7e2ad;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:3px 10px;border-radius:99px;white-space:nowrap}
+.code{margin-top:8px;text-align:left}
+.code summary{cursor:pointer;font-weight:600;color:#2f6b5b;text-align:center}
+.coderow{display:flex;gap:8px;margin-top:10px}
+.coderow input{flex:1;min-width:0;border:0;border-radius:12px;padding:11px 13px;background:#f1ebdd;color:#1d2b26;box-shadow:inset 0 0 0 1px rgba(29,43,38,.12);font-size:16px;text-transform:uppercase}
+.sheet .unlock h2{color:#17251f}
+.plan-own{background:linear-gradient(135deg,rgba(236,201,127,.2),rgba(127,216,198,.1))}
+@media (max-width:420px){.why-grid{grid-template-columns:1fr}.rhythm{grid-template-columns:1fr}.plans{grid-template-columns:1fr}.book{flex-direction:column;gap:10px}}
+.plans.one{grid-template-columns:1fr;max-width:380px;margin-left:auto;margin-right:auto}
+.codebox{margin:14px auto 0;max-width:420px;padding:14px 16px;border-radius:18px;background:#e9f3ee;box-shadow:inset 0 0 0 1px rgba(47,107,91,.25);text-align:left}
+.codebox b{display:block;color:#1d2b26;font-family:var(--display);font-size:17px}
+.codebox small{display:block;color:#4a5953;margin-bottom:8px}
+.codebox .coderow{margin-top:0}
+.preview-tag{display:inline-block;margin:0 0 12px;padding:5px 12px;border-radius:99px;background:#e9f3ee;color:#2f6b5b;font-size:12.5px;font-weight:700}
+
 </style>
 </head>
 <body>
@@ -1026,7 +1125,7 @@ function upsert(kind, date, title, mutate) {
 }
 
 // ---------------- Understanding store ----------------
-function uBlank() { return { v: 1, answers: {}, toggles: {}, values: { ten: [], five: [], three: [], round: 1 }, wheelLabels: WHEEL_AREAS.slice(), done: {}, opened: {}, art: { color: '#ecc97f', shape: 'star' }, seen: '', sky: 'ew' }; }
+function uBlank() { return { v: 1, answers: {}, toggles: {}, values: { ten: [], five: [], three: [], round: 1 }, wheelLabels: WHEEL_AREAS.slice(), done: {}, opened: {}, art: { color: '#ecc97f', shape: 'star' }, seen: '', sky: 'ew', focus: [], feel: [], focusAsked: '', rhythm: null, remindersAdded: '', plan: null, planChecked: '' }; }
 let U = uBlank();
 (function loadU() {
   try {
@@ -1133,8 +1232,8 @@ function setDaily(d, k, v) {
   return upsert('daily', d, 'Daily check-in', (f) => { if (!f.trackingBasis && !E.entries[`daily:${d}`]) f.trackingBasis = 'today'; if (v === '' || v === null) delete f[k]; else f[k] = String(v); });
 }
 const listOf = (s) => String(s || '').split('|').filter(Boolean);
-const DAILY_BOUNDS = { sleep: [0, 24], mood: [0, 10], energy: [0, 10], steps: [0, 200000], screenHours: [0, 24], screenMinutes: [0, 59], dayKcal: [0, 30000], dayProtein: [0, 2000], dayCarbs: [0, 3000], dayFat: [0, 1000] };
-function checkedIn(d) { const f = daily(d); return ['sleep', 'mood', 'energy', 'mind', 'action', 'care', 'feelings', 'words', 'helps'].some((k) => String(f[k] ?? '').trim()); }
+const DAILY_BOUNDS = { sleep: [0, 24], mood: [0, 10], energy: [0, 10], dayScore: [0, 10], steps: [0, 200000], screenHours: [0, 24], screenMinutes: [0, 59], dayKcal: [0, 30000], dayProtein: [0, 2000], dayCarbs: [0, 3000], dayFat: [0, 1000] };
+function checkedIn(d) { const f = daily(d); return ['sleep', 'mood', 'energy', 'mind', 'action', 'care', 'feelings', 'words', 'helps', 'p1', 'p2', 'p3', 'd1', 'd2', 'd3', 'well', 'dayScore', 'medAm', 'medPm'].some((k) => String(f[k] ?? '').trim()); }
 
 // ---------------- Food totals ----------------
 const DAY_KEYS = { calories: 'dayKcal', protein: 'dayProtein', carbs: 'dayCarbs', fat: 'dayFat' };
@@ -1272,7 +1371,7 @@ function sparks() {
   let s = Object.values(U.answers).filter((a) => a.text && a.text.trim()).length;
   for (const e of entries()) {
     if (/^page\d+$/.test(e.kind)) s += Object.values(e.fields).filter((v) => String(v).trim() && v !== 'false').length;
-    else if (e.kind === 'daily') s += checkedIn(e.date) ? 3 : 0;
+    else if (e.kind === 'daily') s += amDone(e.date) || pmDone(e.date) ? (amDone(e.date) ? 3 : 0) + (pmDone(e.date) ? 3 : 0) : checkedIn(e.date) ? 3 : 0;
     else if (e.kind === 'activity' && e.fields.log && e.fields.log !== '[]') s += 2;
     else if (e.kind === 'review' && e.fields.status === 'complete') s += 10;
     else if (e.kind === 'weekly') s += 5;
@@ -1369,7 +1468,7 @@ function setToggle(key, on) {
 
 // ---------------- shell ----------------
 const NAV = [['home', '✦', 'Home'], ['today', '☾', 'Today'], ['track', '◎', 'Track'], ['tools', '✧', 'Toolkit'], ['me', '♡', 'Me']];
-const SECTION = { home: 'home', find: 'home', today: 'today', week: 'today', track: 'track', food: 'track', move: 'track', checkin: 'track', progress: 'track', tools: 'tools', calm: 'tools', minute: 'tools', me: 'me', profile: 'me', share: 'me', about: 'me' };
+const SECTION = { focus: 'home', reminders: 'me', home: 'home', find: 'home', today: 'today', week: 'today', track: 'track', food: 'track', move: 'track', checkin: 'track', progress: 'track', tools: 'tools', calm: 'tools', minute: 'tools', me: 'me', profile: 'me', share: 'me', about: 'me' };
 function navbar(on) { return `<div class="navbar"><nav aria-label="Main">${NAV.map(([r, i, l]) => `<a href="#${r}" class="${on === r ? 'on' : ''}" ${on === r ? 'aria-current="page"' : ''}><span aria-hidden="true">${i}</span>${l}</a>`).join('')}</nav></div>`; }
 function topbar() { return `<div class="topbar"><a class="brand" href="#home" aria-label="Well Mind home"><span class="mark"><img src="assets/emblem.webp" alt="" width="30" height="30"></span><span>Well Mind</span></a><div class="spacer"></div><span class="pill" title="Sparks">✦ <b data-sparks>${sparks()}</b></span><button class="support-btn" data-act="support">Need support?</button></div>`; }
 function warnings() {
@@ -1401,7 +1500,7 @@ function playerView(P) {
 function introCard(j, ch) {
   const pr = progressOf(j, ch);
   return `<article class="cardx ${dir < 0 ? 'back' : ''}"><div class="intro-hero"><div class="big">${ch.glyph}</div><div><div class="eyebrow">${JOURNEYS[j].title} · ${pad(ch.n)}</div><h2 style="margin:4px 0 0;font-size:32px">${esc(ch.title)}</h2></div></div>
-  <div class="consider"><small>Consider</small>${esc(ch.consider)}</div>${ch.intro.map((p) => `<p class="lead">${esc(p)}</p>`).join('')}
+  ${chLocked(j, ch.n) ? `<div class="preview-tag">Free preview · the first ${PREVIEW_CARDS === 1 ? 'card is' : PREVIEW_CARDS + ' cards are'} open to try</div>` : ''}  <div class="consider"><small>Consider</small>${esc(ch.consider)}</div>${ch.intro.map((p) => `<p class="lead">${esc(p)}</p>`).join('')}
   <p class="small" style="color:#6b7a73;margin-top:16px">${deck(j, ch).length} cards · answer what helps, skip what doesn’t${pr.got ? ` · you’ve answered ${pr.got} already` : ''}.${isLit(j, ch.n) ? ' ✦ This star is lit.' : ''}</p></article>`;
 }
 function finishCard(j, ch) {
@@ -1410,7 +1509,7 @@ function finishCard(j, ch) {
   <p>${done ? `You lit it on ${pretty(U.done[doneKey(j, ch.n)])}. You can return and add to it any time.` : 'There’s no score to reach. Light it whenever it feels finished enough for now.'}</p>
   <div class="stat-row"><div class="stat"><b>${pr.got}</b><span>of ${pr.tot} prompts</span></div><div class="stat"><b>${done ? '✓' : '+10'}</b><span>${done ? 'lit' : 'sparks'}</span></div></div>
   <div style="display:grid;gap:10px;margin-top:14px">${done ? `<button class="btn" data-act="reveal" data-j="${j}" data-n="${ch.n}">See my insight card</button>` : `<button class="btn" data-act="light" data-j="${j}" data-n="${ch.n}">Light this star ✦</button>`}
-  <a class="btn ghost" href="#share" data-act="share-ch" data-j="${j}" data-n="${ch.n}">Share this chapter with Ger</a><a class="btn ghost" href="#${rid(j, ch.n, deck(j, ch).length)}" data-dir="-1">← Back to the last card</a><a class="linkbtn" href="#home" style="margin-top:6px">Back to my sky</a></div></article>`;
+  <a class="btn ghost" href="#share" data-act="share-ch" data-j="${j}" data-n="${ch.n}">Share this chapter with Ger</a><a class="btn ghost" href="${BOOK_URL}" target="_blank" rel="noopener">Talk it through with Ger</a><a class="btn ghost" href="#${rid(j, ch.n, deck(j, ch).length)}" data-dir="-1">← Back to the last card</a><a class="linkbtn" href="#home" style="margin-top:6px">Back to my sky</a></div></article>`;
 }
 function tableHtml(t) { return `<div style="overflow-x:auto"><table class="tbl"><thead><tr>${t.head.map((h) => `<th>${esc(h)}</th>`).join('')}</tr></thead><tbody>${t.rows.map((r) => `<tr>${r.map((c) => `<td>${esc(c)}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`; }
 function stepCard(j, ch, st, i) {
@@ -1673,28 +1772,37 @@ function homeView() {
   const lv = level(), name = firstName(), d = today();
   const act = activeDates(), now = new Date(), days = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
   const moons = Array.from({ length: days }, (_, i) => { const iso = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(i + 1)}`; return `<i class="${act.has(iso) ? 'on' : ''} ${iso === d ? 'today' : ''}" title="${pretty(iso)}"></i>`; }).join('');
-  const t = currentTargets(), ft = dayTotals(d), steps = num(daily(d).steps), acts = activityItems(d);
-  const quests = [
-    questCard('#today', '☾', 'Daily quest · a minute or two', checkedIn(d) ? 'Checked in — well done' : 'My daily check-in', checkedIn(d) ? 'Come back any time to add to it.' : 'How am I feeling? What might help me today?', checkedIn(d)),
-    questCard('#food', '❦', 'Food totals', dayHasFood(d) ? `${fmt(ft.calories.value)} kcal noted` : 'Add today’s food totals', t.calories ? `Target ${fmt(t.calories)} kcal · ${fmt(t.protein)} g protein` : 'From MyFitnessPal or any food app', dayHasFood(d)),
-    questCard('#move', '✶', 'Movement', acts.length || steps !== null ? `${acts.length ? acts.length + ' activit' + (acts.length > 1 ? 'ies' : 'y') : ''}${acts.length && steps !== null ? ' · ' : ''}${steps !== null ? fmt(steps) + ' steps' : ''}` : 'Note today’s movement', 'Steps, a walk, strength, stretching…', acts.length > 0 || steps !== null),
-  ];
-  if (targetProposal()) quests.unshift(questCard('#profile', '◎', 'Your targets', 'New targets suggested', 'Your profile changed — review the suggestion before anything changes.', false));
+  const t = currentTargets(), ft = dayTotals(d), steps = num(daily(d).steps), acts = activityItems(d), ps = priorities(d), eve = isEvening();
+  const kept = ps.filter((p) => p.s === 'done').length;
+  const amQ = questCard('#today-am', '☀', 'Morning check-in · two minutes', amDone(d) ? (ps.length ? `${ps.length} priorit${ps.length > 1 ? 'ies' : 'y'} set — go well` : 'Morning check-in done') : 'Start my day', amDone(d) ? ps.map((p) => p.t).join(' · ').slice(0, 90) || 'Come back any time to add to it.' : 'Sleep, mood, today’s priorities and a morning meditation.', amDone(d));
+  const pmQ = questCard('#today-pm', '☾', 'Evening check-in · two minutes', pmDone(d) ? 'Evening check-in done' : 'Close my day', pmDone(d) ? (ps.length ? `${kept} of ${ps.length} priorities done${steps !== null ? ' · ' + fmt(steps) + ' steps' : ''}` : 'Rest well.') : (ps.length ? `Did I do my ${ps.length} priorit${ps.length > 1 ? 'ies' : 'y'}? Steps, and an evening meditation.` : 'How did today go? Steps, and an evening meditation.'), pmDone(d));
+  const quests = eve && !pmDone(d) ? [pmQ, amQ] : [amQ, pmQ];
+  if (foodOn()) quests.push(questCard('#food', '❦', 'Food totals', dayHasFood(d) ? `${fmt(ft.calories.value)} kcal noted` : 'Add today’s food totals', t.calories ? `Target ${fmt(t.calories)} kcal · ${fmt(t.protein)} g protein` : 'From MyFitnessPal or any food app', dayHasFood(d)));
+  if (hasFocus('move')) quests.push(questCard('#move', '✶', 'Movement', acts.length ? `${acts.length} activit${acts.length > 1 ? 'ies' : 'y'} noted` : 'Note today’s movement', 'A walk, strength, stretching…', acts.length > 0));
+  if (foodOn() && targetProposal()) quests.unshift(questCard('#profile', '◎', 'Your targets', 'New targets suggested', 'Your profile changed — review the suggestion before anything changes.', false));
   if (checkinIsDue()) quests.unshift(questCard('#checkin', '◷', 'Your weekly check-in is ready', 'How did this week go?', 'About two minutes — your logged days fill in the numbers.', false, 'style="box-shadow:inset 0 0 0 1px rgba(127,216,198,.6)"'));
   const cont = lastTouched() || suggestedChapter();
-  const contCard = cont ? (() => { const [j, c] = cont, pr = progressOf(j, c); return `<a class="quest" href="#${rid(j, c.n)}" style="--c:${c.hue}"><div class="orb" style="background:radial-gradient(circle at 35% 30%,#fff,${c.hue} 55%,#1d3a32);font-size:24px">${c.glyph}</div><div><div class="eyebrow">${pr.got ? 'Continue your journey' : 'Next on your journey'}</div><h3>${esc(c.title)}</h3><p>${JOURNEYS[j].title}${pr.got ? ` · ${pr.got} of ${pr.tot} prompts` : ''}</p></div></a>`; })() : '';
-  const skyId = U.sky === 'uy' ? 'uy' : 'ew', J = JOURNEYS[skyId], lit = J.list.filter((c) => isLit(skyId, c.n)).length;
+  const contCard = cont ? (() => { const [j, c] = cont, pr = progressOf(j, c); return `<a class="quest" href="#${rid(j, c.n)}" style="--c:${c.hue}"><div class="orb" style="background:radial-gradient(circle at 35% 30%,#fff,${c.hue} 55%,#1d3a32);font-size:24px">${c.glyph}</div><div><div class="eyebrow">${pr.got ? 'Continue your journey' : 'Next on your journey'}</div><h3>${esc(c.title)}</h3><p>${JOURNEYS[j].title}${pr.got ? ` · ${pr.got} of ${pr.tot} prompts` : ''}${chLocked(j, c.n) ? ' · 🔒' : ''}</p></div></a>`; })() : '';
+  const skyId = U.sky === 'uy' ? 'uy' : 'ew', J = JOURNEYS[skyId];
+  const mem = memory(), wk = prioritySummary(7);
   return page('home', `${hero(`${greeting()}${name ? ', ' + esc(name) : ''}`, 'Your <em>Well Mind</em>', 'Space to notice. Knowledge to use. A step that fits.')}
   <div class="levelbar" style="margin:-6px 2px 18px"><span class="pill"><b>Level ${lv.n}</b></span><div class="track"><div class="fill" style="width:${Math.round(lv.pct * 100)}%"></div></div><span class="small muted">${lv.next ? `${lv.next[0] - lv.sp} ✦ to Level ${lv.n + 1}` : 'Top level reached'}</span></div>
-  <div class="section-h" style="margin-top:6px"><h2>Today’s quests</h2><span class="small muted">${pretty(d, { weekday: 'long', day: 'numeric', month: 'long' })}</span></div>
-  <div class="quests">${quests.join('')}${contCard}</div>
-  ${!checkinIsDue() && onboarded() ? `<p class="small muted" style="margin:10px 4px 0">Next weekly check-in: ${pretty(checkinDue(), { weekday: 'long', day: 'numeric', month: 'short' })}.</p>` : ''}
-  <div class="glass" style="padding:16px 18px;margin-top:16px"><div class="small muted">Days you showed up this month — no streaks, no pressure</div><div class="moons">${moons}</div></div>
-  <div class="chips-row" style="margin-top:14px"><a class="mini" href="#find"><span>🧭</span>Find what you need</a><a class="mini" href="#week"><span>🗓</span>My week in view</a><a class="mini" href="#calm"><span>◯</span>Calm meter</a><a class="mini" href="#uy-10-3"><span>▢</span>Boundary builder</a><a class="mini" href="#share"><span>✉</span>Share with Ger</a></div>
+  <div class="section-h" style="margin-top:6px"><h2>Today</h2><span class="small muted">${pretty(d, { weekday: 'long', day: 'numeric', month: 'long' })}</span></div>
+  <div class="quests">${quests.join('')}</div>
+  ${!U.remindersAdded ? `<a class="nudge" href="#reminders">🔔 Get a gentle reminder each morning and evening ›</a>` : ''}
+  <div class="dcard"><div class="eyebrow">Today’s card</div><p>${esc(dailyCard())}</p></div>
+  <div class="section-h"><h2>Your focus</h2><a class="small linkbtn" href="#focus">${focusList().length ? 'Change' : 'Choose'}</a></div>
+  <div class="fcards">${focusCards()}</div>
+  ${contCard ? `<div class="quests" style="margin-top:10px">${contCard}</div>` : ''}
+  ${mem ? `<div class="glass memory"><div class="eyebrow">${mem.i >= 28 ? 'One month ago' : 'One week ago'} · ${pretty(mem.d, { weekday: 'long', day: 'numeric', month: 'short' })}</div><p>You wrote ${mem.l}: <q>${esc(mem.t.slice(0, 220))}</q></p><p class="small muted">Look how far you’ve come.</p></div>` : ''}
+  <div class="glass" style="padding:16px 18px;margin-top:16px"><div class="small muted">Days you showed up this month — no streaks, no pressure</div><div class="moons">${moons}</div>${wk.set ? `<p class="small muted" style="margin:10px 0 0">Last 7 days: ${fmt(wk.kept, 1).replace('.0', '')} of ${wk.set} priorities done ✦</p>` : ''}</div>
+  ${bookCard(false)}
+  <div class="chips-row" style="margin-top:14px"><a class="mini" href="#find"><span>🧭</span>Find what you need</a><a class="mini" href="#week"><span>🗓</span>My week in view</a><a class="mini" href="#calm"><span>◯</span>Calm meter</a><a class="mini" href="#share"><span>✉</span>Share with Ger</a></div>
   <div class="section-h"><h2>Your sky</h2></div>
   <div class="seg" role="tablist">${['ew', 'uy'].map((k) => `<button role="tab" class="${skyId === k ? 'on' : ''}" aria-selected="${skyId === k}" data-act="sky" data-sky="${k}"><b>${JOURNEYS[k].title}</b><small>${JOURNEYS[k].list.filter((c) => isLit(k, c.n)).length}/${JOURNEYS[k].list.length} lit</small></button>`).join('')}</div>
   <p class="small muted" style="margin:10px 2px 4px;text-align:center">${esc(J.sub)} No chapter is a prerequisite — start anywhere that calls you.</p>
   ${mapSvg(skyId)}
+  ${!unlocked() ? `<div class="glass" style="margin-top:20px;text-align:center"><p style="margin:0 0 10px">🔒 chapters have a free preview — open any star to see inside.</p><button class="btn small" data-act="unlock">Unlock everything · ${PRICE.lifetime}</button></div>` : ''}
   <p class="small muted" style="text-align:center;margin:30px 0 0">For adult education and reflection, not diagnosis or therapy. You choose what to share.</p>`);
 }
 function mapSvg(j) {
@@ -1705,7 +1813,7 @@ function mapSvg(j) {
   for (let i = 1; i < pts.length; i++) if (isLit(j, pts[i - 1].c.n) && isLit(j, pts[i].c.n)) lit += `<path class="path-lit" vector-effect="non-scaling-stroke" d="${toPath([pts[i - 1], pts[i]])}"/>`;
   const nodes = pts.map((p) => {
     const ch = p.c, pr = progressOf(j, ch), done = isLit(j, ch.n), r = 34, C = 2 * Math.PI * r, pct = done ? 1 : pr.tot ? pr.got / pr.tot : 0;
-    return `<a class="node ${done ? 'lit' : ''}" href="#${rid(j, ch.n)}" style="left:${p.x}%;top:${p.y}px;--c:${ch.hue}" aria-label="${esc(ch.title)}${done ? ', lit' : pr.got ? `, ${pr.got} prompts answered` : ''}"><span class="star-btn"><svg class="ring" viewBox="0 0 74 74" aria-hidden="true"><circle class="bg" cx="37" cy="37" r="${r}"/><circle class="fg" cx="37" cy="37" r="${r}" stroke-dasharray="${C.toFixed(1)}" stroke-dashoffset="${(C * (1 - pct)).toFixed(1)}"/></svg>${ch.glyph}</span><span class="num">${pad(ch.n)}</span><span class="ttl">${esc(ch.title)}</span></a>`;
+    return `<a class="node ${done ? 'lit' : ''}" href="#${rid(j, ch.n)}" style="left:${p.x}%;top:${p.y}px;--c:${ch.hue}" aria-label="${esc(ch.title)}${done ? ', lit' : pr.got ? `, ${pr.got} prompts answered` : ''}"><span class="star-btn"><svg class="ring" viewBox="0 0 74 74" aria-hidden="true"><circle class="bg" cx="37" cy="37" r="${r}"/><circle class="fg" cx="37" cy="37" r="${r}" stroke-dasharray="${C.toFixed(1)}" stroke-dashoffset="${(C * (1 - pct)).toFixed(1)}"/></svg>${ch.glyph}</span><span class="num">${chLocked(j, ch.n) ? '🔒 ' : ''}${pad(ch.n)}</span><span class="ttl">${esc(ch.title)}</span></a>`;
   }).join('');
   return `<div class="map" style="height:${H}px"><svg viewBox="0 0 400 ${H}" preserveAspectRatio="none" aria-hidden="true"><defs><linearGradient id="litgrad" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#fff2c8"/><stop offset="1" stop-color="#ecc97f"/></linearGradient></defs><path class="path-dim" vector-effect="non-scaling-stroke" d="${toPath(pts)}"/>${lit}</svg>${nodes}</div>`;
 }
@@ -1719,25 +1827,39 @@ function sliderField(k, label, max, unit, step = 1) {
 }
 function dArea(k, label, ph = 'Optional') { const v = daily(tDate)[k] || ''; return `<div class="field ${v.trim() ? 'answered' : ''}"><label for="d-${k}">${label}</label><textarea id="d-${k}" data-d="${k}" rows="2" placeholder="${ph}">${esc(v)}</textarea></div>`; }
 function dNum(k, label, unit, max) { const v = daily(tDate)[k] ?? ''; return `<div class="field"><label for="d-${k}">${label}</label><div class="input-unit"><input type="number" inputmode="numeric" id="d-${k}" min="0" max="${max}" data-dnum="${k}" value="${esc(v)}" placeholder="—"><span>${unit}</span></div></div>`; }
-function todayView() {
+let tPart = null;
+function todayView(part) {
   const f = daily(tDate), feel = listOf(f.feelings), helps = listOf(f.helps);
+  const pt = part === 'am' || part === 'pm' ? part : tPart || (tDate === today() && isEvening() ? 'pm' : 'am');
+  tPart = pt;
   const chip = (group, v, ic, on) => `<button class="feel ${on ? 'on' : ''}" data-dchip="${group}" data-v="${esc(v)}" aria-pressed="${on}"><span aria-hidden="true">${ic}</span>${esc(v)}</button>`;
   const legacy = ['calories', 'protein', 'movement', 'food'].filter((k) => f[k]);
-  return page('today', `${hero(pretty(tDate, { weekday: 'long', day: 'numeric', month: 'long' }), 'A moment <em>for me</em>', 'A minute or two is enough. Choose what feels useful; leave anything blank.')}
-  ${dateStepper(tDate, 'tday')}
-  <article class="cardx" style="--c:#7fd8c6"><h2>How am I today?</h2>${sliderField('sleep', 'Sleep last night', 14, 'hrs', 0.5)}${sliderField('mood', 'Mood', 10, '/ 10')}${sliderField('energy', 'Energy', 10, '/ 10')}<p class="small" style="color:#6b7a73">0 = very low · 10 = very good. Untouched means “not recorded”.</p>
-  <h3 class="ph">How am I feeling?</h3><p>Tick any that fit, or use your own words.</p><div class="feel-chips">${FEELINGS.map((x) => chip('feelings', x, FEEL_IC[x], feel.includes(x))).join('')}</div>${dArea('words', 'My own words, if I want to add them')}${dArea('mind', 'One thing on my mind', 'What’s taking up space today?')}
-  <h3 class="ph">What might help me today?</h3><div class="feel-chips">${HELPS.map((x) => chip('helps', x, HELP_IC[x], helps.includes(x))).join('')}</div>${dArea('needElse', 'Something else I need, if useful')}${dArea('action', 'One small thing I can do for myself today', 'Something small is enough.')}
-  <details class="more" ${['steps', 'screenHours', 'screenMinutes', 'care'].some((k) => f[k]) ? 'open' : ''}><summary>Steps, screen time & self-care</summary><div class="grid2">${dNum('steps', 'Steps', 'steps', 200000)}<div class="grid2" style="gap:8px">${dNum('screenHours', 'Screen time', 'h', 24)}${dNum('screenMinutes', '&nbsp;', 'min', 59)}</div></div>${dArea('care', 'Something I did to care for myself')}</details>
-  ${legacy.length ? `<div class="note">This day also has earlier entries: ${legacy.map((k) => `${k} ${esc(f[k])}`).join(' · ')}.</div>` : ''}
-  <div class="note">You can stop here. Food and movement have their own quick pages — <a href="#food">food totals</a> · <a href="#move">movement</a>.</div></article>
-  <div style="margin-top:16px;display:flex;gap:10px;flex-wrap:wrap"><button class="btn" data-act="today-done">Done ✦</button><a class="btn ghost" href="#week">My week in view</a></div>
+  const tabs = `<div class="seg daypart" role="tablist">${[['am', '☀', 'Morning', amDone(tDate)], ['pm', '☾', 'Evening', pmDone(tDate)]].map(([k, ic, l, dn]) => `<button role="tab" class="${pt === k ? 'on' : ''}" aria-selected="${pt === k}" data-act="tpart" data-part="${k}"><b>${ic} ${l}</b><small>${dn ? '✓ done' : k === 'am' ? 'Set up my day' : 'Close my day'}</small></button>`).join('')}</div>`;
+  const am = `<article class="cardx" style="--c:#ffd27a"><h2>Good morning${firstName() ? ', ' + esc(firstName()) : ''}</h2>${sliderField('sleep', 'Sleep last night', 14, 'hrs', 0.5)}${sliderField('mood', 'Mood', 10, '/ 10')}${sliderField('energy', 'Energy', 10, '/ 10')}<p class="small" style="color:#6b7a73">0 = very low · 10 = very good. Untouched means “not recorded”.</p>
+  <h3 class="ph">My priorities for today</h3><p>Up to three. Small and specific works best — you’ll check them off tonight.</p>${prioHtml()}
+  <h3 class="ph">How am I feeling?</h3><div class="feel-chips">${FEELINGS.map((x) => chip('feelings', x, FEEL_IC[x], feel.includes(x))).join('')}</div>
+  <h3 class="ph">What might help me today?</h3><div class="feel-chips">${HELPS.map((x) => chip('helps', x, HELP_IC[x], helps.includes(x))).join('')}</div>${dArea('action', 'One small thing I can do for myself today', 'Something small is enough.')}${f.needElse ? dArea('needElse', 'Something else I need') : ''}
+  ${medHtml('am')}</article>
+  <div style="margin-top:16px;display:flex;gap:10px;flex-wrap:wrap"><button class="btn" data-act="today-done" data-part="am">Start my day ✦</button><button class="btn ghost" data-act="tpart" data-part="pm">Go to evening</button></div>`;
+  const pm = `<article class="cardx" style="--c:#9db8ff"><h2>How did today go?</h2>
+  <h3 class="ph" style="margin-top:4px">My priorities</h3>${prioReviewHtml()}
+  ${sliderField('dayScore', 'Today overall', 10, '/ 10')}
+  ${dArea('well', 'Something that went well today', 'However small.')}${dArea('mind', 'Anything still on my mind? Let it rest here.', 'Write it down so you don’t have to carry it to bed.')}${dArea('words', 'Anything else, in my own words')}
+  <h3 class="ph">Steps & screen time</h3><div class="grid2">${dNum('steps', 'Steps today', 'steps', 200000)}<div class="grid2" style="gap:8px">${dNum('screenHours', 'Screen time', 'h', 24)}${dNum('screenMinutes', '&nbsp;', 'min', 59)}</div></div><p class="small" style="color:#6b7a73">Steps are in your phone’s Health or Fit app, or on your watch.</p>
+  ${dArea('care', 'Something I did to care for myself')}
+  ${foodOn() ? `<div class="note">Food totals have their own quick page — <a href="#food">add today’s food totals</a>.</div>` : ''}
+  ${medHtml('pm')}</article>
+  <div style="margin-top:16px;display:flex;gap:10px;flex-wrap:wrap"><button class="btn" data-act="today-done" data-part="pm">Close my day ✦</button><a class="btn ghost" href="#week">My week in view</a></div>`;
+  return page('today', `${hero(pretty(tDate, { weekday: 'long', day: 'numeric', month: 'long' }), pt === 'am' ? 'Set up <em>my day</em>' : 'Close <em>my day</em>', pt === 'am' ? 'A minute or two is enough. Choose what feels useful; leave anything blank.' : 'Look back gently. Leave anything blank.')}
+  ${dateStepper(tDate, 'tday')}${tabs}
+  ${pt === 'am' ? am : pm}
+  ${legacy.length ? `<div class="note" style="margin-top:12px">This day also has earlier entries: ${legacy.map((k) => `${k} ${esc(f[k])}`).join(' · ')}.</div>` : ''}
   ${pastCheckins()}`);
 }
 function pastCheckins() {
   const days = Object.keys(E.entries).filter((k) => k.startsWith('daily:')).map((k) => k.slice(6)).filter((d) => d !== tDate && checkedIn(d)).sort().reverse().slice(0, 21);
   if (!days.length) return '';
-  return `<div class="section-h"><h2>Earlier check-ins</h2></div><div class="past">${days.map((d) => { const f = daily(d); const bits = [f.sleep && `Sleep ${f.sleep} h`, f.mood && `Mood ${f.mood}/10`, f.energy && `Energy ${f.energy}/10`, listOf(f.feelings).join(', '), f.words, f.mind && 'On my mind: ' + f.mind, listOf(f.helps).length && 'Might help: ' + listOf(f.helps).join(', '), f.action && 'For myself: ' + f.action, f.care && 'Care: ' + f.care].filter(Boolean); return `<details><summary>${pretty(d)} ${listOf(f.feelings).map((x) => FEEL_IC[x] || '').join(' ')}</summary>${bits.map((b) => `<p>${esc(b)}</p>`).join('')}<a class="linkbtn small" href="#today" data-act="open-day" data-d="${d}">Open this day</a></details>`; }).join('')}</div>`;
+  return `<div class="section-h"><h2>Earlier check-ins</h2></div><div class="past">${days.map((d) => { const f = daily(d); const bits = [f.sleep && `Sleep ${f.sleep} h`, f.mood && `Mood ${f.mood}/10`, f.energy && `Energy ${f.energy}/10`, listOf(f.feelings).join(', '), f.words, f.mind && 'On my mind: ' + f.mind, listOf(f.helps).length && 'Might help: ' + listOf(f.helps).join(', '), priorities(d).length && 'Priorities: ' + priorities(d).map((p) => `${p.t}${p.s === 'done' ? ' ✓' : p.s === 'part' ? ' ◐' : p.s === 'not' ? ' ○' : ''}`).join(' · '), f.action && 'For myself: ' + f.action, f.dayScore && `Today overall ${f.dayScore}/10`, f.well && 'Went well: ' + f.well, f.steps && `Steps ${f.steps}`, f.care && 'Care: ' + f.care].filter(Boolean); return `<details><summary>${pretty(d)} ${listOf(f.feelings).map((x) => FEEL_IC[x] || '').join(' ')}</summary>${bits.map((b) => `<p>${esc(b)}</p>`).join('')}<a class="linkbtn small" href="#today" data-act="open-day" data-d="${d}">Open this day</a></details>`; }).join('')}</div>`;
 }
 
 // ---------------- WEEK ----------------
@@ -1756,7 +1878,7 @@ function weekView() {
 // ---------------- FIND ----------------
 function findView() {
   return page('home', `${hero('Choose a question', 'Find what <em>you need</em>', '<b>Do it</b> opens a practical exercise; <b>Understand it</b> offers more explanation.')}<div class="list">${FIND.map(([q, d, u]) => `<div class="find-row"><h3>${esc(q)}</h3><div class="two"><a class="btn small" href="#${d.to}">Do it · ${esc(d.label)}</a><a class="btn small ghost" href="#${u.to}">Understand it · ${esc(u.label)}</a></div></div>`).join('')}</div>
-  <div class="glass" style="margin-top:18px"><h3>Need a little support?</h3><p class="muted">Reach out to Ger directly to arrange a coaching session and work through any of the material together.</p><a class="btn small" href="https://www.wellmind.ie" target="_blank" rel="noopener">Visit www.wellmind.ie</a></div>`);
+  <div style="margin-top:18px">${bookCard(true)}</div>`);
 }
 
 // ---------------- TRACK ----------------
@@ -1778,7 +1900,7 @@ function trackView() {
 }
 function summaryTiles(s) {
   const tile = (l, v, n) => `<div class="stile"><span>${l}</span><strong>${v}</strong><small>${n}</small></div>`;
-  return `<div class="stiles">${tile('Average steps', s.steps === null ? '—' : fmt(s.steps), s.stepsDays ? `${s.stepsDays} day${s.stepsDays > 1 ? 's' : ''} recorded` : 'Not recorded')}${tile('Activity', `${s.sessions}`, `${fmt(s.minutes)} min · ${s.activeDays} active day${s.activeDays === 1 ? '' : 's'}`)}${tile('Calories', s.calories === null ? '—' : fmt(s.calories), s.foodDays ? `avg on ${s.foodDays} day${s.foodDays > 1 ? 's' : ''}${s.targetDays ? ` · ${s.onTarget}/${s.targetDays} within 10%` : ''}` : 'No food totals')}${tile('Sleep', s.sleep === null ? '—' : fmt(s.sleep, 1) + 'h', s.sleepDays ? `avg of ${s.sleepDays} night${s.sleepDays > 1 ? 's' : ''}` : 'Not recorded')}${tile('Mood · energy', s.mood === null ? '—' : `${fmt(s.mood, 1)} · ${fmt(s.energy, 1)}`, s.moodDays ? 'out of 10' : 'Not recorded')}</div>`;
+  return `<div class="stiles">${tile('Average steps', s.steps === null ? '—' : fmt(s.steps), s.stepsDays ? `${s.stepsDays} day${s.stepsDays > 1 ? 's' : ''} recorded` : 'Not recorded')}${tile('Activity', `${s.sessions}`, `${fmt(s.minutes)} min · ${s.activeDays} active day${s.activeDays === 1 ? '' : 's'}`)}${foodOn() || s.foodDays ? tile('Calories', s.calories === null ? '—' : fmt(s.calories), s.foodDays ? `avg on ${s.foodDays} day${s.foodDays > 1 ? 's' : ''}${s.targetDays ? ` · ${s.onTarget}/${s.targetDays} within 10%` : ''}` : 'No food totals') : (() => { const w = prioritySummary(7); return tile('Priorities', w.set ? `${fmt(w.kept, 1).replace('.0', '')}/${w.set}` : '—', w.set ? 'done in the last 7 days' : 'Set them each morning'); })()}${tile('Sleep', s.sleep === null ? '—' : fmt(s.sleep, 1) + 'h', s.sleepDays ? `avg of ${s.sleepDays} night${s.sleepDays > 1 ? 's' : ''}` : 'Not recorded')}${tile('Mood · energy', s.mood === null ? '—' : `${fmt(s.mood, 1)} · ${fmt(s.energy, 1)}`, s.moodDays ? 'out of 10' : 'Not recorded')}</div>`;
 }
 let fDate = today();
 function foodView() {
@@ -1820,6 +1942,7 @@ function checkinView(param) {
   }
   ciId = rec ? rec.id : `review:${today()}`;
   const end = rec?.fields.completedOn || today(), s = periodSummary(end), lw = lastWeight(), goal = GOALS[p.goal]?.[0] || 'your goal';
+  const showBody = foodOn() || !!lw || !!ciVal('weight') || !!ciVal('nutrition');
   const sel = (k, label, opts) => `<div class="field"><label for="ci-${k}">${label}</label><select id="ci-${k}" data-ci="${k}">${opts.map(([v, l]) => `<option value="${v}" ${ciVal(k) === v ? 'selected' : ''}>${l}</option>`).join('')}</select></div>`;
   const area = (k, label, ph = '') => `<div class="field ${ciVal(k) ? 'answered' : ''}"><label for="ci-${k}">${label}</label><textarea id="ci-${k}" data-ci="${k}" rows="2" placeholder="${esc(ph)}">${esc(ciVal(k))}</textarea></div>`;
   const slide = (k, label, avg) => { const v = ciVal(k), has = v !== ''; return `<div class="field slider-field ${has ? 'answered' : ''}"><label for="ci-${k}">${label}${avg !== null && avg !== undefined ? ` <small style="color:#6b7a73;font-weight:500">· daily average ${fmt(avg, 1)}</small>` : ''}</label><div class="sl"><input type="range" id="ci-${k}" min="0" max="10" value="${has ? v : 5}" data-cislider="${k}" class="${has ? '' : 'unset'}"><span class="scaleval" data-cival="${k}">${has ? v : '–'}</span><span class="small" style="color:#6b7a73">/ 10</span></div></div>`; };
@@ -1827,8 +1950,8 @@ function checkinView(param) {
   return page('track', `${hero('Weekly check-in', past ? `Check-in · <em>${pretty(end)}</em>` : 'How did this <em>week</em> go?', past ? 'A saved check-in. You can still correct it.' : 'About two minutes. Skip anything that doesn’t apply — your logged days fill in the numbers.')}
   <div class="small muted" style="margin:0 2px 8px">From your week · ${pretty(s.from)} – ${pretty(s.to)}</div>${summaryTiles(s)}
   ${prev?.fields.priority ? `<div class="glass" style="margin-top:14px"><div class="small muted">Last week’s priority</div><p style="font-family:var(--display);font-size:19px;margin:4px 0 0">“${esc(prev.fields.priority)}”</p></div>` : ''}
-  <article class="cardx" style="--c:#7fd8c6;margin-top:16px"><div class="grid2"><div class="field"><label for="ci-weight">Current weight</label><div class="input-unit"><input type="number" inputmode="decimal" id="ci-weight" min="20" max="400" step="0.1" data-ci="weight" value="${esc(ciVal('weight'))}" placeholder="${lw ? 'Last: ' + lw.value : '—'}"><span>kg</span></div><span class="hint">${lw ? `Last recorded ${fmt(lw.value, 1)} kg on ${pretty(lw.date)}. Leave blank to skip.` : 'Optional.'}</span></div>${sel('goalProgress', `Progress towards ${esc(goal.toLowerCase())}`, [['', 'Choose (optional)'], ['forward', 'Moving forward'], ['steady', 'About the same'], ['harder', 'A harder week'], ['unsure', 'Not sure yet']])}</div>
-  ${sel('nutrition', 'Nutrition & calorie target', [['', 'Choose (optional)'], ['mostly', 'Mostly on target'], ['some', 'Some days on target'], ['hard', 'Hard to manage this week'], ['none', 'Not tracking food this week']])}
+  <article class="cardx" style="--c:#7fd8c6;margin-top:16px">${showBody ? `<div class="grid2"><div class="field"><label for="ci-weight">Current weight</label><div class="input-unit"><input type="number" inputmode="decimal" id="ci-weight" min="20" max="400" step="0.1" data-ci="weight" value="${esc(ciVal('weight'))}" placeholder="${lw ? 'Last: ' + lw.value : '—'}"><span>kg</span></div><span class="hint">${lw ? `Last recorded ${fmt(lw.value, 1)} kg on ${pretty(lw.date)}. Leave blank to skip.` : 'Optional.'}</span></div>${sel('goalProgress', `Progress towards ${esc(goal.toLowerCase())}`, [['', 'Choose (optional)'], ['forward', 'Moving forward'], ['steady', 'About the same'], ['harder', 'A harder week'], ['unsure', 'Not sure yet']])}</div>
+  ${sel('nutrition', 'Nutrition & calorie target', [['', 'Choose (optional)'], ['mostly', 'Mostly on target'], ['some', 'Some days on target'], ['hard', 'Hard to manage this week'], ['none', 'Not tracking food this week']])}` : sel('goalProgress', 'Progress with my focus this week', [['', 'Choose (optional)'], ['forward', 'Moving forward'], ['steady', 'About the same'], ['harder', 'A harder week'], ['unsure', 'Not sure yet']])}
   ${area('exercise', 'Exercise & movement this week', s.sessions ? `${s.sessions} logged — anything to add?` : 'Walks, sessions, active jobs…')}
   ${slide('wellbeing', 'Wellbeing', null)}${slide('mood', 'Mood', s.mood)}${slide('energy', 'Energy', s.energy)}
   ${area('obstacle', 'Main obstacle this week', p.obstacle ? 'Last noted: ' + String(p.obstacle).slice(0, 60) : 'What got in the way?')}${area('well', 'What went well')}${area('priority', 'One priority for the coming week', 'Small and specific is best.')}
@@ -1899,33 +2022,43 @@ function profileView() {
 }
 
 // ---------------- ONBOARDING ----------------
-const OB_STEPS = ['Welcome', 'About you', 'Your goal', 'What matters', 'Your targets'];
-const obStep = () => { const s = Number(profile().onboardingStep || 0); return s >= 0 && s <= 4 ? s : s === 5 ? 4 : 0; };
+const obSteps = () => ['welcome', 'feel', 'why', 'focus', 'you', ...(foodOn() ? ['goal', 'targets'] : []), 'rhythm'];
+const OB_LABEL = { feel: 'You', why: 'Why', focus: 'Focus', you: 'Name', goal: 'Goal', targets: 'Targets', rhythm: 'Rhythm' };
+const obStep = () => { const s = Number(profile().onboardingStep || 0), n = obSteps().length; return Number.isFinite(s) && s >= 0 ? Math.min(s, n - 1) : 0; };
 function onboardingView() {
-  const step = obStep(), p = profile();
-  if (step === 0) return welcomeHtml(false);
-  const prog = `<ol class="obprog">${OB_STEPS.slice(1).map((s, i) => `<li class="${i + 1 === step ? 'cur' : i + 1 < step ? 'done' : ''}"><span>${i + 1 < step ? '✓' : i + 1}</span>${s}</li>`).join('')}</ol>`;
-  let body;
-  if (step === 1) body = `<h2>Welcome${p.name ? ', ' + esc(p.name) : ''}.</h2><p>A few questions to set up your journal. You’ll only be asked once; you can change anything later.</p>${P1()}`;
-  else if (step === 2) body = `<h2>What would you like to work towards?</h2><p>This sets your daily targets and what your home page shows first.</p>${P2()}`;
-  else if (step === 3) body = `<h2>What’s in the way, and what do you carry?</h2><p>This helps your weekly check-in and goals fit real life.</p>${P3()}`;
-  else { const t = autoTargets(); body = `<h2>Your daily targets.</h2><p>${t.blocked ? 'You can set your own targets now or later.' : 'Calculated from your answers. Use them as a starting point.'}</p>${targetsHtml(t)}<button class="tog ${t.blocked ? 'on' : ''}" data-act="ob-manual" id="ob-manual" aria-pressed="${!!t.blocked}" style="margin-top:14px"><i></i>I’d rather enter my own targets</button><div id="ob-manual-box" ${t.blocked ? '' : 'hidden'}>${manualInputs(t.blocked ? currentTargets() : t)}</div><div class="note">Estimates for adults, not prescriptions. Seek individual advice with low weight, unintended weight loss, an eating-disorder history, kidney disease, diabetes medicines or a prescribed diet.</div>`; }
-  return `<div class="wrap">${prog}<article class="cardx" style="--c:#ecc97f">${body}<div style="display:flex;gap:10px;margin-top:22px">${step > 1 ? `<button class="btn ghost" ${DARK_BTN} data-act="ob-back">← Back</button>` : ''}<button class="btn" style="flex:1" data-act="${step < 4 ? 'ob-next' : 'ob-finish'}">${step < 4 ? 'Continue' : 'Light up my sky ✦'}</button></div><p class="small" style="color:#6b7a73;margin-top:10px;text-align:center">Your answers save as you type, so you can leave and come back.</p></article></div>`;
+  const steps = obSteps(), step = obStep(), key = steps[step], p = profile();
+  if (key === 'welcome') return welcomeHtml(false);
+  const prog = `<ol class="obprog">${steps.slice(1).map((s, i) => `<li class="${i + 1 === step ? 'cur' : i + 1 < step ? 'done' : ''}"><span>${i + 1 < step ? '✓' : i + 1}</span>${OB_LABEL[s]}</li>`).join('')}</ol>`;
+  let body, next = 'Continue';
+  if (key === 'feel') body = `<h2>What feels true for you right now?</h2><p>Tick as many as you like. There are no wrong answers — this just helps us point you to the right place.</p>${feelHtml()}`;
+  else if (key === 'why') body = whyHtml(), next = 'Choose my focus';
+  else if (key === 'focus') body = `<h2>Choose up to three areas to focus on.</h2><p>${(U.feel || []).length ? 'We’ve suggested some from what you ticked — change them freely.' : 'These go to the top of your home page.'} Everything else stays open in your sky.</p>${focusPickHtml()}`;
+  else if (key === 'you') body = `<h2>What should we call you?</h2>${foodOn() ? `<p>Because you chose food & body, a few details help suggest daily targets. Skip any you prefer not to give.</p>${P1()}` : `${pField('name', 'Your first name', 'text', { ph: 'Your first name' })}<p class="small" style="color:#6b7a73">Just for your greeting. It stays on this device.</p>`}`;
+  else if (key === 'goal') body = `<h2>What would you like to work towards?</h2><p>This sets your daily food targets.</p>${P2()}`;
+  else if (key === 'targets') { const t = autoTargets(); body = `<h2>Your daily targets.</h2><p>${t.blocked ? 'You can set your own targets now or later.' : 'Calculated from your answers. Use them as a starting point.'}</p>${targetsHtml(t)}<button class="tog ${t.blocked ? 'on' : ''}" data-act="ob-manual" id="ob-manual" aria-pressed="${!!t.blocked}" style="margin-top:14px"><i></i>I’d rather enter my own targets</button><div id="ob-manual-box" ${t.blocked ? '' : 'hidden'}>${manualInputs(t.blocked ? currentTargets() : t)}</div><div class="note">Estimates for adults, not prescriptions. Seek individual advice with low weight, unintended weight loss, an eating-disorder history, kidney disease, diabetes medicines or a prescribed diet.</div>`; }
+  else body = `<h2>Your daily rhythm.</h2><p>Two minutes in the morning to set up your day. Two minutes in the evening to close it. That’s the whole habit.</p><div class="rhythm"><div><span>☀</span><b>Morning</b><small>Sleep, mood, your three priorities and a short meditation</small></div><div><span>☾</span><b>Evening</b><small>Did I do them? What went well? Steps — and a wind-down meditation</small></div></div><h3 class="ph">Want a reminder?</h3>${reminderHtml()}`;
+  const last = step === steps.length - 1;
+  return `<div class="wrap">${prog}<article class="cardx" style="--c:#ecc97f">${body}<div style="display:flex;gap:10px;margin-top:22px">${step > 1 ? `<button class="btn ghost" ${DARK_BTN} data-act="ob-back">← Back</button>` : ''}<button class="btn" style="flex:1" data-act="${last ? 'ob-finish' : 'ob-next'}">${last ? 'Light up my sky ✦' : next}</button></div><p class="small" style="color:#6b7a73;margin-top:10px;text-align:center">${key === 'feel' || key === 'focus' ? 'You can change this any time.' : 'Your answers save as you type, so you can leave and come back.'}</p></article></div>`;
 }
 function welcomeHtml(returning) {
-  return `<div class="welcome"><div style="max-width:520px"><div class="orbit" aria-hidden="true"><i></i><i></i><span class="core"><img src="assets/emblem.webp" alt=""></span></div><div class="eyebrow">Well Mind · Ger Boland · One Step Forward</div><h1>${returning ? 'A new look for <em>your journal</em>' : 'Your <em>Well Mind</em>'}</h1><p class="sub">${returning ? 'Everything you wrote is still here.' : 'Space to notice. Knowledge to use. A step that fits.'}</p>
-  <div class="howto"><div><span>✦</span><p><b>Two journeys, one sky.</b> Everyday Wellbeing and Understanding Yourself. Each chapter is a star you light when it feels finished enough for now.</p></div><div><span>☾</span><p><b>Today’s quests.</b> A one-minute check-in, food totals and movement — skip any day you like.</p></div><div><span>♡</span><p><b>No streaks. No scores to beat.</b> Answer what helps, leave the rest. Sparks just mark the ground you’ve covered.</p></div></div>
-  <button class="btn block" data-act="${returning ? 'seen-new' : 'ob-start'}">${returning ? 'Show me my sky ✦' : 'Begin ✦'}</button>${returning ? '' : '<p class="small muted" style="margin-top:14px">Moving from another device? <a href="#restore">Restore a backup</a>.</p>'}<p class="small muted" style="margin-top:14px">For adult education and reflection, not diagnosis or therapy. Your entries stay on this device.</p></div></div>`;
+  return `<div class="welcome"><div style="max-width:520px"><div class="orbit" aria-hidden="true"><i></i><i></i><span class="core"><img src="assets/emblem.webp" alt=""></span></div><div class="eyebrow">Well Mind · Ger Boland · One Step Forward</div><h1>${returning ? 'A new look for <em>your journal</em>' : 'Stop reacting.<br><em>Start understanding yourself.</em>'}</h1><p class="sub">${returning ? 'Everything you wrote is still here.' : 'Feel calmer, make better choices and get on better with the people around you — at home, at your own pace.'}</p>
+  <div class="howto"><div><span>☀</span><p><b>Two minutes, morning and evening.</b> Set your priorities, check in with yourself, and close the day with a short meditation.</p></div><div><span>✦</span><p><b>Your own path.</b> Choose what matters to you — boundaries, calm, relationships, sleep… Each chapter is a star you light.</p></div><div><span>♡</span><p><b>Built by Ger, for real life.</b> Plain-English tools from his personal development sessions. No streaks to break.</p></div></div>
+  <button class="btn block" data-act="${returning ? 'seen-new' : 'ob-start'}">${returning ? 'Show me my sky ✦' : 'Let’s begin ✦'}</button>${returning ? '' : '<p class="small muted" style="margin-top:14px">Moving from another device? <a href="#restore">Restore a backup</a>.</p>'}<p class="small muted" style="margin-top:14px">For adult education and reflection, not diagnosis or therapy. Your entries stay on this device.</p></div></div>`;
 }
 function obFinish() {
-  const t = autoTargets(), manual = $('#ob-manual')?.getAttribute('aria-pressed') === 'true';
-  if (manual) { const v = readManual(); if (!v) return toast('Check the targets: whole numbers, or leave a box blank.'); if (Object.values(v).some((x) => x !== '')) saveTargets(v, 'manual', 'Entered during set-up'); }
-  else if (!t.blocked) saveTargets(t, 'auto', `Calculated at set-up for ${GOALS[t.goal][0].toLowerCase()}`);
-  if (num(profile().weight) !== null) { setProfile('startWeight', profile().weight); setProfile('weightDate', today()); }
+  if (foodOn()) {
+    const t = autoTargets(), manual = $('#ob-manual')?.getAttribute('aria-pressed') === 'true';
+    if (manual) { const v = readManual(); if (!v) return toast('Check the targets: whole numbers, or leave a box blank.'); if (Object.values(v).some((x) => x !== '')) saveTargets(v, 'manual', 'Entered during set-up'); }
+    else if (!t.blocked && t.goal) saveTargets(t, 'auto', `Calculated at set-up for ${GOALS[t.goal][0].toLowerCase()}`);
+    if (num(profile().weight) !== null) { setProfile('startWeight', profile().weight); setProfile('weightDate', today()); }
+  }
   setProfile('onboardingStep', 'done'); setProfile('onboardedAt', today());
-  U.seen = 'v6'; saveAll(); burst('#ecc97f', 130); vibrate([20, 40, 30]);
+  U.seen = 'v6'; U.focusAsked = today(); saveAll(); burst('#ecc97f', 130); vibrate([20, 40, 30]);
   toast(`Welcome${firstName() ? ', ' + firstName() : ''}. Your sky is ready ✦`);
   go('home');
+}
+function focusAskView() {
+  return `<div class="wrap"><article class="cardx" style="--c:#ecc97f;margin-top:24px"><div class="eyebrow" style="color:#8a6a2a">New in Well Mind</div><h2>Make your home page yours.</h2><p>Pick up to three areas to focus on. They’ll sit at the top of your home page. Plus: separate <b>morning and evening check-ins</b>, a daily card, meditations and reminders.</p>${focusPickHtml()}<div style="display:flex;gap:10px;margin-top:18px;flex-wrap:wrap"><button class="btn" style="flex:1" data-act="focus-ask-done">Save ✦</button><button class="btn ghost" ${DARK_BTN} data-act="focus-ask-skip">Maybe later</button></div></article></div>`;
 }
 
 // ---------------- TOOLS ----------------
@@ -1941,6 +2074,258 @@ function calmView() {
   return page('tools', `${hero('Calm meter', 'Where am I <em>right now?</em>', 'A personal scale, not a clinical score.')}<article class="cardx" style="--c:${names[zone][1]}"><div class="meter"><input type="range" min="1" max="10" value="${calmVal}" data-calm aria-label="My level from 1 to 10"></div><div class="meter-read"><span class="num" data-calmnum>${calmVal}</span><div><b style="font-family:var(--display);font-size:22px;color:#1d2b26">${names[zone][0]}</b><div class="small" style="color:#6b7a73">1–3 steady · 4–6 building · 7–10 overload</div></div></div>${plan}</article><p class="small muted" style="margin-top:14px">“Steady enough” does not mean cheerful or symptom-free. If you feel unsafe or at risk of harming yourself or someone else, seek immediate local help — tap <b>Need support?</b> at the top.</p>`);
 }
 function minuteView() { return page('tools', `${hero('A one-minute pause', 'Just <em>one minute</em>', 'You do not have to feel calm afterwards for your observation to be useful.')}<article class="cardx" style="--c:#c4b2ff">${GAMES.minute.html()}${fieldHtml('p:31:p31_inline_170', 'Before the pause I noticed … Afterwards …')}<div class="note">If inward attention feels distressing, stop and reconnect with the room or choose another activity. Meditation does not replace needed healthcare.</div></article>`); }
+
+'use strict';
+// =====================================================================
+// Well Mind — part 4: focus areas, daily rhythm & reminders, booking,
+// meditations, daily card, memories, and the paid unlock.
+// =====================================================================
+
+// ---------------- settings Ger/Kora may change ----------------
+const BOOK_URL = 'https://app.studioninja.co/booking//63F591LAVM261H5Q4YGP1KUR0';
+const PAY = { lifetime: 'https://buy.stripe.com/8x2bJ0dHj7si8eP2zy1kA02' }; // Stripe Payment Link (Therapy account, 12 Nov 2026)
+const PRICE = { lifetime: '€30' };
+const PREVIEW_CARDS = 1; // in a locked chapter, the intro plus this many cards are free to try
+const MEDS = {
+  am: { id: 'FGO8IWiusJo', title: 'Guided morning meditation', len: '10 min' },
+  pm: { id: 'dVae-pOyRXk', title: 'Evening meditation · reflection & gratitude', len: '10 min' },
+};
+// Chapters anyone can use before unlocking.
+const FREE_CH = new Set(['ew1', 'ew5', 'uy1', 'uy7']);
+// SHA-256 of each unlock code (the codes themselves are not stored in the app).
+const CODES = {
+  '042836d05a2ec4c071a531eaf9f07e6b56a6175f253a14faf0a966574fc1ace1': 'founder',
+  '600f4ed4528f406f6150df1a2b8318b5ac950bb60c28af5386143486287cb950': 'lifetime',
+  '40d5bf95a3249d9c61719a5327ce9b41c172151bdbd684fb2f8820fe36b50939': 'monthly',
+  '0899181a30a732f4f6433de565c4f97ae8c1fe665892ae47f4671e5a418d43fa': 'client',
+};
+
+// ---------------- focus areas ----------------
+const FOCUS = {
+  calm: { t: 'Calm & less reactive', d: 'Pause before you react, with a plan for hard moments.', ic: '◯', hue: '#7fd8c6', ch: [['uy', 7], ['uy', 8]], tool: ['#calm', 'Calm meter'], promise: 'Respond instead of react — with your own calm plan for hard moments.' },
+  emotions: { t: 'Understanding my emotions', d: 'Name what you feel and what it is telling you.', ic: '✦', hue: '#c4b2ff', ch: [['uy', 1], ['uy', 3]], tool: ['#uy-01-3', 'Reflection or rumination?'], promise: 'Make sense of your feelings instead of being run by them.' },
+  boundaries: { t: 'Boundaries & saying no', d: 'Say what you need, kindly and clearly.', ic: '▢', hue: '#ffb3c7', ch: [['uy', 10]], tool: ['#uy-10-3', 'Boundary builder'], promise: 'Say no without the guilt, and yes when you mean it.' },
+  relationships: { t: 'Relationships & connection', d: 'Feel closer, heard and understood.', ic: '♡', hue: '#ff9fb0', ch: [['uy', 4], ['uy', 6], ['uy', 9]], tool: null, promise: 'Feel more connected and understood by the people who matter.' },
+  values: { t: 'Better choices & alignment', d: 'Live closer to what matters to you.', ic: '◆', hue: '#f2c879', ch: [['uy', 2], ['uy', 5], ['uy', 15]], tool: ['#uy-02-1', 'Values card sort'], promise: 'Make choices that feel like you — and follow through.' },
+  kind: { t: 'Self-compassion & confidence', d: 'Be on your own side.', ic: '✉', hue: '#ffc6a8', ch: [['uy', 13], ['uy', 11]], tool: ['#uy-13-2', 'Dear me'], promise: 'Swap the inner critic for a kinder, steadier voice.' },
+  goals: { t: 'Goals & direction', d: 'See where you are and the next step.', ic: '✹', hue: '#ffe08a', ch: [['ew', 6], ['uy', 14]], tool: ['#ew-06-2', 'Wheel of Life'], promise: 'Get unstuck: see where you are and take the next small step.' },
+  sleep: { t: 'Sleep & energy', d: 'Rest that supports the rest of your life.', ic: '☾', hue: '#9db8ff', ch: [['ew', 1], ['ew', 2]], tool: ['#ew-01-2', 'An evening routine'], promise: 'Build rest and routines that give you your energy back.' },
+  screen: { t: 'Screen time & focus', d: 'Take your attention back.', ic: '▣', hue: '#9be7ff', ch: [['ew', 4], ['ew', 5]], tool: ['#minute', 'One-minute pause'], promise: 'Take your time and attention back from your phone.' },
+  food: { t: 'Food & body', d: 'Daily food totals and gentle targets.', ic: '❦', hue: '#b6f08f', ch: [['ew', 3]], tool: ['#food', 'Food totals'], promise: 'Look after your body with food that fits your life.' },
+  move: { t: 'Movement', d: 'Steps and activity, your way.', ic: '✶', hue: '#ff9f7a', ch: [['ew', 7], ['ew', 8]], tool: ['#move', 'Movement log'], promise: 'Move more, in ways you actually enjoy.' },
+};
+const TRUE_FOR_ME = [
+  ['I react, then regret it', ['calm']],
+  ['I overthink everything', ['emotions', 'calm']],
+  ['I find it hard to say no', ['boundaries']],
+  ['I don’t always understand my feelings', ['emotions']],
+  ['My relationships feel like hard work', ['relationships']],
+  ['I know what I want, but I don’t do it', ['values', 'goals']],
+  ['I’m hard on myself', ['kind']],
+  ['I feel stuck or a bit lost', ['goals', 'values']],
+  ['I’m tired and running on empty', ['sleep']],
+  ['My phone takes over my day', ['screen']],
+  ['I feel lonely or disconnected', ['relationships']],
+  ['I want to feel better in my body', ['food', 'move']],
+];
+const focusList = () => (Array.isArray(U.focus) ? U.focus : []).filter((k) => FOCUS[k]).slice(0, 3);
+const hasFocus = (k) => focusList().includes(k);
+const foodOn = () => hasFocus('food');
+function suggestFocus() {
+  const score = {};
+  (U.feel || []).forEach((i) => (TRUE_FOR_ME[i]?.[1] || []).forEach((k, n) => (score[k] = (score[k] || 0) + 2 - n * 0.5)));
+  return Object.entries(score).sort((a, b) => b[1] - a[1]).slice(0, 3).map(([k]) => k);
+}
+function feelHtml() {
+  return `<div class="truth">${TRUE_FOR_ME.map(([t], i) => `<button class="truth-b ${(U.feel || []).includes(i) ? 'on' : ''}" data-feel="${i}" aria-pressed="${(U.feel || []).includes(i)}">${esc(t)}</button>`).join('')}</div>`;
+}
+function whyHtml() {
+  const keys = focusList().length ? focusList() : suggestFocus();
+  const lines = (keys.length ? keys : ['calm', 'emotions', 'values']).map((k) => `<li><span style="--c:${FOCUS[k].hue}">${FOCUS[k].ic}</span>${esc(FOCUS[k].promise)}</li>`).join('');
+  return `<div class="why"><p class="why-big">You’re in the right place.</p><p>${(U.feel || []).length ? 'What you ticked is really common — and it can change. Here is what Well Mind can help you with:' : 'Here is what people use Well Mind for:'}</p><ul class="promises">${lines}</ul><div class="why-grid"><div><b>At home</b><small>At your own pace, in a few minutes a day</small></div><div><b>Ger’s method</b><small>Practical, plain-English tools</small></div><div><b>Private</b><small>Your journal stays on your phone</small></div></div></div>`;
+}
+function focusPickHtml() {
+  const cur = focusList();
+  return `<div class="focusgrid">${Object.entries(FOCUS).map(([k, f]) => `<button class="focus-b ${cur.includes(k) ? 'on' : ''}" style="--c:${f.hue}" data-focus="${k}" aria-pressed="${cur.includes(k)}"><span class="fi">${f.ic}</span><b>${esc(f.t)}</b><small>${esc(f.d)}</small></button>`).join('')}</div><p class="small" style="color:#6b7a73;margin-top:10px" data-focuscount>${cur.length} of 3 chosen · you can change these any time, and every chapter stays open in your sky.</p>`;
+}
+function toggleFocus(k) {
+  const cur = focusList(), i = cur.indexOf(k);
+  if (i >= 0) cur.splice(i, 1); else if (cur.length < 3) cur.push(k); else { toast('You can pick up to 3 — tap one to swap it out.'); return false; }
+  U.focus = cur; saveU(); return true;
+}
+function focusView() {
+  return page('home', `${hero('Make it yours', 'Choose your <em>focus</em>', 'Pick up to three areas. They go to the top of your home page. Everything else is still in your sky whenever you want it.')}
+  <article class="cardx" style="--c:#ecc97f">${focusPickHtml()}<button class="btn block" style="margin-top:16px" data-act="focus-save">Save my focus ✦</button></article>`);
+}
+function nextInFocus(k) {
+  const f = FOCUS[k];
+  for (const [j, n] of f.ch) if (!isLit(j, n)) return [j, chOf(j, n)];
+  return [f.ch[0][0], chOf(f.ch[0][0], f.ch[0][1])];
+}
+function focusCards() {
+  const keys = focusList();
+  if (!keys.length) return `<a class="quest" href="#focus"><div class="orb">✧</div><div><div class="eyebrow">Make it yours</div><h3>Choose your focus</h3><p>Pick up to three areas that matter to you right now.</p></div></a>`;
+  return keys.map((k) => {
+    const f = FOCUS[k], [j, c] = nextInFocus(k), pr = progressOf(j, c), lk = chLocked(j, c.n), done = f.ch.filter(([a, b]) => isLit(a, b)).length;
+    return `<div class="fcard" style="--c:${f.hue}"><div class="fhead"><span class="fi">${f.ic}</span><div><div class="eyebrow">Your focus · ${done}/${f.ch.length} stars lit</div><h3>${esc(f.t)}</h3></div></div><a class="fnext" href="#${rid(j, c.n)}"><span>${c.glyph}</span><span><b>${esc(c.title)}</b><small>${lk ? '🔒 Free preview' : pr.got ? `${pr.got} of ${pr.tot} prompts` : 'Start here'}</small></span><span class="go">›</span></a>${f.tool ? `<a class="linkbtn small" href="${f.tool[0]}">Quick tool: ${esc(f.tool[1])} ›</a>` : ''}</div>`;
+  }).join('');
+}
+
+// ---------------- morning & evening ----------------
+const AM_KEYS = ['sleep', 'mood', 'energy', 'feelings', 'helps', 'p1', 'p2', 'p3', 'action', 'medAm'];
+const PM_KEYS = ['d1', 'd2', 'd3', 'dayScore', 'well', 'mind', 'words', 'steps', 'screenHours', 'screenMinutes', 'care', 'medPm'];
+const amDone = (d) => AM_KEYS.some((k) => String(daily(d)[k] ?? '').trim());
+const pmDone = (d) => PM_KEYS.filter((k) => k !== 'steps' && k !== 'screenHours' && k !== 'screenMinutes').some((k) => String(daily(d)[k] ?? '').trim()) || (num(daily(d).steps) !== null && ['d1', 'd2', 'd3', 'well'].some((k) => daily(d)[k]));
+const isEvening = () => new Date().getHours() >= 15;
+const priorities = (d) => ['p1', 'p2', 'p3'].map((k, i) => ({ k, t: String(daily(d)[k] || '').trim(), s: daily(d)['d' + (i + 1)] || '' })).filter((p) => p.t);
+function prioritySummary(days = 7) {
+  let set = 0, kept = 0;
+  for (let i = 0; i < days; i++) for (const p of priorities(shift(today(), -i))) { set++; if (p.s === 'done') kept++; else if (p.s === 'part') kept += 0.5; }
+  return { set, kept };
+}
+function medHtml(which) {
+  const m = MEDS[which], k = which === 'am' ? 'medAm' : 'medPm', done = daily(tDate)[k] === 'done';
+  return `<div class="med"><div class="med-top"><span class="med-ic">${which === 'am' ? '☀' : '☾'}</span><div><div class="eyebrow">${which === 'am' ? 'Morning' : 'Evening'} meditation · ${m.len}</div><b>${esc(m.title)}</b></div></div>
+  <div class="yt" data-yt="${m.id}"><img src="https://i.ytimg.com/vi/${m.id}/hqdefault.jpg" alt="" loading="lazy"><button class="yt-play" data-act="yt" data-id="${m.id}" aria-label="Play the ${which === 'am' ? 'morning' : 'evening'} meditation">▶</button></div>
+  <div class="med-foot"><a class="linkbtn small" href="https://www.youtube.com/watch?v=${m.id}" target="_blank" rel="noopener">Open in YouTube</a><button class="tog ${done ? 'on' : ''}" data-act="med" data-k="${k}" aria-pressed="${done}" style="--c:#7fd8c6;width:auto;margin:0"><i></i>I did it</button></div></div>`;
+}
+function prioHtml() {
+  return `<div class="prios">${['p1', 'p2', 'p3'].map((k, i) => `<div class="prio"><span>${i + 1}</span><input type="text" maxlength="140" data-d="${k}" id="d-${k}" value="${esc(daily(tDate)[k] || '')}" placeholder="${['The one that matters most', 'Something else I’d like to do', 'A small one counts too'][i]}" aria-label="Priority ${i + 1}"></div>`).join('')}</div>`;
+}
+function prioReviewHtml() {
+  const ps = priorities(tDate);
+  if (!ps.length) return `<p class="small" style="color:#6b7a73">No priorities set for this day. <button class="linkbtn small" data-act="tpart" data-part="am">Add them in the morning check-in</button></p>`;
+  const opts = [['done', '✓ Done'], ['part', '◐ Partly'], ['not', '○ Not today']];
+  return ps.map((p) => { const dk = 'd' + p.k.slice(1); return `<div class="prev"><p>${esc(p.t)}</p><div class="feel-chips">${opts.map(([v, l]) => `<button class="feel ${p.s === v ? 'on' : ''}" data-dset="${dk}" data-v="${v}" aria-pressed="${p.s === v}">${l}</button>`).join('')}</div></div>`; }).join('') + '<p class="small" style="color:#6b7a73">“Not today” is useful information too — no judgement.</p>';
+}
+
+// ---------------- reminders ----------------
+const rhythm = () => ({ am: '07:30', pm: '21:00', ...(U.rhythm || {}) });
+const appUrl = () => (location.origin.startsWith('http') ? location.origin + location.pathname : 'https://www.wellmind.ie/app/');
+function calDates(time) {
+  const [h, m] = time.split(':').map(Number), d = new Date(); d.setDate(d.getDate() + 1); d.setHours(h, m, 0, 0);
+  const e = new Date(d.getTime() + 10 * 60000), f = (x) => `${x.getFullYear()}${pad(x.getMonth() + 1)}${pad(x.getDate())}T${pad(x.getHours())}${pad(x.getMinutes())}00`;
+  return [f(d), f(e)];
+}
+const REM = { am: ['Well Mind · morning check-in', 'Two minutes: sleep, mood and today’s priorities — plus your morning meditation.'], pm: ['Well Mind · evening check-in', 'Did I do my priorities? Steps, what went well — and your evening meditation.'] };
+function gcalLink(which) {
+  const [s, e] = calDates(rhythm()[which]), tz = Intl.DateTimeFormat().resolvedOptions().timeZone || 'Europe/Dublin';
+  return `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(REM[which][0])}&details=${encodeURIComponent(REM[which][1] + '\n' + appUrl() + '#today')}&dates=${s}/${e}&ctz=${encodeURIComponent(tz)}&recur=${encodeURIComponent('RRULE:FREQ=DAILY')}`;
+}
+function icsText() {
+  const ev = (w) => { const [s, e] = calDates(rhythm()[w]); return ['BEGIN:VEVENT', `UID:wellmind-${w}-${Date.now()}@wellmind.ie`, `DTSTAMP:${new Date().toISOString().replace(/[-:]/g, '').slice(0, 15)}Z`, `DTSTART:${s}`, `DTEND:${e}`, 'RRULE:FREQ=DAILY', `SUMMARY:${REM[w][0]}`, `DESCRIPTION:${REM[w][1]} ${appUrl()}#today`, `URL:${appUrl()}#today`, 'BEGIN:VALARM', 'ACTION:DISPLAY', `DESCRIPTION:${REM[w][0]}`, 'TRIGGER:PT0M', 'END:VALARM', 'END:VEVENT'].join('\r\n'); };
+  return ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//Well Mind//Reminders//EN', 'CALSCALE:GREGORIAN', ev('am'), ev('pm'), 'END:VCALENDAR'].join('\r\n');
+}
+function reminderHtml() {
+  const r = rhythm();
+  return `<div class="grid2"><div class="field"><label for="r-am">Morning check-in</label><input type="time" id="r-am" data-rhythm="am" value="${r.am}"></div><div class="field"><label for="r-pm">Evening check-in</label><input type="time" id="r-pm" data-rhythm="pm" value="${r.pm}"></div></div>
+  <p class="small" style="color:#6b7a73">Your phone’s calendar will remind you every day at these times. Tap the reminder to open Well Mind.</p>
+  <div class="remrow"><button class="btn small" data-act="ics">📅 Add both to my phone calendar</button></div>
+  <p class="small" style="color:#6b7a73;margin:12px 0 4px">Use Google Calendar? Add each one:</p><div class="remrow"><a class="btn small ghost" ${DARK_BTN} href="${gcalLink('am')}" target="_blank" rel="noopener" data-gcal="am">Morning in Google Calendar</a><a class="btn small ghost" ${DARK_BTN} href="${gcalLink('pm')}" target="_blank" rel="noopener" data-gcal="pm">Evening in Google Calendar</a></div>
+  <p class="small" style="color:#6b7a73;margin-top:10px">You can delete the reminders from your calendar at any time.</p>`;
+}
+function downloadIcs() {
+  const blob = new Blob([icsText()], { type: 'text/calendar' }), a = document.createElement('a');
+  a.href = URL.createObjectURL(blob); a.download = 'well-mind-reminders.ics'; document.body.append(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(a.href), 4000);
+  U.remindersAdded = today(); saveU(); toast('Open the file to add the reminders to your calendar.');
+}
+function remindersView() {
+  return page('me', `${hero('Daily rhythm', 'Your <em>reminders</em>', 'A gentle nudge, morning and evening. Choose your times, then add them to your phone’s calendar.')}<article class="cardx" style="--c:#9db8ff">${reminderHtml()}</article>`);
+}
+
+// ---------------- booking ----------------
+function bookCard(compact) {
+  return `<div class="book ${compact ? 'compact' : ''}"><div class="book-ic"><img src="assets/emblem.webp" alt=""></div><div class="book-txt"><div class="eyebrow">Work with Ger</div><h3>${compact ? 'Talk it through with Ger' : 'Want to go further, faster?'}</h3><p>Book a free 15-minute introduction or a 1:1 personal development session online.</p><div class="book-btns"><a class="btn small" href="${BOOK_URL}" target="_blank" rel="noopener">Book with Ger</a><a class="btn small ghost" href="mailto:${SHARE_EMAIL}?subject=${encodeURIComponent('Well Mind app — question')}">Email Ger</a></div></div></div>`;
+}
+
+// ---------------- daily card & memories ----------------
+const DAILY_CARDS = [
+  'Between what happens and how I respond, there is a pause. Where could I find it today?',
+  'What is one thing I am carrying that isn’t mine to carry?',
+  'A feeling is information, not an instruction. What is mine telling me?',
+  'What would “good enough” look like today?',
+  'Who could I let in a little more this week?',
+  'When did I last feel like myself? What was I doing?',
+  'One small yes to myself today. One kind no to something else.',
+  'What would I say to a friend who felt the way I do?',
+  'Which value do I want to live a little more of today?',
+  'What drains me that I keep saying yes to?',
+  'Rest is not a reward. What would help me rest today?',
+  'What is in my control today — and what can I let go of?',
+  'Notice one moment today when I felt calm. What helped?',
+  'Am I reflecting or ruminating right now?',
+  'What is one thing I am proud of from this week?',
+  'Where do I need a boundary — and what would I say?',
+  'What would make today 1% better?',
+  'Who or what gives me energy? Can I get a little more of it?',
+  'What story am I telling myself about today? Is it the only one?',
+  'If I trusted myself a little more, what would I do?',
+  'A slow breath in, a longer breath out. Try it three times now.',
+  'What am I avoiding? What is the smallest first step?',
+  'What does my body need from me today?',
+  'What could I appreciate about someone close to me today?',
+  'Progress, not perfection. What has moved forward, even slightly?',
+  'Where am I on my calm scale right now, from 1 to 10?',
+  'What would the wisest version of me do next?',
+  'What can I put down before I go to sleep tonight?',
+  'Is this mine to fix, or mine to feel?',
+  'What do I want more of in my life — and what is one way to make room for it?',
+];
+const dayIndex = (d) => Math.floor(new Date(d + 'T12:00:00').getTime() / 86400000);
+const dailyCard = (d = today()) => DAILY_CARDS[((dayIndex(d) % DAILY_CARDS.length) + DAILY_CARDS.length) % DAILY_CARDS.length];
+function memory() {
+  const pick = (from, to) => { for (let i = from; i <= to; i++) { const d = shift(today(), -i), f = daily(d); for (const [k, l] of [['well', 'what went well'], ['p1', 'your top priority'], ['action', 'a small thing for yourself'], ['mind', 'what was on your mind'], ['words', 'in your own words']]) { const t = String(f[k] || '').trim(); if (t.length >= 3) return { d, t, l, i }; } } return null; };
+  return pick(28, 35) || pick(6, 8);
+}
+
+// ---------------- payment / unlock ----------------
+const unlocked = () => !!(U.plan && U.plan.type);
+const chLocked = (j, n) => !unlocked() && !FREE_CH.has(j + n);
+const planName = (t) => ({ founder: 'Founding member', client: 'Well Mind client', lifetime: 'Full access', monthly: 'Full access', gift: 'Gifted access' }[t] || 'Full access');
+async function sha256(s) { const b = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(s)); return [...new Uint8Array(b)].map((x) => x.toString(16).padStart(2, '0')).join(''); }
+async function redeem(code, quiet) {
+  const c = String(code || '').trim().toUpperCase().replace(/\s+/g, '');
+  if (!c) return false;
+  let type = null;
+  try { type = CODES[await sha256(c)] || null; } catch (e) { type = null; }
+  if (!type) { if (!quiet) toast('That code didn’t work — check it and try again, or email Ger.'); return false; }
+  if (!unlocked()) U.plan = { type, at: today() };
+  saveU(true); closeOverlay(); burst('#ecc97f', 140); vibrate([20, 40, 30]);
+  toast(`Unlocked ✦ ${planName(U.plan.type)} — every chapter is open.`);
+  return true;
+}
+function unlockHtml(ch) {
+  const pay = PAY.lifetime ? `<a class="plan best" href="${esc(PAY.lifetime)}" rel="noopener"><span class="tag">One-off</span><b>Unlock for ${PRICE.lifetime}</b><small>Pay once — yours to keep, including all future updates.</small></a>` : `<button class="plan best" data-act="pay-soon"><span class="tag">One-off</span><b>Unlock for ${PRICE.lifetime}</b><small>Pay once — yours to keep, including all future updates.</small></button>`;
+  return `<div class="unlock"><div class="lock-orb">🔒</div><h2>${ch ? `Keep going with “${esc(ch.title)}”` : 'Unlock all of Well Mind'}</h2><p>${ch ? 'You’ve seen a preview of this chapter. ' : ''}Unlock all 25 chapters across both journeys, every tool and game, and everything Ger adds in future.</p>
+  <ul class="ticks"><li>Everyday Wellbeing and Understanding Yourself — every star</li><li>Boundary builder, values sort, calm plan, Wheel of Life and more</li><li>Your journal stays private on your phone</li></ul>
+  <div class="plans one">${pay}</div>
+  <div class="codebox"><b>Working with Ger?</b><small>Well Mind clients get the full app free. Enter the code Ger gave you.</small><div class="coderow"><input type="text" data-code autocomplete="off" autocapitalize="characters" placeholder="Your code" aria-label="Unlock code"><button class="btn small" data-act="redeem">Unlock</button></div></div>
+  <p class="small" style="color:#6b7a73;margin-top:12px">Secure payment by Stripe. After paying you come straight back here and everything opens. Questions? <a href="mailto:${SHARE_EMAIL}">${SHARE_EMAIL}</a></p></div>`;
+}
+const unlockSheet = (ch) => sheet(`${unlockHtml(ch)}${closeBtn('Not now')}`);
+function lockedView(j, ch) {
+  return `<div class="player" style="--c:${ch.hue}"><div class="player-top"><a class="iconbtn" href="#home" aria-label="Back to your sky">←</a><div class="t"><div>${JOURNEYS[j].short} · ${pad(ch.n)}</div><strong>${esc(ch.title)}</strong></div><span class="pill">✦ <b data-sparks>${sparks()}</b></span><button class="iconbtn" data-act="support" aria-label="Need support?" style="color:#ffd5dc">♡</button></div><main class="deck" id="deck"><article class="cardx"><div class="intro-hero"><div class="big">${ch.glyph}</div><div><div class="eyebrow">${JOURNEYS[j].title} · ${pad(ch.n)}</div><h2 style="margin:4px 0 0;font-size:30px">${esc(ch.title)}</h2></div></div><div class="consider"><small>Consider</small>${esc(ch.consider)}</div>${unlockHtml(ch)}<p class="small" style="color:#6b7a73;text-align:center"><a href="#${rid(j, ch.n)}">← Back to the preview</a></p><p class="small" style="color:#6b7a73;text-align:center">Free in full: ${[...FREE_CH].map((k) => { const jj = k.slice(0, 2), c = chOf(jj, Number(k.slice(2))); return `<a href="#${rid(jj, c.n)}">${esc(c.title)}</a>`; }).join(' · ')}</p></article></main></div>`;
+}
+function planCard() {
+  if (unlocked()) return `<div class="glass plan-own"><div class="eyebrow">Your access</div><h3>${planName(U.plan.type)} ✦</h3><p class="muted small">${U.plan.type === 'founder' ? 'Thank you for being one of the first. Full access, free — including future updates.' : U.plan.type === 'client' ? 'Full access, free, as part of your sessions with Ger — including future updates.' : 'Every chapter is open, including future updates.'}${U.plan.at ? ` Since ${pretty(U.plan.at)}.` : ''}</p></div>`;
+  return `<div class="glass"><div class="eyebrow">Your access</div><h3>Free version</h3><p class="muted small">Your morning and evening check-ins, the calm tools and ${FREE_CH.size} full chapters are free, and you can preview every other chapter. Unlock everything for ${PRICE.lifetime}, once — or free with a code if you work with Ger.</p><button class="btn small" data-act="unlock">Unlock Well Mind</button></div>`;
+}
+// Founding members: anyone already using the journal when payments arrived keeps full access, free.
+function checkFounder() {
+  if (U.planChecked || eLocked) return;
+  U.planChecked = today();
+  if (!unlocked() && (onboarded() || Object.keys(U.answers || {}).length || Object.keys(U.done || {}).length)) U.plan = { type: 'founder', at: today() };
+  saveU(true);
+}
+// Coming back from Stripe: …/app/?unlock=CODE or #unlock=CODE
+async function handleUnlockLink() {
+  const q = new URLSearchParams(location.search).get('unlock'), h = (location.hash.match(/^#unlock[=/](.+)$/) || [])[1];
+  const code = q || (h && decodeURIComponent(h));
+  if (!code) return;
+  history.replaceState(null, '', location.pathname + (h ? '#home' : location.hash));
+  if (await redeem(code, true)) render(); else toast('That unlock link didn’t work — email Ger and we’ll sort it out.');
+}
 
 'use strict';
 // =====================================================================
@@ -2031,13 +2416,17 @@ function meView() {
   const lv = level(), lit = Object.keys(U.done).length;
   const cards = (j) => JOURNEYS[j].list.map((c) => isLit(j, c.n) ? `<button class="cc got" style="--c:${c.hue}" data-act="reveal" data-j="${j}" data-n="${c.n}"><span class="g">${c.glyph}</span>${pad(c.n)}</button>` : `<a class="cc" href="#${rid(j, c.n)}" aria-label="${esc(c.title)}, not yet lit"><span class="g">${c.glyph}</span>${pad(c.n)}</a>`).join('');
   return page('me', `${hero('This journal belongs to', firstName() ? esc(firstName()) : 'Me', `Level ${lv.n} · ${lv.sp} sparks · ${lit} star${lit === 1 ? '' : 's'} lit`)}
+  ${planCard()}
   <div class="section-h"><h2>Insight cards</h2></div><p class="small muted" style="margin:-6px 2px 8px">Everyday Wellbeing</p><div class="collection">${cards('ew')}</div><p class="small muted" style="margin:14px 2px 8px">Understanding Yourself</p><div class="collection">${cards('uy')}</div>
   <div class="section-h"><h2>My journal</h2></div>
-  <div class="list"><a class="item" href="#profile"><span class="ic">◎</span><span><b>Profile, goals & targets</b><small>${GOALS[profile().goal]?.[0] || 'Set your goal'}</small></span><span class="go">›</span></a>
+  <div class="list"><a class="item" href="#focus"><span class="ic">✧</span><span><b>My focus</b><small>${focusList().length ? focusList().map((k) => FOCUS[k].t).join(' · ') : 'Choose up to three areas'}</small></span><span class="go">›</span></a>
+  <a class="item" href="#reminders"><span class="ic">🔔</span><span><b>Reminders</b><small>Morning ${rhythm().am} · evening ${rhythm().pm}</small></span><span class="go">›</span></a>
+  <a class="item" href="#profile"><span class="ic">◎</span><span><b>Profile${foodOn() ? ', goals & targets' : ' & goals'}</b><small>${foodOn() ? GOALS[profile().goal]?.[0] || 'Set your goal' : 'About you and what matters'}</small></span><span class="go">›</span></a>
   <a class="item" href="#share"><span class="ic">✉</span><span><b>Share with Ger</b><small>Choose what to send — nothing goes automatically</small></span><span class="go">›</span></a>
   <button class="item" data-act="backup"><span class="ic">⇩</span><span><b>Back up my journal</b><small>Copy a backup code to keep somewhere safe</small></span><span class="go">›</span></button>
   <button class="item" data-act="restore"><span class="ic">⇧</span><span><b>Restore from a backup</b><small>Paste a backup code or choose a backup file</small></span><span class="go">›</span></button>
   <a class="item" href="#about"><span class="ic">ⓘ</span><span><b>About & sources</b><small>Models, credits and further reading</small></span><span class="go">›</span></a></div>
+  <div style="margin-top:16px">${bookCard(true)}</div>
   <p class="small muted" style="margin-top:18px">Your journal is stored only in this browser, on this device. Clearing browser data removes it, so back up now and then.</p><button class="linkbtn" style="color:#f2a7b4;margin-top:6px" data-act="reset">Start again with a blank journal</button>`);
 }
 function aboutView() {
@@ -2049,7 +2438,7 @@ function aboutView() {
 function sheet(html, role = 'dialog') { closeOverlay(); const o = document.createElement('div'); o.className = 'overlay'; o.setAttribute('role', role); o.innerHTML = `<div class="sheet">${html}</div>`; document.body.append(o); $('button, a, textarea', o)?.focus(); return o; }
 const closeBtn = (l = 'Close') => `<button class="btn ghost block" data-act="close" style="margin-top:8px;color:#1d2b26;box-shadow:inset 0 0 0 1px #c9bfa9">${l}</button>`;
 function supportSheet() {
-  sheet(`<h2>Need support?</h2><p>If you feel unsafe or at risk of harming yourself or someone else, seek immediate help.</p><div class="line"><span><b>Emergency</b><br><small>Ireland</small></span><a href="tel:112">112 / 999</a></div><div class="line"><span><b>Samaritans</b><br><small>Free, 24/7, listening support</small></span><a href="tel:116123">116 123</a></div><div class="line"><span><b>Pieta</b><br><small>Free, 24/7 · or text HELP to 51444</small></span><a href="tel:1800247247">1800 247 247</a></div><div class="line"><span><b>Text About It</b><br><small>Free, 24/7 text support</small></span><a href="sms:50808?body=HELLO">Text HELLO to 50808</a></div><p class="small" style="margin-top:14px">Outside Ireland, contact your local emergency number.</p><p>For coaching support, reach out to Ger at <b>www.wellmind.ie</b>.</p><button class="btn block" data-act="close" style="margin-top:8px">Close</button>`);
+  sheet(`<h2>Need support?</h2><p>If you feel unsafe or at risk of harming yourself or someone else, seek immediate help.</p><div class="line"><span><b>Emergency</b><br><small>Ireland</small></span><a href="tel:112">112 / 999</a></div><div class="line"><span><b>Samaritans</b><br><small>Free, 24/7, listening support</small></span><a href="tel:116123">116 123</a></div><div class="line"><span><b>Pieta</b><br><small>Free, 24/7 · or text HELP to 51444</small></span><a href="tel:1800247247">1800 247 247</a></div><div class="line"><span><b>Text About It</b><br><small>Free, 24/7 text support</small></span><a href="sms:50808?body=HELLO">Text HELLO to 50808</a></div><p class="small" style="margin-top:14px">Outside Ireland, contact your local emergency number.</p><p>For personal development support with Ger: <a href="${BOOK_URL}" target="_blank" rel="noopener"><b>book a session</b></a> or email ${SHARE_EMAIL}.</p><button class="btn block" data-act="close" style="margin-top:8px">Close</button>`);
 }
 const backupCode = () => JSON.stringify({ app: 'wellmind', v: 6, saved: new Date().toISOString(), everyday: E, understanding: U });
 function backupSheet() { sheet(`<h2>Back up my journal</h2><p>Copy this backup code and keep it somewhere safe and private (for example a note on your phone). Paste it into <b>Restore</b> to bring your journal back on any device.</p><textarea class="input-dark" readonly style="background:#f1ebdd;color:#1d2b26" aria-label="Backup code">${esc(backupCode())}</textarea><button class="btn block" data-act="backup-copy" style="margin-top:12px">Copy backup code</button>${closeBtn()}`); }
@@ -2075,11 +2464,14 @@ function render() {
   if (!onboarded() && !eLocked) {
     if (!['about', 'restore'].includes(r)) { app.innerHTML = onboardingView(); afterRender(app, r, null); return; }
   } else if (U.seen !== 'v6' && !['about'].includes(r)) { app.innerHTML = welcomeHtml(true); return; }
+  else if (!U.focusAsked && !eLocked && !['about', 'restore'].includes(r) && !P0(r)) { app.innerHTML = focusAskView(); return; }
   const P = parseCh(r);
   const base = r.split('-')[0];
   let html;
-  if (P) html = playerView(P);
-  else if (r === 'today') html = todayView();
+  if (P) html = chLocked(P.j, P.ch.n) && P.i > PREVIEW_CARDS ? lockedView(P.j, P.ch) : playerView(P);
+  else if (base === 'today') html = todayView(r.split('-')[1]);
+  else if (r === 'focus') html = focusView();
+  else if (r === 'reminders') html = remindersView();
   else if (r === 'week') html = weekView();
   else if (r === 'find') html = findView();
   else if (r === 'track') html = trackView();
@@ -2101,14 +2493,18 @@ function render() {
   if (r === 'restore') restoreSheet();
   dir = 1;
 }
+const P0 = (r) => /^unlock/.test(r);
 function rerender() { const y = scrollY, f = document.activeElement?.id; render(); scrollTo(0, y); if (f) document.getElementById(f)?.focus({ preventScroll: true }); }
 function afterRender(app, r, P) {
   bindFields(app);
   $$('textarea', app).forEach((t) => !t.dataset.f && autosize(t));
   // daily check-in
-  $$('[data-d]', app).forEach((t) => t.addEventListener('input', () => { autosize(t); const before = checkedIn(tDate); setDaily(tDate, t.dataset.d, t.value.slice(0, 4000)); t.closest('.field')?.classList.toggle('answered', !!t.value.trim()); if (!before && checkedIn(tDate)) { floater(t, '+3 ✦'); updateChrome(); } }));
+  $$('[data-d]', app).forEach((t) => t.addEventListener('input', () => { if (t.tagName === 'TEXTAREA') autosize(t); const before = checkedIn(tDate); setDaily(tDate, t.dataset.d, t.value.slice(0, 4000)); t.closest('.field')?.classList.toggle('answered', !!t.value.trim()); if (!before && checkedIn(tDate)) { floater(t, '+3 ✦'); updateChrome(); } }));
   $$('[data-dslider]', app).forEach((s) => s.addEventListener('input', () => { const before = checkedIn(tDate); setDaily(tDate, s.dataset.dslider, s.value); s.classList.remove('unset'); $(`[data-dval="${s.dataset.dslider}"]`, app).textContent = s.value; s.closest('.field').classList.add('answered'); if (!before) { floater(s, '+3 ✦'); updateChrome(); } }));
   $$('[data-dnum]', app).forEach((i) => i.addEventListener('change', () => { const k = i.dataset.dnum, v = i.value.trim(), b = DAILY_BOUNDS[k]; if (v !== '' && !(Number(v) >= b[0] && Number(v) <= b[1])) { i.value = daily(tDate)[k] ?? ''; return toast(`Please enter a number between ${b[0]} and ${b[1]}.`); } if (k === 'screenHours' || k === 'screenMinutes') { const h = Number(k === 'screenHours' ? v || 0 : daily(tDate).screenHours || 0), m = Number(k === 'screenMinutes' ? v || 0 : daily(tDate).screenMinutes || 0); if (h * 60 + m > 1440) { i.value = daily(tDate)[k] ?? ''; return toast('Screen time can’t be more than 24 hours.'); } } setDaily(tDate, k, v); updateChrome(); }));
+  $$('[data-rhythm]', app).forEach((i) => i.addEventListener('change', () => { if (!/^\d\d:\d\d$/.test(i.value)) return; U.rhythm = { ...rhythm(), [i.dataset.rhythm]: i.value }; saveU(); $$('[data-gcal]', app).forEach((a) => (a.href = gcalLink(a.dataset.gcal))); }));
+  $$('[data-gcal]', app).forEach((a) => a.addEventListener('click', () => { U.remindersAdded = today(); saveU(); }));
+  const code = $('[data-code]', app); if (code) code.addEventListener('keydown', (e) => { if (e.key === 'Enter') redeem(code.value).then((ok) => ok && rerender()); });
   // week
   $$('[data-w]', app).forEach((t) => t.addEventListener('input', () => { autosize(t); if (setWeek(monday(), t.dataset.w, t.value.slice(0, 4000))) { floater(t, '+5 ✦'); updateChrome(); } }));
   // food totals
@@ -2165,6 +2561,12 @@ document.addEventListener('click', (e) => {
   }
   const jq = e.target.closest('[data-jq]');
   if (jq) { $$('.jq').forEach((b) => b.classList.toggle('on', b === jq && !jq.classList.contains('on'))); return; }
+  const fl = e.target.closest('[data-feel]');
+  if (fl) { const i = Number(fl.dataset.feel), cur = U.feel || (U.feel = []), at = cur.indexOf(i); if (at >= 0) cur.splice(at, 1); else cur.push(i); U.focus = suggestFocus(); saveU(); fl.classList.toggle('on', at < 0); fl.setAttribute('aria-pressed', at < 0); vibrate(6); return; }
+  const fo = e.target.closest('[data-focus]');
+  if (fo) { if (toggleFocus(fo.dataset.focus)) { const on = focusList().includes(fo.dataset.focus); fo.classList.toggle('on', on); fo.setAttribute('aria-pressed', on); vibrate(6); const c = $('[data-focuscount]'); if (c) c.firstChild.textContent = `${focusList().length} of 3 chosen · you can change these any time, and every chapter stays open in your sky.`; } return; }
+  const ds = e.target.closest('[data-dset]');
+  if (ds) { const k = ds.dataset.dset, v = daily(tDate)[k] === ds.dataset.v ? '' : ds.dataset.v, before = pmDone(tDate); setDaily(tDate, k, v); if (v === 'done') { burst('#b6f08f', 40); vibrate([10, 30, 10]); } if (!before && pmDone(tDate)) { floater(ds, '+3 ✦'); updateChrome(); } return rerender(); }
   const dc = e.target.closest('[data-dchip]');
   if (dc) { const g = dc.dataset.dchip, cur = listOf(daily(tDate)[g]), i = cur.indexOf(dc.dataset.v), before = checkedIn(tDate); if (i >= 0) cur.splice(i, 1); else cur.push(dc.dataset.v); setDaily(tDate, g, cur.join('|')); dc.classList.toggle('on', cur.includes(dc.dataset.v)); dc.setAttribute('aria-pressed', cur.includes(dc.dataset.v)); vibrate(6); if (!before && checkedIn(tDate)) { floater(dc, '+3 ✦'); updateChrome(); } return; }
   const eff = e.target.closest('[data-effort]');
@@ -2195,7 +2597,17 @@ document.addEventListener('click', (e) => {
     case 'mday': mDate = step(mDate, act.dataset.delta); actDraft = null; return rerender();
     case 'open-day': tDate = act.dataset.d; e.preventDefault(); scrollTo(0, 0); return render();
     case 'dclear': setDaily(tDate, act.dataset.k, ''); return rerender();
-    case 'today-done': if (checkedIn(tDate)) { burst('#7fd8c6', 70); toast('Checked in ✦ See you tomorrow — or whenever.'); go('home'); } else toast('Add anything at all — a number, a feeling or a few words.'); return;
+    case 'today-done': { const pt = act.dataset.part, ok = pt === 'pm' ? pmDone(tDate) : amDone(tDate); if (!ok) return toast(pt === 'pm' ? 'Add anything at all — a tick, a number or a few words.' : 'Add anything at all — a priority, a number or a feeling.'); burst(pt === 'pm' ? '#9db8ff' : '#ffd27a', 80); vibrate([20, 40, 20]); toast(pt === 'pm' ? 'Day closed ✦ Rest well.' : `Have a good day${firstName() ? ', ' + firstName() : ''} ✦ See you this evening.`); return go('home'); }
+    case 'tpart': tPart = act.dataset.part; if (route().startsWith('today')) { history.replaceState(null, '', '#today-' + tPart); scrollTo(0, 0); return render(); } return go('today-' + tPart);
+    case 'med': { const k = act.dataset.k, on = daily(tDate)[k] !== 'done'; setDaily(tDate, k, on ? 'done' : ''); if (on) { floater(act, '+2 ✦'); burst('#c4b2ff', 40); } return rerender(); }
+    case 'yt': { const box = act.closest('[data-yt]'); box.innerHTML = `<iframe src="https://www.youtube-nocookie.com/embed/${encodeURIComponent(act.dataset.id)}?autoplay=1&rel=0" title="Meditation video" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>`; return; }
+    case 'ics': return downloadIcs();
+    case 'focus-save': U.focusAsked = U.focusAsked || today(); saveU(true); toast('Your focus is saved ✦'); return go('home');
+    case 'focus-ask-done': U.focusAsked = today(); saveU(true); burst('#ecc97f', 90); toast(focusList().length ? 'Your home page is ready ✦' : 'You can choose a focus any time from Home.'); return render();
+    case 'focus-ask-skip': U.focusAsked = today(); saveU(true); return render();
+    case 'unlock': return unlockSheet(null);
+    case 'redeem': { const i = act.closest('.unlock')?.querySelector('[data-code]'); return redeem(i?.value).then((ok) => ok && rerender()); }
+    case 'pay-soon': return toast('Payments open very soon. Working with Ger? Enter your code below.');
     case 'act-new': actDraft = { type: act.dataset.type, minutes: '', kcal: '', effort: '', name: '' }; return rerender();
     case 'act-cancel': actDraft = null; return rerender();
     case 'act-save': {
@@ -2213,7 +2625,10 @@ document.addEventListener('click', (e) => {
     case 'ob-start': setProfile('onboardingStep', '1'); return render();
     case 'ob-back': setProfile('onboardingStep', String(Math.max(1, obStep() - 1))); scrollTo(0, 0); return render();
     case 'ob-next': {
-      if (obStep() === 1) { if (!firstName()) { toast('Add your first name so the journal can greet you.'); return $('#p-name')?.focus(); } }
+      const key = obSteps()[obStep()];
+      if (key === 'you' && !firstName()) { toast('Add your first name so the journal can greet you.'); return $('#p-name')?.focus(); }
+      if (key === 'focus' && !focusList().length) return toast('Pick at least one area — you can change it later.');
+      if (key === 'feel' && !(U.feel || []).length) U.focus = U.focus || [];
       setProfile('onboardingStep', String(obStep() + 1)); scrollTo(0, 0); return render();
     }
     case 'ob-manual': { const on = act.getAttribute('aria-pressed') !== 'true'; act.setAttribute('aria-pressed', on); act.classList.toggle('on', on); $('#ob-manual-box').hidden = !on; return; }
@@ -2235,7 +2650,9 @@ document.addEventListener('click', (e) => {
   }
 });
 document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeOverlay(); if ((e.key === 'Enter' || e.key === ' ') && e.target.matches?.('.insight')) { e.preventDefault(); e.target.classList.toggle('flip'); } });
+checkFounder();
 render();
+handleUnlockLink();
 
 </script>
 </body>
