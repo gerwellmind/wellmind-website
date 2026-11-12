@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Your Well Mind gift card</title>
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="theme-color" content="#0c1a17">
+  <link rel="icon" href="/assets/wellmind-logo.png" type="image/png">
+  <link rel="stylesheet" href="/style.css"><link rel="stylesheet" href="/expressive.css"><link rel="stylesheet" href="/theme.css"><link rel="stylesheet" href="/gift/gift.css">
+</head>
+<body>
+<header class="header">
+  <a class="brand" href="/" aria-label="WellMind home"><span class="brand-type">WellMind<small>WITH GER BOLAND</small></span></a>
+</header>
+<main id="main">
+  <section class="builder wrap">
+    <div class="form-col">
+      <div class="thanks" id="thanks" hidden><b>Thank you — your gift is ready ✦</b><br>A receipt is on its way to your email. Bookmark this page if you’d like to come back to the card later.</div>
+      <p class="eyebrow">YOUR GIFT CARD</p>
+      <h1>Make it <em>personal.</em></h1>
+      <p>Add their name and a message. The card updates as you type — then print it, save it as a PDF, or send it.</p>
+      <div class="field"><label for="to">Who is it for?</label><input id="to" maxlength="40" placeholder="e.g. Aoife" autocomplete="off"></div>
+      <div class="field"><label for="msg">Your message</label><textarea id="msg" maxlength="160" placeholder="e.g. Wishing you calmer days and a kinder year ahead."></textarea></div>
+      <div class="field"><label for="from">From</label><input id="from" maxlength="40" placeholder="e.g. Sarah" autocomplete="off"></div>
+      <div class="actions">
+        <button class="button" id="print">Print or save as PDF</button>
+        <button class="button alt" id="share">Send the gift</button>
+        <button class="button alt" id="copy">Copy gift link</button>
+      </div>
+      <p class="linkbox">Their gift link: <span id="giftlink"></span></p>
+      <p class="small" style="color:var(--muted)">Tip: when printing, choose A5 or “fit to page”, and turn on “background graphics” so the night sky prints.</p>
+    </div>
+    <div class="card-col">
+      <div class="giftcard" id="card">
+        <div class="gc-stars"></div>
+        <img class="gc-logo" src="/app/assets/icon-192.png" alt="Well Mind logo">
+        <p class="gc-kicker">A GIFT FOR YOU</p>
+        <p class="gc-to" id="c-to">For you</p>
+        <p class="gc-title">Well Mind</p>
+        <p class="gc-msg" id="c-msg">Wishing you calmer days and a kinder year ahead.</p>
+        <p class="gc-from" id="c-from"></p>
+        <div class="gc-qr" id="qr" role="img" aria-label="QR code that opens your gift"></div>
+        <p class="gc-how">Scan with your phone camera, or go to<br><b>wellmind.ie/app</b> and enter the code <b>GIFT-EVAX4HTQZ4</b></p>
+      </div>
+    </div>
+  </section>
+</main>
+<script src="/gift/qrcode.js"></script>
+<script>
+(function(){
+  var LINK='https://www.wellmind.ie/app/?unlock=GIFT-EVAX4HTQZ4';
+  var KEY='wellmind.giftcard.v1';
+  var $=function(id){return document.getElementById(id)};
+  if(/[?&]order=/.test(location.search)) $('thanks').hidden=false;
+  $('giftlink').textContent=LINK;
+  try{var qr=qrcode(0,'M');qr.addData(LINK);qr.make();$('qr').innerHTML=qr.createSvgTag({cellSize:4,margin:0,scalable:true});}catch(e){}
+  var saved={};try{saved=JSON.parse(localStorage.getItem(KEY)||'{}')}catch(e){}
+  ['to','msg','from'].forEach(function(k){if(saved[k])$(k).value=saved[k];});
+  function draw(){
+    var to=$('to').value.trim(),msg=$('msg').value.trim(),from=$('from').value.trim();
+    $('c-to').textContent=to?'For '+to:'For you';
+    $('c-msg').textContent=msg?'“'+msg+'”':'Wishing you calmer days and a kinder year ahead.';
+    $('c-from').textContent=from?'With love, '+from+' ✦':'';
+    try{localStorage.setItem(KEY,JSON.stringify({to:to,msg:msg,from:from}))}catch(e){}
+  }
+  ['to','msg','from'].forEach(function(k){$(k).addEventListener('input',draw)});draw();
+  function text(){var to=$('to').value.trim(),from=$('from').value.trim(),msg=$('msg').value.trim();
+    return (to?'Hi '+to+'! ':'Hi! ')+'I got you a little Christmas gift 🎁 The Well Mind app — calmer days, better boundaries and a few minutes for yourself, morning and night.'+(msg?'\n\n'+msg:'')+'\n\nOpen your gift here (everything is unlocked for you):\n'+LINK+(from?'\n\nWith love, '+from+' ✦':'');}
+  $('print').addEventListener('click',function(){window.print()});
+  $('share').addEventListener('click',function(){
+    var t=text();
+    if(navigator.share){navigator.share({title:'A gift for you: Well Mind',text:t}).catch(function(){});}
+    else{location.href='mailto:?subject='+encodeURIComponent('A gift for you: Well Mind 🎁')+'&body='+encodeURIComponent(t);}
+  });
+  $('copy').addEventListener('click',function(){
+    var b=$('copy');(navigator.clipboard?navigator.clipboard.writeText(text()):Promise.reject()).then(function(){b.textContent='Copied ✓';setTimeout(function(){b.textContent='Copy gift link'},2000)},function(){prompt('Copy this:',LINK)});
+  });
+})();
+</script>
+</body></html>

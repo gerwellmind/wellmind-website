@@ -1,0 +1,50 @@
+/* Christmas gift pages */
+.gift-visual{display:grid;place-items:center}
+.giftcard{position:relative;overflow:hidden;width:100%;max-width:400px;aspect-ratio:5/7;border-radius:22px;padding:34px 30px;color:#f6f0e3;text-align:center;
+  background:radial-gradient(520px 360px at 85% -10%,#2b6b5b88,transparent 60%),radial-gradient(420px 320px at -10% 110%,#3a2f6e77,transparent 60%),linear-gradient(180deg,#0b1915,#10261f 60%,#0c1a17);
+  box-shadow:0 0 0 1px #ecc97f66,0 0 0 9px #ecc97f14,0 30px 70px #0007;display:flex;flex-direction:column;align-items:center}
+.gc-stars{position:absolute;inset:0;pointer-events:none;background:
+  radial-gradient(1.5px 1.5px at 12% 14%,#fffb 50%,transparent 51%),radial-gradient(1px 1px at 30% 40%,#fff9 50%,transparent 51%),radial-gradient(1.5px 1.5px at 78% 10%,#ffe9b0 50%,transparent 51%),
+  radial-gradient(1px 1px at 88% 36%,#fff9 50%,transparent 51%),radial-gradient(1px 1px at 18% 70%,#fff8 50%,transparent 51%),radial-gradient(1.5px 1.5px at 66% 58%,#ffe9b0cc 50%,transparent 51%),
+  radial-gradient(1px 1px at 46% 22%,#fff8 50%,transparent 51%),radial-gradient(1px 1px at 92% 82%,#fff8 50%,transparent 51%),radial-gradient(1px 1px at 8% 92%,#fff7 50%,transparent 51%)}
+.giftcard>*{position:relative}
+.gc-logo{width:74px;height:74px;border-radius:20px;box-shadow:0 0 0 1px #ecc97f55,0 0 34px #ecc97f44;margin-bottom:14px}
+.gc-kicker{font:700 .72rem/1 var(--sans);letter-spacing:.24em;color:#ecc97f;margin:0 0 10px}
+.gc-to{font-family:var(--serif);font-style:italic;font-weight:300;font-size:1.5rem;color:#f7e2ad;margin:0}
+.gc-title{font-family:var(--serif);font-weight:300;font-size:2.7rem;line-height:1.05;margin:4px 0 10px;color:#fffaf0}
+.gc-msg{font-family:var(--serif);font-style:italic;font-weight:300;font-size:1.02rem;line-height:1.45;color:#dfe7e2;margin:0 0 8px;max-width:30ch;white-space:pre-line}
+.gc-from{font-size:.92rem;color:#c6d3cc;margin:0 0 auto}
+.gc-qr{margin-top:14px;background:#fffaf0;border-radius:14px;padding:10px;min-width:110px;min-height:110px;display:grid;place-items:center}
+.gc-qr svg,.gc-qr img{display:block;width:110px;height:110px}
+.giftcard.sample .gc-qr{background:#fffaf0 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 7 7'%3E%3Cpath d='M0 0h3v3H0zM4 0h3v3H4zM0 4h3v3H0zM4 4h1v1H4zM6 4h1v1H6zM5 5h1v1H5zM4 6h1v1H4zM6 6h1v1H6z' fill='%2316302a'/%3E%3C/svg%3E") center/80px no-repeat}
+.gc-how{font-size:.74rem;color:#c6d3cc;margin:10px 0 0;line-height:1.4}
+.gc-how b{color:#f7e2ad}
+.gift-hero .giftcard{transform:rotate(3deg)}
+.gift-steps{grid-template-columns:repeat(3,1fr)}
+.gift-cta{text-align:center;margin-top:36px}
+/* card builder */
+.builder{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:start;padding-block:56px 80px}
+.builder h1{font-size:clamp(2.4rem,4vw,3.4rem);margin:0 0 12px}
+.builder .field{display:grid;gap:6px;margin:14px 0}
+.builder label{font-weight:650;font-size:.92rem}
+.builder input,.builder textarea{font:inherit;border:1px solid #e6dcc7;border-radius:14px;padding:12px 14px;background:#fffcf5;color:var(--ink)}
+.builder textarea{min-height:92px;resize:vertical}
+.builder input:focus,.builder textarea:focus{outline:2px solid #ecc97f;border-color:#ecc97f}
+.actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}
+.actions .button{cursor:pointer;font:inherit;font-weight:650}
+.button.alt{background:transparent!important;color:var(--ink)!important;box-shadow:inset 0 0 0 1.5px var(--ink)!important}
+.thanks{background:#fffcf5;border:1px solid #e6dcc7;border-radius:18px;padding:16px 18px;margin-bottom:18px}
+.thanks b{font-family:var(--serif);font-size:1.25rem;font-weight:400}
+.linkbox{margin-top:18px;font-size:.88rem;color:var(--muted);word-break:break-all}
+.card-col{position:sticky;top:110px;display:grid;place-items:center}
+@media(max-width:900px){.builder{grid-template-columns:1fr}.card-col{position:static}.gift-steps{grid-template-columns:1fr}.gift-hero .giftcard{transform:none}}
+@media print{
+  @page{size:A5 portrait;margin:0}
+  body{background:#0c1a17!important}
+  header,footer,.skip,.form-col,.no-print{display:none!important}
+  .builder{display:block;padding:0}
+  .card-col{position:static;display:block}
+  .giftcard{max-width:none;width:148mm;height:210mm;aspect-ratio:auto;border-radius:0;box-shadow:none;padding:16mm 12mm;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .gc-qr svg{width:38mm;height:38mm}.gc-qr{min-width:0;min-height:0}
+  .gc-title{font-size:30pt}
+}
