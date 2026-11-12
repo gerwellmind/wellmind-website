@@ -1,0 +1,135 @@
+/* =====================================================================
+   WellMind "night garden" theme — loaded last on every page.
+   Brings the website closer to the Well Mind app: night-sky sections,
+   warm cream paper, gold accents and the app's Fraunces display type.
+   Content and links are untouched; remove this file to return to the
+   previous look.
+   ===================================================================== */
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;1,9..144,300;1,9..144,400;1,9..144,500&display=swap');
+
+:root{
+  --ink:#16302a;--deep:#0c1a17;--night:#0c1a17;--night2:#132a24;--moss:#284e43;
+  --cream:#f6f0e3;--paper:#fffcf5;--muted:#5b6b64;--line:#e6dcc7;--lime:#efe2c2;
+  --accent:#c9a24e;--gold:#ecc97f;--gold2:#f7e2ad;--teal:#7fd8c6;
+  --serif:'Fraunces',Georgia,'Times New Roman',serif;
+  --shadow:0 18px 40px #16302a12,0 2px 6px #16302a08;
+}
+html,body{overflow-x:hidden}
+body{background:var(--cream);color:var(--ink)}
+h1,h2,h3,h4,.footer-brand,.brand-type{font-family:var(--serif);font-weight:400;letter-spacing:-.02em}
+h1 em,h2 em,h3 em{font-style:italic;font-weight:300;color:#9a7330;background:none!important}
+
+/* ---------- shared night-sky backdrop ---------- */
+.hero,.journal-teaser,.start-section,.app-hero,.app-rhythm,footer{position:relative;isolation:isolate}
+.hero::before,.journal-teaser::before,.app-hero::before{content:"";position:absolute;inset:0;left:50%;width:100vw;transform:translateX(-50%);z-index:-1;
+  background:
+    radial-gradient(1.5px 1.5px at 12% 18%,#fff9 50%,transparent 51%),radial-gradient(1px 1px at 28% 72%,#fff8 50%,transparent 51%),
+    radial-gradient(1.5px 1.5px at 47% 12%,#ffe9b0aa 50%,transparent 51%),radial-gradient(1px 1px at 63% 44%,#fff7 50%,transparent 51%),
+    radial-gradient(1.5px 1.5px at 81% 22%,#fffa 50%,transparent 51%),radial-gradient(1px 1px at 91% 66%,#fff7 50%,transparent 51%),
+    radial-gradient(1px 1px at 36% 38%,#fff6 50%,transparent 51%),radial-gradient(1.5px 1.5px at 6% 84%,#ffe9b099 50%,transparent 51%),
+    radial-gradient(1px 1px at 72% 88%,#fff6 50%,transparent 51%),radial-gradient(1px 1px at 54% 62%,#fff5 50%,transparent 51%),
+    radial-gradient(900px 520px at 85% -10%,#2b6b5b66 0%,transparent 60%),
+    radial-gradient(700px 480px at -5% 105%,#3a2f6e55 0%,transparent 60%),
+    radial-gradient(520px 360px at 55% 55%,#ecc97f14 0%,transparent 70%),
+    linear-gradient(180deg,#0b1915 0%,#10261f 55%,#0c1a17 100%)}
+.hero h1,.hero h2,.journal-teaser h2,.app-hero h1,.start-section h2{color:#f6f0e3}
+.hero h1 em,.journal-teaser h2 em,.app-hero h1 em,.start-section h2 em,.app-rhythm h2 em,footer em{color:var(--gold)}
+.hero p,.hero .hero-note,.hero .micro,.journal-teaser p:not(.eyebrow),.app-hero p:not(.eyebrow){color:#c6d3cc}
+.hero .hero-intro,.app-hero .journal-intro{color:#eef0e8}
+.hero .eyebrow,.journal-teaser .eyebrow,.app-hero .eyebrow,.start-section .eyebrow{color:var(--gold)!important}
+.hero .text-link,.journal-teaser .text-link,.app-hero .text-link,.start-section a:not(.button){color:#f7e2ad;border-color:#ecc97f88}
+
+/* ---------- header ---------- */
+.header{background:#f6f0e3e6;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid #e6dcc7;position:sticky;top:0;z-index:50}
+.brand-type{color:var(--ink)}
+.header nav>a:not(.nav-cta):hover{text-decoration-color:var(--accent)}
+
+/* ---------- buttons & links ---------- */
+.button,.nav-cta{border:0!important;border-radius:999px!important;background:linear-gradient(135deg,#f5d995,#e3b866)!important;color:#1e2a24!important;font-weight:650;box-shadow:0 10px 26px #c9a24e40!important;padding-inline:24px}
+.button:hover,.nav-cta:hover{background:linear-gradient(135deg,#f8e2a8,#e9c174)!important;box-shadow:0 14px 32px #c9a24e55!important;transform:translateY(-2px)}
+.text-link{border-bottom-color:var(--accent)}
+.eyebrow{color:#9a7330;letter-spacing:.14em!important;font-weight:650}
+.eyebrow::before{content:"✦ ";color:var(--accent)}
+.hero .eyebrow span{display:none}
+
+/* ---------- hero ---------- */
+.hero{padding-top:84px;padding-bottom:100px}
+.hero h1{letter-spacing:-.035em;font-weight:300}
+.hero-visual{border:0!important;box-shadow:0 0 0 1px #ecc97f55,0 0 0 10px #ecc97f12,0 0 80px #ecc97f2e,0 30px 60px #0008!important;background:#132a24}
+.hero-visual::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 55%,#0c1a17aa);pointer-events:none}
+.photo-caption{background:#0c1a17cc!important;color:#f6f0e3!important;backdrop-filter:blur(8px);border:1px solid #ecc97f44!important;border-radius:16px!important;z-index:2}
+.photo-caption p,.photo-caption span{color:#f6f0e3!important}.photo-caption em{color:var(--gold)}
+.image-note{color:#c6d3cc!important;z-index:2}
+
+/* ---------- strip ---------- */
+.intro-strip{background:linear-gradient(90deg,#e9d7a8,#f3e6c4 50%,#e9d7a8)!important;color:#16302a!important;border:0!important}
+.intro-strip span:first-child{font-family:var(--serif);font-style:italic;font-weight:300}
+.intro-strip .strip-note{color:#5b4a22!important;letter-spacing:.14em}
+
+/* ---------- cards ---------- */
+.session-choice-grid article,.topic-grid article,.topic-grid>*,.process-grid>*,.resource-grid>*,.offer-card,.certificate-card,.journal-card,.why-grid article,.journey,.price-card,.booking-card,.comparison-side,.faq details,.group-course,.massage-training,.training-details,.letter{
+  border-radius:22px!important;border:1px solid #e6dcc7!important;background:var(--paper);box-shadow:var(--shadow)!important}
+.session-choice-grid article,.offer-card,.price-card,.why-grid article,.journey{transition:transform .25s,box-shadow .25s}
+.session-choice-grid article:hover,.offer-card:hover,.price-card:hover,.why-grid article:hover,.journey:hover{transform:translateY(-4px);box-shadow:0 26px 50px #16302a1c!important}
+.service-label,.offer-kicker,.journal-kicker,.topic-number{color:#9a7330!important;letter-spacing:.12em}
+.offer-price,.journal-price{font-family:var(--serif);font-weight:400}
+.offer-card.offer-intro,.price-card.full,.journey.tools{background:linear-gradient(160deg,#16302a,#0c1a17)!important;color:#eef0e8;border-color:#ecc97f55!important}
+.offer-card.offer-intro *:not(.button),.journey.tools *,.price-card.full *:not(.button){color:#e6ece7!important}
+.offer-card.offer-intro .offer-kicker,.price-card.full .journal-kicker,.journey.tools .journal-kicker{color:var(--gold)!important}
+.offer-card.offer-intro .offer-price,.price-card.full .journal-price{color:var(--gold2)!important}
+
+/* ---------- soft sections ---------- */
+.approach,.sessions,.journal-how,.support-comparison{background:linear-gradient(180deg,#efe6d2,#f6f0e3)!important;border:0!important}
+.faq details{padding:4px 18px;margin-bottom:10px}
+.faq summary{font-family:var(--serif);font-size:1.12rem}
+
+/* ---------- app teaser on the homepage ---------- */
+.journal-teaser{border:0!important;padding-block:96px!important}
+.journal-teaser::after{content:"";position:absolute;left:50%;width:100vw;transform:translateX(-50%);bottom:0;height:1px;background:linear-gradient(90deg,transparent,#ecc97f66,transparent)}
+.teaser-covers{background:radial-gradient(circle at 50% 40%,#ecc97f2a,transparent 65%)!important;border:0!important}
+.teaser-phones img{box-shadow:0 0 0 4px #0c1a17,0 0 0 5px #ecc97f55,0 24px 50px #000a!important}
+
+/* ---------- start / booking ---------- */
+.start-section{background:
+    radial-gradient(1.5px 1.5px at 15% 25%,#fff9 50%,transparent 51%),radial-gradient(1px 1px at 40% 80%,#fff7 50%,transparent 51%),
+    radial-gradient(1.5px 1.5px at 70% 15%,#ffe9b0aa 50%,transparent 51%),radial-gradient(1px 1px at 88% 60%,#fff7 50%,transparent 51%),
+    radial-gradient(800px 500px at 90% 0%,#2b6b5b66,transparent 60%),radial-gradient(700px 500px at 0% 100%,#3a2f6e55,transparent 60%),
+    linear-gradient(180deg,#0b1915,#0c1a17)!important}
+.start-grid>div>p{color:#c6d3cc!important}
+.booking-card{box-shadow:0 0 0 1px #ecc97f55,0 0 60px #ecc97f22,0 30px 60px #0007!important}
+.booking-badge{background:#efe2c2!important;color:#5b4a22!important;border-radius:999px!important}
+
+/* ---------- footer ---------- */
+footer{background:#081310!important;color:#c6d3cc}
+footer a{color:#f7e2ad}
+.footer-brand{color:#f6f0e3}
+.footer-bottom{border-top-color:#ecc97f22!important;color:#8fa39a}
+
+/* ---------- app page extras ---------- */
+.app-hero{padding-block:80px 96px!important}
+.app-rhythm{background:linear-gradient(180deg,#10261f,#0c1a17)!important;color:#c6d3cc}
+.app-rhythm h2,.app-rhythm h3{color:#f6f0e3}
+.app-rhythm .eyebrow{color:var(--gold)!important}
+.app-rhythm .journal-steps>div{background:#ffffff08;border:1px solid #ecc97f2e;border-radius:18px;padding:20px 22px}
+.app-rhythm .journal-steps span{color:var(--gold)}
+.app-rhythm p{color:#c6d3cc}
+.phone{box-shadow:0 0 0 7px #0c1a17,0 0 0 8px #ecc97f55,0 30px 60px #0006!important}
+.shots img{box-shadow:0 0 0 6px #0c1a17,0 0 0 7px #ecc97f55,0 24px 50px #16302a40!important}
+.price-card .button-light{background:transparent!important;color:var(--ink)!important;box-shadow:inset 0 0 0 1.5px var(--ink)!important}
+
+/* ---------- gentle entrance ---------- */
+@media (prefers-reduced-motion:no-preference){
+  .hero-copy,.hero-visual,.app-hero>*{animation:wmRise .9s cubic-bezier(.2,.8,.2,1) both}
+  .hero-visual,.app-hero>*:nth-child(2){animation-delay:.15s}
+  @keyframes wmRise{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+}
+@media(max-width:640px){.hero{padding-top:44px;padding-bottom:64px}.journal-teaser{padding-block:64px!important}}
+/* contrast fixes */
+.journal-teaser>div>p:not(.eyebrow){color:#d3ddd7!important}
+.booking-card,.booking-card h3{color:var(--ink)!important}
+.booking-card p{color:var(--muted)!important}
+.booking-card a:not(.button){color:#2f6b5b!important}
+.booking-card .booking-small{color:var(--muted)!important}
+.app-hero p:not(.eyebrow){color:#d3ddd7!important}.app-hero .journal-intro{color:#f1efe6!important}
+.session-choice-grid article{background:var(--paper)!important}
+.comparison-side,.offer-note,.package-choice-note{background:var(--paper)}
