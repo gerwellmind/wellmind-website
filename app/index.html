@@ -9,7 +9,11 @@
 <title>Well Mind · Your journal</title>
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="assets/favicon-64.png" type="image/png">
-<link rel="apple-touch-icon" href="assets/icon-192.png">
+<link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Well Mind">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700;9..40,800&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&display=swap" rel="stylesheet">
 <style>
@@ -619,6 +623,17 @@ details.explain ol{padding-left:18px;color:#33433c}
 .codebox .coderow{margin-top:0}
 .preview-tag{display:inline-block;margin:0 0 12px;padding:5px 12px;border-radius:99px;background:#e9f3ee;color:#2f6b5b;font-size:12.5px;font-weight:700}
 .h2-note{font-family:var(--body);font-size:15px;font-weight:500;color:var(--muted);letter-spacing:0}
+.nudge.install{display:flex;align-items:center;gap:12px;width:100%;text-align:left;border:0;font:inherit;cursor:pointer;background:linear-gradient(135deg,rgba(236,201,127,.18),rgba(127,216,198,.08));box-shadow:inset 0 0 0 1px rgba(236,201,127,.35)}
+.nudge.install img{width:40px;height:40px;border-radius:10px;flex:0 0 40px}
+.nudge.install b{display:block;color:var(--ink)}.nudge.install small{color:var(--muted);font-size:12.5px;line-height:1.35;display:block}
+.nudge.install .go{margin-left:auto;color:var(--muted)}
+.install-sheet{text-align:left}
+.install-logo{display:block;margin:0 auto 10px;border-radius:16px;box-shadow:0 8px 24px rgba(0,0,0,.25)}
+.install-sheet h2{text-align:center}
+.istep{display:flex;gap:12px;align-items:flex-start;padding:10px 12px;border-radius:14px;background:#f3eddf;margin:8px 0}
+.istep>span{flex:0 0 28px;height:28px;border-radius:50%;display:grid;place-items:center;background:#ecc97f;color:#1d2b26;font-weight:800}
+.istep p{margin:2px 0 0;color:#33433c}
+.istep .ico{display:inline-block;padding:0 6px;border-radius:6px;background:#fff;box-shadow:0 0 0 1px #d8cfbd}
 
 </style>
 </head>
@@ -1790,6 +1805,7 @@ function homeView() {
   <div class="levelbar" style="margin:-6px 2px 18px"><span class="pill"><b>Level ${lv.n}</b></span><div class="track"><div class="fill" style="width:${Math.round(lv.pct * 100)}%"></div></div><span class="small muted">${lv.next ? `${lv.next[0] - lv.sp} ✦ to Level ${lv.n + 1}` : 'Top level reached'}</span></div>
   <div class="section-h" style="margin-top:6px"><h2>Today</h2><span class="small muted">${pretty(d, { weekday: 'long', day: 'numeric', month: 'long' })}</span></div>
   <div class="quests">${quests.join('')}</div>
+  ${showInstallCard() ? installCard() : ''}
   ${!U.remindersAdded ? `<a class="nudge" href="#reminders">🔔 Get a gentle reminder each morning and evening ›</a>` : ''}
   <div class="dcard"><div class="eyebrow">Today’s card</div><p>${esc(dailyCard())}</p></div>
   <div class="section-h"><h2>Your focus</h2><a class="small linkbtn" href="#focus">${focusList().length ? 'Change' : 'Choose'}</a></div>
@@ -2326,6 +2342,28 @@ async function handleUnlockLink() {
   if (await redeem(code, true)) render(); else toast('That unlock link didn’t work — email Ger and we’ll sort it out.');
 }
 
+// ---------------- add to home screen ----------------
+let installEvt = null;
+window.addEventListener('beforeinstallprompt', (e) => { e.preventDefault(); installEvt = e; if (route() === 'home' || route() === 'me') rerender(); });
+window.addEventListener('appinstalled', () => { installEvt = null; U.installed = today(); saveU(); toast('Well Mind is on your home screen ✦'); });
+try { if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {}); } catch (e) {}
+const isStandalone = () => { try { return matchMedia('(display-mode: standalone)').matches || navigator.standalone === true; } catch (e) { return false; } };
+const isIOS = () => /iphone|ipad|ipod/i.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+const isInAppBrowser = () => /FBAN|FBAV|Instagram|Line\/|WhatsApp|Messenger|Snapchat|TikTok/i.test(navigator.userAgent);
+const showInstallCard = () => !isStandalone() && !U.installHide && !U.installed;
+function installCard() {
+  return `<button class="nudge install" data-act="install"><img src="assets/icon-192.png" alt="" width="40" height="40"><span><b>Put Well Mind on your home screen</b><small>${installEvt ? 'One tap — it opens like a normal app, with the Well Mind logo.' : 'Takes 10 seconds — it opens like a normal app, with the Well Mind logo.'}</small></span><span class="go">›</span></button>`;
+}
+async function startInstall() {
+  if (installEvt) { installEvt.prompt(); const r = await installEvt.userChoice.catch(() => null); installEvt = null; if (r && r.outcome === 'accepted') { U.installed = today(); saveU(); } return rerender(); }
+  const step = (n, t) => `<div class="istep"><span>${n}</span><p>${t}</p></div>`;
+  let body;
+  if (isInAppBrowser()) body = `<p>You’ve opened Well Mind inside another app (like WhatsApp or Instagram). First open it in your phone’s browser:</p>${step(1, 'Tap the <b>⋯</b> or <b>⋮</b> menu at the top or bottom of this screen.')}${step(2, `Choose <b>Open in ${isIOS() ? 'Safari' : 'Chrome'}</b> (or “Open in browser”).`)}${step(3, 'Then tap <b>Put Well Mind on your home screen</b> again.')}`;
+  else if (isIOS()) body = `<p>On iPhone or iPad:</p>${step(1, 'Tap the <b>Share</b> button <span class="ico">⬆︎</span> — at the bottom of the screen in Safari (at the top right on iPad or in Chrome).')}${step(2, 'Scroll down and tap <b>Add to Home Screen</b> <span class="ico">⊞</span>.')}${step(3, 'Tap <b>Add</b>. The Well Mind logo appears on your home screen.')}<div class="callout" style="--c:#ecc97f"><b>Already written in Well Mind?</b>On iPhone, the home-screen app keeps its own copy of your journal. To bring your entries with you: in this screen go to <b>Me → Back up my journal</b> and copy the code, then open the new icon and use <b>Me → Restore from a backup</b>.</div><p class="small" style="color:#6b7a73">Icon showing the wrong picture? Open the old icon first and back up (Me → Back up my journal) — deleting an icon on iPhone also deletes the journal inside it. Then press and hold it → <b>Remove App</b> → <b>Delete from Home Screen</b>, add it again from Safari, and restore your backup.</p>`;
+  else body = `<p>On Android:</p>${step(1, 'Tap the <b>⋮</b> menu at the top right of Chrome.')}${step(2, 'Tap <b>Add to Home screen</b> or <b>Install app</b>.')}${step(3, 'Tap <b>Install</b> or <b>Add</b>. The Well Mind logo appears on your home screen.')}<p class="small" style="color:#6b7a73">Icon showing the wrong picture? Back up first to be safe (Me → Back up my journal). Then press and hold the old icon, remove it, and add it again.</p>`;
+  sheet(`<div class="install-sheet"><img class="install-logo" src="assets/icon-192.png" alt="Well Mind app icon" width="72" height="72"><h2>Put Well Mind on your home screen</h2>${body}</div><button class="btn block" data-act="install-done" style="margin-top:10px">Done ✦</button><button class="linkbtn" data-act="install-hide" style="display:block;margin:12px auto 0;color:#6b7a73">Don’t show this again</button>`);
+}
+
 'use strict';
 // =====================================================================
 // Well Mind — views part 3: share, me, sheets, render and events.
@@ -2419,6 +2457,7 @@ function meView() {
   <div class="section-h"><h2>Insight cards</h2></div><p class="small muted" style="margin:-6px 2px 8px">Everyday Wellbeing</p><div class="collection">${cards('ew')}</div><p class="small muted" style="margin:14px 2px 8px">Understanding Yourself</p><div class="collection">${cards('uy')}</div>
   <div class="section-h"><h2>My journal</h2></div>
   <div class="list"><a class="item" href="#focus"><span class="ic">✧</span><span><b>My focus</b><small>${focusList().length ? focusList().map((k) => FOCUS[k].t).join(' · ') : 'Choose up to three areas'}</small></span><span class="go">›</span></a>
+  ${!isStandalone() ? `<button class="item" data-act="install"><span class="ic">📲</span><span><b>Add to my home screen</b><small>Open Well Mind like a normal app, with its own icon</small></span><span class="go">›</span></button>` : ''}
   <a class="item" href="#reminders"><span class="ic">🔔</span><span><b>Reminders</b><small>Morning ${rhythm().am} · evening ${rhythm().pm}</small></span><span class="go">›</span></a>
   <a class="item" href="#profile"><span class="ic">◎</span><span><b>Profile${foodOn() ? ', goals & targets' : ' & goals'}</b><small>${foodOn() ? GOALS[profile().goal]?.[0] || 'Set your goal' : 'About you and what matters'}</small></span><span class="go">›</span></a>
   <a class="item" href="#share"><span class="ic">✉</span><span><b>Share with Ger</b><small>Choose what to send — nothing goes automatically</small></span><span class="go">›</span></a>
@@ -2605,6 +2644,9 @@ document.addEventListener('click', (e) => {
     case 'focus-ask-done': U.focusAsked = today(); saveU(true); burst('#ecc97f', 90); toast(focusList().length ? 'Your home page is ready ✦' : 'You can choose a focus any time from Home.'); return render();
     case 'focus-ask-skip': U.focusAsked = today(); saveU(true); return render();
     case 'unlock': return unlockSheet(null);
+    case 'install': return startInstall();
+    case 'install-done': closeOverlay(); if (isStandalone()) { U.installed = today(); saveU(); } return rerender();
+    case 'install-hide': U.installHide = today(); saveU(); closeOverlay(); return rerender();
     case 'redeem': { const i = act.closest('.unlock')?.querySelector('[data-code]'); return redeem(i?.value).then((ok) => ok && rerender()); }
     case 'pay-soon': return toast('Payments open very soon. Have a code? Enter it below.');
     case 'act-new': actDraft = { type: act.dataset.type, minutes: '', kcal: '', effort: '', name: '' }; return rerender();
