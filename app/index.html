@@ -2281,7 +2281,7 @@ function memory() {
 // ---------------- payment / unlock ----------------
 const unlocked = () => !!(U.plan && U.plan.type);
 const chLocked = (j, n) => !unlocked() && !FREE_CH.has(j + n);
-const planName = (t) => ({ founder: 'Founding member', client: 'Well Mind client', lifetime: 'Full access', monthly: 'Full access', gift: 'Full access (free)' }[t] || 'Full access');
+const planName = (t) => ({ founder: 'Founding member', client: 'Full access', lifetime: 'Full access', monthly: 'Full access', gift: 'Full access (free)' }[t] || 'Full access');
 async function sha256(s) { const b = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(s)); return [...new Uint8Array(b)].map((x) => x.toString(16).padStart(2, '0')).join(''); }
 async function redeem(code, quiet) {
   const c = String(code || '').trim().toUpperCase().replace(/\s+/g, '');
@@ -2299,7 +2299,7 @@ function unlockHtml(ch) {
   return `<div class="unlock"><div class="lock-orb">🔒</div><h2>${ch ? `Keep going with “${esc(ch.title)}”` : 'Unlock all of Well Mind'}</h2><p>${ch ? 'You’ve seen a preview of this chapter. ' : ''}Unlock all 25 chapters across both journeys, every tool and game, and everything Ger adds in future.</p>
   <ul class="ticks"><li>Everyday Wellbeing and Understanding Yourself — every star</li><li>Boundary builder, values sort, calm plan, Wheel of Life and more</li><li>Your journal stays private on your phone</li></ul>
   <div class="plans one">${pay}</div>
-  <div class="codebox"><b>Working with Ger?</b><small>Well Mind clients get the full app free. Enter the code Ger gave you.</small><div class="coderow"><input type="text" data-code autocomplete="off" autocapitalize="characters" placeholder="Your code" aria-label="Unlock code"><button class="btn small" data-act="redeem">Unlock</button></div></div>
+  <div class="codebox"><b>Have a code?</b><small>Enter it here to unlock the full app.</small><div class="coderow"><input type="text" data-code autocomplete="off" autocapitalize="characters" placeholder="Your code" aria-label="Unlock code"><button class="btn small" data-act="redeem">Unlock</button></div></div>
   <p class="small" style="color:#6b7a73;margin-top:12px">Secure payment by Stripe. After paying you come straight back here and everything opens. Questions? <a href="mailto:${SHARE_EMAIL}">${SHARE_EMAIL}</a></p></div>`;
 }
 const unlockSheet = (ch) => sheet(`${unlockHtml(ch)}${closeBtn('Not now')}`);
@@ -2307,8 +2307,8 @@ function lockedView(j, ch) {
   return `<div class="player" style="--c:${ch.hue}"><div class="player-top"><a class="iconbtn" href="#home" aria-label="Back to your sky">←</a><div class="t"><div>${JOURNEYS[j].short} · ${pad(ch.n)}</div><strong>${esc(ch.title)}</strong></div><span class="pill">✦ <b data-sparks>${sparks()}</b></span><button class="iconbtn" data-act="support" aria-label="Need support?" style="color:#ffd5dc">♡</button></div><main class="deck" id="deck"><article class="cardx"><div class="intro-hero"><div class="big">${ch.glyph}</div><div><div class="eyebrow">${JOURNEYS[j].title} · ${pad(ch.n)}</div><h2 style="margin:4px 0 0;font-size:30px">${esc(ch.title)}</h2></div></div><div class="consider"><small>Consider</small>${esc(ch.consider)}</div>${unlockHtml(ch)}<p class="small" style="color:#6b7a73;text-align:center"><a href="#${rid(j, ch.n)}">← Back to the preview</a></p><p class="small" style="color:#6b7a73;text-align:center">Free in full: ${[...FREE_CH].map((k) => { const jj = k.slice(0, 2), c = chOf(jj, Number(k.slice(2))); return `<a href="#${rid(jj, c.n)}">${esc(c.title)}</a>`; }).join(' · ')}</p></article></main></div>`;
 }
 function planCard() {
-  if (unlocked()) return `<div class="glass plan-own"><div class="eyebrow">Your access</div><h3>${planName(U.plan.type)} ✦</h3><p class="muted small">${U.plan.type === 'founder' ? 'Thank you for being one of the first. Full access, free — including future updates.' : U.plan.type === 'client' ? 'Full access, free, as part of your sessions with Ger — including future updates.' : 'Every chapter is open, including future updates.'}${U.plan.at ? ` Since ${pretty(U.plan.at)}.` : ''}</p></div>`;
-  return `<div class="glass"><div class="eyebrow">Your access</div><h3>Free version</h3><p class="muted small">Your morning and evening check-ins, the calm tools and ${FREE_CH.size} full chapters are free, and you can preview every other chapter. Unlock everything for ${PRICE.lifetime}, once — or free with a code if you work with Ger.</p><button class="btn small" data-act="unlock">Unlock Well Mind</button></div>`;
+  if (unlocked()) return `<div class="glass plan-own"><div class="eyebrow">Your access</div><h3>${planName(U.plan.type)} ✦</h3><p class="muted small">${U.plan.type === 'founder' ? 'Thank you for being one of the first. Full access, free — including future updates.' : U.plan.type === 'client' ? 'Every chapter is open, including future updates.' : 'Every chapter is open, including future updates.'}${U.plan.at ? ` Since ${pretty(U.plan.at)}.` : ''}</p></div>`;
+  return `<div class="glass"><div class="eyebrow">Your access</div><h3>Free version</h3><p class="muted small">Your morning and evening check-ins, the calm tools and ${FREE_CH.size} full chapters are free, and you can preview every other chapter. Unlock everything for ${PRICE.lifetime}, once.</p><button class="btn small" data-act="unlock">Unlock Well Mind</button></div>`;
 }
 // Founding members: anyone already using the journal when payments arrived keeps full access, free.
 function checkFounder() {
@@ -2606,7 +2606,7 @@ document.addEventListener('click', (e) => {
     case 'focus-ask-skip': U.focusAsked = today(); saveU(true); return render();
     case 'unlock': return unlockSheet(null);
     case 'redeem': { const i = act.closest('.unlock')?.querySelector('[data-code]'); return redeem(i?.value).then((ok) => ok && rerender()); }
-    case 'pay-soon': return toast('Payments open very soon. Working with Ger? Enter your code below.');
+    case 'pay-soon': return toast('Payments open very soon. Have a code? Enter it below.');
     case 'act-new': actDraft = { type: act.dataset.type, minutes: '', kcal: '', effort: '', name: '' }; return rerender();
     case 'act-cancel': actDraft = null; return rerender();
     case 'act-save': {

@@ -37,3 +37,4 @@
 .button-light:hover{background:#1d304f0d!important}
 @media(max-width:900px){.app-hero{grid-template-columns:1fr}.phone-stack{margin:0 auto;height:480px;max-width:360px}.phone-stack .phone{width:215px}.why-grid,.inside-grid,.price-grid{grid-template-columns:1fr 1fr}.app-rhythm .rhythm-grid{grid-template-columns:1fr}}
 @media(max-width:640px){.why-grid,.inside-grid,.price-grid{grid-template-columns:1fr}.shots{grid-template-columns:1fr 1fr;gap:16px}.shots img:last-child{display:none}.phone-stack{height:420px;max-width:320px}.phone-stack .phone{width:190px}}
+.price-grid.two{grid-template-columns:repeat(2,1fr);max-width:860px;margin-inline:auto}@media(max-width:640px){.price-grid.two{grid-template-columns:1fr}}
