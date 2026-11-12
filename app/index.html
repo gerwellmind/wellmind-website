@@ -618,6 +618,7 @@ details.explain ol{padding-left:18px;color:#33433c}
 .codebox small{display:block;color:#4a5953;margin-bottom:8px}
 .codebox .coderow{margin-top:0}
 .preview-tag{display:inline-block;margin:0 0 12px;padding:5px 12px;border-radius:99px;background:#e9f3ee;color:#2f6b5b;font-size:12.5px;font-weight:700}
+.h2-note{font-family:var(--body);font-size:15px;font-weight:500;color:var(--muted);letter-spacing:0}
 
 </style>
 </head>
@@ -1509,7 +1510,7 @@ function finishCard(j, ch) {
   <p>${done ? `You lit it on ${pretty(U.done[doneKey(j, ch.n)])}. You can return and add to it any time.` : 'There’s no score to reach. Light it whenever it feels finished enough for now.'}</p>
   <div class="stat-row"><div class="stat"><b>${pr.got}</b><span>of ${pr.tot} prompts</span></div><div class="stat"><b>${done ? '✓' : '+10'}</b><span>${done ? 'lit' : 'sparks'}</span></div></div>
   <div style="display:grid;gap:10px;margin-top:14px">${done ? `<button class="btn" data-act="reveal" data-j="${j}" data-n="${ch.n}">See my insight card</button>` : `<button class="btn" data-act="light" data-j="${j}" data-n="${ch.n}">Light this star ✦</button>`}
-  <a class="btn ghost" href="#share" data-act="share-ch" data-j="${j}" data-n="${ch.n}">Share this chapter with Ger</a><a class="btn ghost" href="${BOOK_URL}" target="_blank" rel="noopener">Talk it through with Ger</a><a class="btn ghost" href="#${rid(j, ch.n, deck(j, ch).length)}" data-dir="-1">← Back to the last card</a><a class="linkbtn" href="#home" style="margin-top:6px">Back to my sky</a></div></article>`;
+  <a class="btn ghost" href="#share" data-act="share-ch" data-j="${j}" data-n="${ch.n}">Share this chapter with Ger</a><a class="btn ghost" href="${BOOK_URL}" target="_blank" rel="noopener">Talk it through with Ger</a><a class="btn ghost" href="#${rid(j, ch.n, deck(j, ch).length)}" data-dir="-1">← Back to the last card</a><a class="linkbtn" href="#home" style="margin-top:6px">Back to my sky (all chapters)</a></div></article>`;
 }
 function tableHtml(t) { return `<div style="overflow-x:auto"><table class="tbl"><thead><tr>${t.head.map((h) => `<th>${esc(h)}</th>`).join('')}</tr></thead><tbody>${t.rows.map((r) => `<tr>${r.map((c) => `<td>${esc(c)}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`; }
 function stepCard(j, ch, st, i) {
@@ -1798,7 +1799,7 @@ function homeView() {
   <div class="glass" style="padding:16px 18px;margin-top:16px"><div class="small muted">Days you showed up this month — no streaks, no pressure</div><div class="moons">${moons}</div>${wk.set ? `<p class="small muted" style="margin:10px 0 0">Last 7 days: ${fmt(wk.kept, 1).replace('.0', '')} of ${wk.set} priorities done ✦</p>` : ''}</div>
   ${bookCard(false)}
   <div class="chips-row" style="margin-top:14px"><a class="mini" href="#find"><span>🧭</span>Find what you need</a><a class="mini" href="#week"><span>🗓</span>My week in view</a><a class="mini" href="#calm"><span>◯</span>Calm meter</a><a class="mini" href="#share"><span>✉</span>Share with Ger</a></div>
-  <div class="section-h"><h2>Your sky</h2></div>
+  <div class="section-h"><h2>Your sky <span class="h2-note">(all chapters)</span></h2></div>
   <div class="seg" role="tablist">${['ew', 'uy'].map((k) => `<button role="tab" class="${skyId === k ? 'on' : ''}" aria-selected="${skyId === k}" data-act="sky" data-sky="${k}"><b>${JOURNEYS[k].title}</b><small>${JOURNEYS[k].list.filter((c) => isLit(k, c.n)).length}/${JOURNEYS[k].list.length} lit</small></button>`).join('')}</div>
   <p class="small muted" style="margin:10px 2px 4px;text-align:center">${esc(J.sub)} No chapter is a prerequisite — start anywhere that calls you.</p>
   ${mapSvg(skyId)}
