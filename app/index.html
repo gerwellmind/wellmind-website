@@ -2094,10 +2094,8 @@ const MEDS = {
 const FREE_CH = new Set(['ew1', 'ew5', 'uy1', 'uy7']);
 // SHA-256 of each unlock code (the codes themselves are not stored in the app).
 const CODES = {
-  '042836d05a2ec4c071a531eaf9f07e6b56a6175f253a14faf0a966574fc1ace1': 'founder',
-  '600f4ed4528f406f6150df1a2b8318b5ac950bb60c28af5386143486287cb950': 'lifetime',
-  '40d5bf95a3249d9c61719a5327ce9b41c172151bdbd684fb2f8820fe36b50939': 'monthly',
-  '0899181a30a732f4f6433de565c4f97ae8c1fe665892ae47f4671e5a418d43fa': 'client',
+  '2c9442e4afd4ca0304ed1605fd1f4eff6a7d26329f2ce162a06cc004245e0ab3': 'gift', // HAPPY — the one free code for clients, friends and early users
+  '600f4ed4528f406f6150df1a2b8318b5ac950bb60c28af5386143486287cb950': 'lifetime', // used only by the Stripe return link
 };
 
 // ---------------- focus areas ----------------
@@ -2282,7 +2280,7 @@ function memory() {
 // ---------------- payment / unlock ----------------
 const unlocked = () => !!(U.plan && U.plan.type);
 const chLocked = (j, n) => !unlocked() && !FREE_CH.has(j + n);
-const planName = (t) => ({ founder: 'Founding member', client: 'Well Mind client', lifetime: 'Full access', monthly: 'Full access', gift: 'Gifted access' }[t] || 'Full access');
+const planName = (t) => ({ founder: 'Founding member', client: 'Well Mind client', lifetime: 'Full access', monthly: 'Full access', gift: 'Full access (free)' }[t] || 'Full access');
 async function sha256(s) { const b = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(s)); return [...new Uint8Array(b)].map((x) => x.toString(16).padStart(2, '0')).join(''); }
 async function redeem(code, quiet) {
   const c = String(code || '').trim().toUpperCase().replace(/\s+/g, '');
