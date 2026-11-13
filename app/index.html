@@ -634,6 +634,15 @@ details.explain ol{padding-left:18px;color:#33433c}
 .istep>span{flex:0 0 28px;height:28px;border-radius:50%;display:grid;place-items:center;background:#ecc97f;color:#1d2b26;font-weight:800}
 .istep p{margin:2px 0 0;color:#33433c}
 .istep .ico{display:inline-block;padding:0 6px;border-radius:6px;background:#fff;box-shadow:0 0 0 1px #d8cfbd}
+.calm-eg{display:grid;gap:8px;margin:14px 0 18px;padding:14px 16px;border-radius:16px;background:#f3eddf;color:#33433c;font-size:14.5px;line-height:1.45}
+.calm-eg>b{font-family:var(--display);font-weight:500;color:#1d2b26}
+.calm-eg i{display:inline-block;font-style:normal;font-weight:800;font-size:12px;padding:2px 8px;border-radius:99px;background:var(--z);color:#1d2b26;margin-right:8px}
+.calm-eg em{font-style:normal;font-weight:700;color:#2f6b5b}
+.gcal-tip{margin-top:12px;padding:10px 14px;border-radius:14px;background:#f3eddf;color:#33433c;font-size:14px;line-height:1.45}
+.gcal-tip summary{cursor:pointer;font-weight:700;color:#2f6b5b}
+.gcal-tip ol{margin:6px 0;padding-left:20px}
+.gcal-tip p{margin:6px 0}
+.zone h3{flex-wrap:wrap}.zone h3>span{white-space:nowrap;flex:none}.zone h3 small{flex-basis:100%;margin-left:0!important}
 
 </style>
 </head>
@@ -829,7 +838,7 @@ const UY = [
   {
     n: 7, key: 'c07', title: 'My calm plan', glyph: '◯', hue: '#7fc8f8',
     consider: 'What would I like support with in a difficult moment?',
-    intro: ['Stress may show up as silence, restlessness, irritability, tears, distraction or overworking. Use this personal 1–10 scale to recognise your signs and match support to them; it is not a clinical score.'],
+    intro: ['Think of your feelings as a scale from 1 to 10. 1 is you at your calmest. 5 is getting wound up — irritable, tense, snappy. 10 is the moment you explode, shut down or fall apart.', 'Most of us climb the scale step by step, and the earlier you notice where you are, the easier it is to come back down. In this chapter you write down what each stage looks like for you, and what helps you at each one — your own calm plan. It is a personal guide, not a clinical score.'],
     insight: '“Steady enough” does not mean cheerful or symptom-free. You can begin wherever you are.',
     steps: [
       game('calmscale', 'My 1–10 scale', { note: '“Steady enough” does not mean cheerful or symptom-free. You can begin wherever you are. If you feel unsafe or at risk of harming yourself or someone else, seek immediate local help.' }),
@@ -1662,8 +1671,10 @@ const GAMES = {
   },
   calmscale: {
     html(ch) {
-      const Z = [['1', '1–3', 'Steady', '#8fe3a8', 'Body / thoughts / behaviour:', 'A routine or support to keep:'], ['2', '4–6', 'Building', '#ffc86b', 'Early changes I notice:', 'A demand to reduce or person to ask:'], ['3', '7–10', 'Overload', '#ff8a7a', 'Signs I need to pause:', 'Safe space / fewer demands / support:']];
-      return `<p>For each band, note your signs and what may help. Your plan powers the <b>Calm meter</b> in your toolkit.</p><div class="zones">${Z.map(([k, r, n, c, a, b]) => `<div class="zone" style="--z:${c}"><h3><span>${r}</span>${n}</h3>${uq(ch, 'zone.s' + k, 'My signs — ' + a)}${uq(ch, 'zone.h' + k, 'What may help — ' + b)}</div>`).join('')}</div>`;
+      const Z = [['1', '1–3', 'Calm', 'I feel like myself', '#8fe3a8', 'What I’m like at this level (body, thoughts, what I do):', 'What keeps me here:'], ['2', '4–6', 'Getting wound up', 'Irritable, tense, on edge', '#ffc86b', 'The early signs I notice:', 'What helps me calm down again:'], ['3', '7–10', 'About to explode', 'Or shut down, or fall apart', '#ff8a7a', 'The signs I need to stop and step away:', 'What I need right now (space, a person, fewer demands):']];
+      return `<p><b>How it works:</b> 1 is you at your calmest, 5 is getting wound up, and 10 is the moment you explode or shut down. For each stage, write what it looks like for you and what helps. Your plan then powers the <b>Calm meter</b> in your toolkit, so it’s there when you need it.</p>
+      <div class="calm-eg"><b>For example</b><span><i style="--z:#8fe3a8">1–3</i>I’m chatty, sleeping well, patient with the kids. <em>Helps:</em> my morning walk.</span><span><i style="--z:#ffc86b">4–6</i>Tight shoulders, short answers, scrolling my phone. <em>Helps:</em> 10 minutes on my own, a glass of water.</span><span><i style="--z:#ff8a7a">7–10</i>Raised voice, slamming doors — or going silent. <em>Helps:</em> leave the room, say “I need 20 minutes”.</span></div>
+      <div class="zones">${Z.map(([k, r, n, d, c, a, b]) => `<div class="zone" style="--z:${c}"><h3><span>${r}</span>${n}<small style="display:block;font-family:var(--body);font-size:13px;font-weight:500;color:#6b7a73;margin-top:2px">${d}</small></h3>${uq(ch, 'zone.s' + k, a)}${uq(ch, 'zone.h' + k, b)}</div>`).join('')}</div>`;
     },
   },
   pressures: {
@@ -2085,10 +2096,10 @@ function toolsView() {
 }
 let calmVal = 3;
 function calmView() {
-  const ch = chOf('uy', 7), zone = calmVal <= 3 ? 1 : calmVal <= 6 ? 2 : 3, names = { 1: ['Steady', '#8fe3a8'], 2: ['Building', '#ffc86b'], 3: ['Overload', '#ff8a7a'] };
+  const ch = chOf('uy', 7), zone = calmVal <= 3 ? 1 : calmVal <= 6 ? 2 : 3, names = { 1: ['Calm', '#8fe3a8'], 2: ['Getting wound up', '#ffc86b'], 3: ['About to explode', '#ff8a7a'] };
   const signs = UA(fid(ch, 'zone.s' + zone)), helps = UA(fid(ch, 'zone.h' + zone));
   const plan = !signs && !helps ? `<div class="note">You haven’t written your plan for this band yet. <a href="#uy-07-1">Build my calm plan</a> — then it appears here when you need it.</div>` : `${signs ? `<div class="callout"><b>My signs</b>${esc(signs)}</div>` : ''}${helps ? `<div class="callout"><b>What may help</b>${esc(helps)}</div>` : ''}<a class="linkbtn" href="#uy-07-1">Edit my plan</a>`;
-  return page('tools', `${hero('Calm meter', 'Where am I <em>right now?</em>', 'A personal scale, not a clinical score.')}<article class="cardx" style="--c:${names[zone][1]}"><div class="meter"><input type="range" min="1" max="10" value="${calmVal}" data-calm aria-label="My level from 1 to 10"></div><div class="meter-read"><span class="num" data-calmnum>${calmVal}</span><div><b style="font-family:var(--display);font-size:22px;color:#1d2b26">${names[zone][0]}</b><div class="small" style="color:#6b7a73">1–3 steady · 4–6 building · 7–10 overload</div></div></div>${plan}</article><p class="small muted" style="margin-top:14px">“Steady enough” does not mean cheerful or symptom-free. If you feel unsafe or at risk of harming yourself or someone else, seek immediate local help — tap <b>Need support?</b> at the top.</p>`);
+  return page('tools', `${hero('Calm meter', 'Where am I <em>right now?</em>', 'A personal scale, not a clinical score.')}<article class="cardx" style="--c:${names[zone][1]}"><div class="meter"><input type="range" min="1" max="10" value="${calmVal}" data-calm aria-label="My level from 1 to 10"></div><div class="meter-read"><span class="num" data-calmnum>${calmVal}</span><div><b style="font-family:var(--display);font-size:22px;color:#1d2b26">${names[zone][0]}</b><div class="small" style="color:#6b7a73">1 = at my calmest · 5 = getting wound up · 10 = about to explode</div></div></div>${plan}</article><p class="small muted" style="margin-top:14px">“Steady enough” does not mean cheerful or symptom-free. If you feel unsafe or at risk of harming yourself or someone else, seek immediate local help — tap <b>Need support?</b> at the top.</p>`);
 }
 function minuteView() { return page('tools', `${hero('A one-minute pause', 'Just <em>one minute</em>', 'You do not have to feel calm afterwards for your observation to be useful.')}<article class="cardx" style="--c:#c4b2ff">${GAMES.minute.html()}${fieldHtml('p:31:p31_inline_170', 'Before the pause I noticed … Afterwards …')}<div class="note">If inward attention feels distressing, stop and reconnect with the room or choose another activity. Meditation does not replace needed healthcare.</div></article>`); }
 
@@ -2229,7 +2240,7 @@ function gcalLink(which) {
   return `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(REM[which][0])}&details=${encodeURIComponent(REM[which][1] + '\n' + appUrl() + '#today')}&dates=${s}/${e}&ctz=${encodeURIComponent(tz)}&recur=${encodeURIComponent('RRULE:FREQ=DAILY')}`;
 }
 function icsText() {
-  const ev = (w) => { const [s, e] = calDates(rhythm()[w]); return ['BEGIN:VEVENT', `UID:wellmind-${w}-${Date.now()}@wellmind.ie`, `DTSTAMP:${new Date().toISOString().replace(/[-:]/g, '').slice(0, 15)}Z`, `DTSTART:${s}`, `DTEND:${e}`, 'RRULE:FREQ=DAILY', `SUMMARY:${REM[w][0]}`, `DESCRIPTION:${REM[w][1]} ${appUrl()}#today`, `URL:${appUrl()}#today`, 'BEGIN:VALARM', 'ACTION:DISPLAY', `DESCRIPTION:${REM[w][0]}`, 'TRIGGER:PT0M', 'END:VALARM', 'END:VEVENT'].join('\r\n'); };
+  const ev = (w) => { const [s, e] = calDates(rhythm()[w]); return ['BEGIN:VEVENT', `UID:wellmind-${w}-${Date.now()}@wellmind.ie`, `DTSTAMP:${new Date().toISOString().replace(/[-:]/g, '').slice(0, 15)}Z`, `DTSTART:${s}`, `DTEND:${e}`, 'RRULE:FREQ=DAILY', `SUMMARY:${REM[w][0]}`, `DESCRIPTION:${REM[w][1]} ${appUrl()}#today`, `URL:${appUrl()}#today`, 'BEGIN:VALARM', 'ACTION:DISPLAY', `DESCRIPTION:${REM[w][0]}`, 'TRIGGER:-PT1M', 'END:VALARM', 'END:VEVENT'].join('\r\n'); };
   return ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//Well Mind//Reminders//EN', 'CALSCALE:GREGORIAN', ev('am'), ev('pm'), 'END:VCALENDAR'].join('\r\n');
 }
 function reminderHtml() {
@@ -2238,7 +2249,8 @@ function reminderHtml() {
   <p class="small" style="color:#6b7a73">Your phone’s calendar will remind you every day at these times. Tap the reminder to open Well Mind.</p>
   <div class="remrow"><button class="btn small" data-act="ics">📅 Add both to my phone calendar</button></div>
   <p class="small" style="color:#6b7a73;margin:12px 0 4px">Use Google Calendar? Add each one:</p><div class="remrow"><a class="btn small ghost" ${DARK_BTN} href="${gcalLink('am')}" target="_blank" rel="noopener" data-gcal="am">Morning in Google Calendar</a><a class="btn small ghost" ${DARK_BTN} href="${gcalLink('pm')}" target="_blank" rel="noopener" data-gcal="pm">Evening in Google Calendar</a></div>
-  <p class="small" style="color:#6b7a73;margin-top:10px">You can delete the reminders from your calendar at any time.</p>`;
+  <details class="gcal-tip"><summary>Using Google Calendar? Make sure it pings you</summary><p>Google adds the reminder with <b>your own default alert</b>, so you may need to switch one on once:</p><ol><li>Open the Well Mind event in Google Calendar and tap <b>Edit</b> (the pencil).</li><li>Tap <b>Add notification</b> → choose <b>1 minute before</b> (or “Custom”).</li><li>Choose <b>All events</b> when asked, then <b>Save</b>.</li></ol><p>To make 1 minute the default for every new event: Google Calendar <b>Settings</b> → your calendar → <b>Default notifications</b> → 1 minute. Also check notifications are allowed for the Google Calendar app in your phone’s settings.</p></details>
+  <p class="small" style="color:#6b7a73;margin-top:10px">The phone-calendar file alerts you 1 minute before each check-in. You can delete the reminders from your calendar at any time.</p>`;
 }
 function downloadIcs() {
   const blob = new Blob([icsText()], { type: 'text/calendar' }), a = document.createElement('a');
@@ -2386,7 +2398,7 @@ function chapterText(j, ch) {
     if (st.t === 'leader') add('What would a great leader do? ' + st.q, UA(fid(ch, st.key)));
     if (st.t === 'next') [['g', 'Goal'], ['n', 'Now'], ['o', 'Options'], ['s', 'Next step']].forEach(([k, l]) => add(l, UA(fid(ch, 'ns.' + k))));
     if (st.g === 'values' && U.values.three.length) L.push(`• My three values: ${U.values.three.join(', ')} (from ${U.values.five.join(', ')})`);
-    if (st.g === 'calmscale') [['1', 'Steady'], ['2', 'Building'], ['3', 'Overload']].forEach(([k, l]) => { add(`${l} – my signs`, UA(fid(ch, 'zone.s' + k))); add(`${l} – what may help`, UA(fid(ch, 'zone.h' + k))); });
+    if (st.g === 'calmscale') [['1', 'Calm (1–3)'], ['2', 'Getting wound up (4–6)'], ['3', 'About to explode (7–10)']].forEach(([k, l]) => { add(`${l} – my signs`, UA(fid(ch, 'zone.s' + k))); add(`${l} – what may help`, UA(fid(ch, 'zone.h' + k))); });
     if (st.g === 'boundary') add('My boundary sentence', boundaryPlain(ch));
     if (st.g === 'creative') [['name', 'A surprising name'], ['notice', 'Three things I notice'], ['poem', 'My poem / scene'], ['enjoy', 'Enjoyable before I judged it']].forEach(([k, l]) => add(l, UA(fid(ch, 'cr.' + k))));
     if (st.g === 'blueprint') BLUEPRINT.forEach(([k, l]) => add(l, UA(fid(ch, 'bp.' + k))));
