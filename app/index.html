@@ -680,6 +680,10 @@ details.explain ol{padding-left:18px;color:#33433c}
 .nowb{display:flex;flex-direction:column;align-items:center;gap:4px;text-decoration:none;color:var(--ink);font-size:12px;font-weight:600;text-align:center;padding:10px 2px;border-radius:16px;background:rgba(255,255,255,.06);box-shadow:inset 0 0 0 1px rgba(255,255,255,.1)}
 .nowb span{font-size:30px}
 .newstyle{padding:16px 18px;margin:0 0 16px}
+.modebar{display:flex;gap:4px;padding:4px;margin:0 auto 14px;width:max-content;max-width:100%;border-radius:999px;background:rgba(255,255,255,.07);box-shadow:inset 0 0 0 1px rgba(255,255,255,.12)}
+.modebar button{border:0;background:transparent;color:var(--ink);opacity:.75;font:600 13px/1 var(--body);padding:9px 14px;border-radius:999px;cursor:pointer;white-space:nowrap}
+.modebar button.on{background:var(--gold,#ecc97f);color:#13211c;opacity:1}
+.modebar.inplayer{margin:10px auto 0}
 
 </style>
 </head>
@@ -1656,7 +1660,7 @@ function warnings() {
   if (!canSave) w += '<div class="warn">This browser isn’t letting the journal save. Your answers last only while this page stays open. Use <b>Me → Back up</b> to keep a copy.</div>';
   return w;
 }
-const page = (sec, body) => `<div class="wrap">${topbar()}${warnings()}${body}</div>${navbar(sec)}`;
+const page = (sec, body) => `<div class="wrap">${topbar()}${modeBar()}${warnings()}${body}</div>${navbar(sec)}`;
 const hero = (eyebrow, title, sub) => `<div class="hello"><div class="eyebrow">${eyebrow}</div><h1>${title}</h1>${sub ? `<p class="muted">${sub}</p>` : ''}</div>`;
 
 // ---------------- chapter player ----------------
@@ -1673,7 +1677,7 @@ function playerView(P) {
   const dots = Array.from({ length: total }, (_, k) => `<i class="${k < i ? 'on' : ''} ${k === i ? 'cur' : ''}"></i>`).join('');
   const body = i === 0 ? introCard(j, ch) : i === total - 1 ? finishCard(j, ch) : stepCard(j, ch, steps[i - 1], i);
   const isLast = i === total - 1;
-  return `<div class="player" style="--c:${ch.hue}"><div class="player-top"><a class="iconbtn" href="#home" aria-label="Back to your sky">←</a><div class="t"><div>${JOURNEYS[j].short} · ${pad(ch.n)} · ${i + 1}/${total}</div><strong>${esc(ch.title)}</strong></div><span class="pill">✦ <b data-sparks>${sparks()}</b></span><button class="iconbtn" data-act="support" aria-label="Need support?" style="color:#ffd5dc">♡</button></div><div class="dots" aria-hidden="true">${dots}</div><main class="deck" id="deck">${body}</main>
+  return `<div class="player" style="--c:${ch.hue}"><div class="player-top"><a class="iconbtn" href="#home" aria-label="Back to your sky">←</a><div class="t"><div>${JOURNEYS[j].short} · ${pad(ch.n)} · ${i + 1}/${total}</div><strong>${esc(ch.title)}</strong></div><span class="pill">✦ <b data-sparks>${sparks()}</b></span><button class="iconbtn" data-act="support" aria-label="Need support?" style="color:#ffd5dc">♡</button></div><div class="dots" aria-hidden="true">${dots}</div>${modeBar(true)}<main class="deck" id="deck">${body}</main>
   ${isLast ? '' : `<div class="playnav"><div class="in">${i > 0 ? `<a class="btn ghost" href="#${rid(j, ch.n, i - 1)}" data-dir="-1" aria-label="Previous card">←</a>` : ''}<a class="btn" href="#${rid(j, ch.n, i + 1)}" data-dir="1">${i === 0 ? 'Begin' : i === total - 2 ? 'Finish chapter ✦' : 'Next'}</a></div></div>`}</div>`;
 }
 function introCard(j, ch) {
@@ -2549,6 +2553,10 @@ function styleChoiceHtml(dark) {
 function styleSheet() {
   sheet(`<h2>How do you like to use Well Mind?</h2><p>Switch any time. Nothing you’ve written is lost either way.</p>${styleChoiceHtml(false)}${closeBtn('Done')}`);
 }
+function modeBar(inPlayer) {
+  const b = (k, l) => `<button class="${(k === 'easy') === easy() ? 'on' : ''}" data-act="style-set" data-style="${k}" aria-pressed="${(k === 'easy') === easy()}">${l}</button>`;
+  return `<div class="modebar ${inPlayer ? 'inplayer' : ''}" role="group" aria-label="How I use Well Mind">${b('easy', '⚡ Quick & easy')}${b('deep', '📖 Go deeper')}</div>`;
+}
 const styleLabel = () => (easy() ? '⚡ Quick & easy' : '📖 Go deeper');
 
 // --- player helpers: a shorter deck in easy mode ---
@@ -2682,7 +2690,11 @@ document.addEventListener('click', (e) => {
   if (k === 'style-set') {
     const was = U.style; U.style = a.dataset.style; saveU(true); vibrate(8);
     if (!onboarded()) { $$('.stylepick').forEach((b) => { const on = b.dataset.style === U.style; b.classList.toggle('on', on); b.setAttribute('aria-pressed', on); }); return; }
-    closeOverlay(); if (was !== U.style) toast(easy() ? 'Quick & easy is on ⚡' : 'Full version is on 📖'); return rerender();
+    closeOverlay(); fullToday = false;
+    if (was !== U.style) toast(easy() ? 'Quick & easy is on ⚡' : 'Go deeper is on 📖 — the full version');
+    const P = parseCh(route());
+    if (P) { const r = rid(P.j, P.ch.n, P.i === 0 ? 0 : 1); if (route() !== r) { location.hash = r; return; } return render(); }
+    return rerender();
   }
   if (k === 'style-sheet') return styleSheet();
   if (k === 'full-today') { fullToday = true; return rerender(); }
