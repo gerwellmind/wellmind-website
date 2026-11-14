@@ -2112,7 +2112,7 @@ function minuteView() { return page('tools', `${hero('A one-minute pause', 'Just
 // ---------------- settings Ger/Kora may change ----------------
 const BOOK_URL = 'https://app.studioninja.co/booking//63F591LAVM261H5Q4YGP1KUR0';
 const PAY = { lifetime: 'https://buy.stripe.com/8x2bJ0dHj7si8eP2zy1kA02' }; // Stripe Payment Link (Therapy account, 12 Nov 2026)
-const PRICE = { lifetime: '€3' };
+const PRICE = { lifetime: '€30' };
 const PREVIEW_CARDS = 1; // in a locked chapter, the intro plus this many cards are free to try
 const MEDS = {
   am: { id: 'FGO8IWiusJo', title: 'Guided morning meditation', len: '10 min' },
@@ -2324,7 +2324,7 @@ async function redeem(code, quiet) {
   return true;
 }
 function unlockHtml(ch) {
-  const pay = PAY.lifetime ? `<a class="plan best" href="${esc(PAY.lifetime)}" rel="noopener"><span class="tag">One-off</span><b>Unlock for ${PRICE.lifetime}</b><small>Pay once — yours to keep, including all future updates.</small></a>` : `<button class="plan best" data-act="pay-soon"><span class="tag">One-off</span><b>Unlock for ${PRICE.lifetime}</b><small>Pay once — yours to keep, including all future updates.</small></button>`;
+  const pay = PAY.lifetime ? `<a class="plan best" href="${esc(PAY.lifetime)}" rel="noopener"><span class="tag">Launch price · one-off</span><b>Unlock for ${PRICE.lifetime}</b><small>Pay once — yours to keep, including all future updates.</small></a>` : `<button class="plan best" data-act="pay-soon"><span class="tag">Launch price · one-off</span><b>Unlock for ${PRICE.lifetime}</b><small>Pay once — yours to keep, including all future updates.</small></button>`;
   return `<div class="unlock"><div class="lock-orb">🔒</div><h2>${ch ? `Keep going with “${esc(ch.title)}”` : 'Unlock all of Well Mind'}</h2><p>${ch ? 'You’ve seen a preview of this chapter. ' : ''}Unlock all 25 chapters across both journeys, every tool and game, and everything Ger adds in future.</p>
   <ul class="ticks"><li>Everyday Wellbeing and Understanding Yourself — every star</li><li>Boundary builder, values sort, calm plan, Wheel of Life and more</li><li>Your journal stays private on your phone</li></ul>
   <div class="plans one">${pay}</div>
