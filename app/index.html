@@ -684,6 +684,46 @@ details.explain ol{padding-left:18px;color:#33433c}
 .modebar button{border:0;background:transparent;color:var(--ink);opacity:.75;font:600 13px/1 var(--body);padding:9px 14px;border-radius:999px;cursor:pointer;white-space:nowrap}
 .modebar button.on{background:var(--gold,#ecc97f);color:#13211c;opacity:1}
 .modebar.inplayer{margin:10px auto 0}
+/* ---------- My plan for today / My path ---------- */
+.dayplan{padding:18px 16px 14px;margin:0 0 16px;color:var(--ink)}
+.plan-head{display:flex;align-items:center;gap:14px}
+.plan-head h2{margin:0;font-family:var(--display);font-size:23px;font-weight:400}
+.plan-head p{margin:2px 0 0;font-size:14px;opacity:.8}
+.dayplan .ring{position:relative;width:52px;height:52px;flex:none}
+.dayplan .ring svg{width:52px;height:52px;transform:rotate(-90deg)}
+.dayplan .ring .rt{fill:none;stroke:rgba(255,255,255,.12);stroke-width:5}
+.dayplan .ring .rf{fill:none;stroke:#ecc97f;stroke-width:5;stroke-linecap:round;transition:stroke-dashoffset .6s}
+.dayplan .ring b{position:absolute;inset:0;display:grid;place-items:center;font-size:13px}
+.streak{margin-left:auto;align-self:flex-start;background:rgba(255,160,90,.16);color:#ffd0a8;border-radius:999px;padding:6px 10px;font-size:13px;font-weight:700;white-space:nowrap}
+.plan-list{list-style:none;margin:14px 0 0;padding:0;display:grid;gap:8px}
+.plan-item{display:flex;align-items:center;gap:12px;padding:13px 14px;border-radius:18px;background:rgba(255,255,255,.05);box-shadow:inset 0 0 0 1px rgba(255,255,255,.08);color:var(--ink);text-decoration:none}
+.plan-item .pn{width:28px;height:28px;flex:none;border-radius:50%;display:grid;place-items:center;font-weight:700;font-size:14px;background:rgba(255,255,255,.1)}
+.plan-item .pi{font-size:22px;flex:none}
+.plan-item .pt{flex:1;min-width:0}
+.plan-item .pt b{display:block;font-size:16px}
+.plan-item .pt small{display:block;font-size:13px;opacity:.75;overflow:hidden;text-overflow:ellipsis}
+.plan-item.done{opacity:.6}
+.plan-item.done .pn{background:#7fd8c6;color:#0b1915}
+.plan-item.next{background:#fff7e3;color:#13211c;box-shadow:0 8px 24px rgba(236,201,127,.25),inset 0 0 0 2px #ecc97f;opacity:1}
+.plan-item.next .pn{background:#ecc97f;color:#13211c}
+.plan-item.next .pt small{opacity:.8}
+.pgo{flex:none;background:#13211c;color:#fff7e3;border-radius:999px;padding:8px 12px;font-weight:700;font-size:13px}
+.plan-why{margin:12px 4px 0;font-size:14px;line-height:1.45;opacity:.85}
+.plan-why a{color:#ecc97f}
+.myfocus{display:flex;align-items:center;gap:12px;padding:14px 16px;margin:16px 0 4px;text-decoration:none;color:var(--ink)}
+.myfocus .fi{width:40px;height:40px;flex:none;border-radius:12px;display:grid;place-items:center;font-size:20px;background:color-mix(in srgb,var(--c,#ecc97f) 25%,transparent)}
+.myfocus small{display:block;font-size:12px;opacity:.7}
+.myfocus b{display:block;font-size:16px;margin:1px 0}
+.myfocus .go,.prow .go{margin-left:auto;opacity:.6;font-size:22px}
+.plist{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.prow{display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:16px;background:rgba(255,255,255,.05);box-shadow:inset 0 0 0 1px rgba(255,255,255,.08);color:var(--ink);text-decoration:none}
+.prow .pnum{width:30px;height:30px;flex:none;border-radius:50%;display:grid;place-items:center;font-weight:700;font-size:13px;background:rgba(255,255,255,.1)}
+.prow .ptitle b{display:block;font-size:15px}
+.prow .ptitle small{display:block;font-size:12.5px;opacity:.7}
+.prow.done .pnum{background:#7fd8c6;color:#0b1915}
+.prow.done{opacity:.7}
+.prow.cur{box-shadow:inset 0 0 0 2px #ecc97f}
+.prow.cur .pnum{background:#ecc97f;color:#13211c}
 
 </style>
 </head>
@@ -1549,7 +1589,7 @@ function progressOf(j, ch) {
 const allChapters = () => [...EW.map((c) => ['ew', c]), ...UY.map((c) => ['uy', c])];
 
 // ---------------- sparks & levels ----------------
-const LEVELS = [[0, 'Noticer'], [20, 'Explorer'], [60, 'Wayfinder'], [120, 'Lantern-bearer'], [200, 'Pathmaker'], [320, 'Star-mapper'], [480, 'Lighthouse']];
+const LEVELS = [[0, 'Starting out'], [20, 'Getting going'], [60, 'Building habits'], [120, 'Steady'], [200, 'Strong'], [320, 'Very strong'], [480, 'Expert']];
 function sparks() {
   let s = Object.values(U.answers).filter((a) => a.text && a.text.trim()).length;
   for (const e of entries()) {
@@ -1651,9 +1691,9 @@ function setToggle(key, on) {
 
 // ---------------- shell ----------------
 const NAV = [['home', '✦', 'Home'], ['today', '☾', 'Today'], ['track', '◎', 'Track'], ['tools', '✧', 'Toolkit'], ['me', '♡', 'Me']];
-const SECTION = { focus: 'home', reminders: 'me', home: 'home', find: 'home', today: 'today', week: 'today', track: 'track', food: 'track', move: 'track', checkin: 'track', progress: 'track', tools: 'tools', calm: 'tools', minute: 'tools', me: 'me', profile: 'me', share: 'me', about: 'me' };
+const SECTION = { focus: 'home', reminders: 'me', home: 'home', find: 'home', path: 'home', today: 'today', week: 'today', track: 'track', food: 'track', move: 'track', checkin: 'track', progress: 'track', tools: 'tools', calm: 'tools', minute: 'tools', me: 'me', profile: 'me', share: 'me', about: 'me' };
 function navbar(on) { return `<div class="navbar"><nav aria-label="Main">${NAV.map(([r, i, l]) => `<a href="#${r}" class="${on === r ? 'on' : ''}" ${on === r ? 'aria-current="page"' : ''}><span aria-hidden="true">${i}</span>${l}</a>`).join('')}</nav></div>`; }
-function topbar() { return `<div class="topbar"><a class="brand" href="#home" aria-label="Well Mind home"><span class="mark"><img src="assets/emblem.webp" alt="" width="30" height="30"></span><span>Well Mind</span></a><div class="spacer"></div><span class="pill" title="Sparks">✦ <b data-sparks>${sparks()}</b></span><button class="support-btn" data-act="support">Need support?</button></div>`; }
+function topbar() { return `<div class="topbar"><a class="brand" href="#home" aria-label="Well Mind home"><span class="mark"><img src="assets/emblem.webp" alt="" width="30" height="30"></span><span>Well Mind</span></a><div class="spacer"></div><span class="pill" title="Points you earn for using the app">⭐ <b data-sparks>${sparks()}</b> pts</span><button class="support-btn" data-act="support">Need support?</button></div>`; }
 function warnings() {
   let w = '';
   if (eLocked) w += '<div class="warn">Your earlier journal entries on this device couldn’t be read, so they have been left untouched and nothing new will overwrite them. Please contact Ger before continuing.</div>';
@@ -1677,7 +1717,7 @@ function playerView(P) {
   const dots = Array.from({ length: total }, (_, k) => `<i class="${k < i ? 'on' : ''} ${k === i ? 'cur' : ''}"></i>`).join('');
   const body = i === 0 ? introCard(j, ch) : i === total - 1 ? finishCard(j, ch) : stepCard(j, ch, steps[i - 1], i);
   const isLast = i === total - 1;
-  return `<div class="player" style="--c:${ch.hue}"><div class="player-top"><a class="iconbtn" href="#home" aria-label="Back to your sky">←</a><div class="t"><div>${JOURNEYS[j].short} · ${pad(ch.n)} · ${i + 1}/${total}</div><strong>${esc(ch.title)}</strong></div><span class="pill">✦ <b data-sparks>${sparks()}</b></span><button class="iconbtn" data-act="support" aria-label="Need support?" style="color:#ffd5dc">♡</button></div><div class="dots" aria-hidden="true">${dots}</div>${modeBar(true)}<main class="deck" id="deck">${body}</main>
+  return `<div class="player" style="--c:${ch.hue}"><div class="player-top"><a class="iconbtn" href="#home" aria-label="Back to home">←</a><div class="t"><div>${JOURNEYS[j].short} · ${pad(ch.n)} · ${i + 1}/${total}</div><strong>${esc(ch.title)}</strong></div><span class="pill" title="Points">⭐ <b data-sparks>${sparks()}</b></span><button class="iconbtn" data-act="support" aria-label="Need support?" style="color:#ffd5dc">♡</button></div><div class="dots" aria-hidden="true">${dots}</div>${modeBar(true)}<main class="deck" id="deck">${body}</main>
   ${isLast ? '' : `<div class="playnav"><div class="in">${i > 0 ? `<a class="btn ghost" href="#${rid(j, ch.n, i - 1)}" data-dir="-1" aria-label="Previous card">←</a>` : ''}<a class="btn" href="#${rid(j, ch.n, i + 1)}" data-dir="1">${i === 0 ? 'Begin' : i === total - 2 ? 'Finish chapter ✦' : 'Next'}</a></div></div>`}</div>`;
 }
 function introCard(j, ch) {
@@ -1688,11 +1728,11 @@ function introCard(j, ch) {
 }
 function finishCard(j, ch) {
   const pr = progressOf(j, ch), done = isLit(j, ch.n);
-  return `<article class="cardx finish ${dir < 0 ? 'back' : ''}"><div class="big">${ch.glyph}</div><div class="eyebrow">End of ${esc(ch.title)}</div><h2>${done ? 'This star is lit' : 'Ready to light this star?'}</h2>
-  <p>${done ? `You lit it on ${pretty(U.done[doneKey(j, ch.n)])}. You can return and add to it any time.` : 'There’s no score to reach. Light it whenever it feels finished enough for now.'}</p>
-  <div class="stat-row"><div class="stat"><b>${pr.got}</b><span>of ${pr.tot} prompts</span></div><div class="stat"><b>${done ? '✓' : '+10'}</b><span>${done ? 'lit' : 'sparks'}</span></div></div>
-  <div style="display:grid;gap:10px;margin-top:14px">${done ? `<button class="btn" data-act="reveal" data-j="${j}" data-n="${ch.n}">See my insight card</button>` : `<button class="btn" data-act="light" data-j="${j}" data-n="${ch.n}">Light this star ✦</button>`}
-  ${easy() ? `<button class="btn ghost" data-act="style-sheet">📖 Want the full chapter? Switch to Go deeper</button>` : ''}<a class="btn ghost" href="#share" data-act="share-ch" data-j="${j}" data-n="${ch.n}">Share this chapter with Ger</a><a class="btn ghost" href="${BOOK_URL}" target="_blank" rel="noopener">Talk it through with Ger</a><a class="btn ghost" href="#${rid(j, ch.n, pdeck(j, ch).length)}" data-dir="-1">← Back to the last card</a><a class="linkbtn" href="#home" style="margin-top:6px">Back to my sky (all chapters)</a></div></article>`;
+  return `<article class="cardx finish ${dir < 0 ? 'back' : ''}"><div class="big">${ch.glyph}</div><div class="eyebrow">End of ${esc(ch.title)}</div><h2>${done ? 'Chapter done ✓' : 'Finished this chapter?'}</h2>
+  <p>${done ? `You finished it on ${pretty(U.done[doneKey(j, ch.n)])}. You can come back and add to it any time.` : 'There is no test. Tap the button below to mark this chapter as done.'}</p>
+  <div class="stat-row"><div class="stat"><b>${pr.got}</b><span>of ${pr.tot} prompts</span></div><div class="stat"><b>${done ? '✓' : '+10'}</b><span>${done ? 'done' : 'points'}</span></div></div>
+  <div style="display:grid;gap:10px;margin-top:14px">${done ? `<button class="btn" data-act="reveal" data-j="${j}" data-n="${ch.n}">See my insight card</button>` : `<button class="btn" data-act="light" data-j="${j}" data-n="${ch.n}">Mark chapter as done ✓</button>`}
+  ${easy() ? `<button class="btn ghost" data-act="style-sheet">📖 Want the full chapter? Switch to Go deeper</button>` : ''}<a class="btn ghost" href="#share" data-act="share-ch" data-j="${j}" data-n="${ch.n}">Share this chapter with Ger</a><a class="btn ghost" href="${BOOK_URL}" target="_blank" rel="noopener">Talk it through with Ger</a><a class="btn ghost" href="#${rid(j, ch.n, pdeck(j, ch).length)}" data-dir="-1">← Back to the last card</a><a class="linkbtn" href="#home" style="margin-top:6px">Back to home</a></div></article>`;
 }
 function tableHtml(t) { return `<div style="overflow-x:auto"><table class="tbl"><thead><tr>${t.head.map((h) => `<th>${esc(h)}</th>`).join('')}</tr></thead><tbody>${t.rows.map((r) => `<tr>${r.map((c) => `<td>${esc(c)}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`; }
 function stepCard(j, ch, st, i) {
@@ -1792,7 +1832,7 @@ function revealInsight(j, ch, fresh) {
   closeOverlay();
   const o = document.createElement('div');
   o.className = 'overlay'; o.setAttribute('role', 'dialog'); o.setAttribute('aria-label', 'Insight card'); o.style.setProperty('--c', ch.hue);
-  o.innerHTML = `<div class="overlay-inner">${fresh ? '<h2>Star lit ✦</h2>' : ''}<div class="insight" data-act="flip" tabindex="0" aria-label="Tap to turn the card"><div class="inner"><div class="face front"><div class="g">${ch.glyph}</div><div class="eyebrow" style="color:#fff;margin-top:16px">${JOURNEYS[j].short} · ${pad(ch.n)}</div><p style="font-family:var(--display);font-size:22px;margin:6px 0 0">${esc(ch.title)}</p><p class="small" style="opacity:.8;margin-top:18px">Tap to turn over</p></div><div class="face back"><div class="g">${ch.glyph}</div><q>${esc(ch.insight)}</q><div class="small" style="color:#6b7a73">${esc(ch.title)} · ${JOURNEYS[j].title}</div></div></div></div><div class="actions"><button class="btn" data-act="close">${fresh ? 'Back to my sky' : 'Close'}</button></div></div>`;
+  o.innerHTML = `<div class="overlay-inner">${fresh ? '<h2>Chapter done ✓</h2>' : ''}<div class="insight" data-act="flip" tabindex="0" aria-label="Tap to turn the card"><div class="inner"><div class="face front"><div class="g">${ch.glyph}</div><div class="eyebrow" style="color:#fff;margin-top:16px">${JOURNEYS[j].short} · ${pad(ch.n)}</div><p style="font-family:var(--display);font-size:22px;margin:6px 0 0">${esc(ch.title)}</p><p class="small" style="opacity:.8;margin-top:18px">Tap to turn over</p></div><div class="face back"><div class="g">${ch.glyph}</div><q>${esc(ch.insight)}</q><div class="small" style="color:#6b7a73">${esc(ch.title)} · ${JOURNEYS[j].title}</div></div></div></div><div class="actions"><button class="btn" data-act="close">${fresh ? 'Back to home' : 'Close'}</button></div></div>`;
   document.body.append(o);
   setTimeout(() => $('.insight', o)?.classList.add('flip'), fresh ? 900 : 200);
   $('[data-act="close"]', o).focus();
@@ -1972,26 +2012,22 @@ function homeView() {
   const contCard = cont ? (() => { const [j, c] = cont, pr = progressOf(j, c); return `<a class="quest" href="#${rid(j, c.n)}" style="--c:${c.hue}"><div class="orb" style="background:radial-gradient(circle at 35% 30%,#fff,${c.hue} 55%,#1d3a32);font-size:24px">${c.glyph}</div><div><div class="eyebrow">${pr.got ? 'Continue your journey' : 'Next on your journey'}</div><h3>${esc(c.title)}</h3><p>${JOURNEYS[j].title}${pr.got ? ` · ${pr.got} of ${pr.tot} prompts` : ''}${chLocked(j, c.n) ? ' · 🔒' : ''}</p></div></a>`; })() : '';
   const skyId = U.sky === 'uy' ? 'uy' : 'ew', J = JOURNEYS[skyId];
   const mem = memory(), wk = prioritySummary(7);
-  return page('home', `${hero(`${greeting()}${name ? ', ' + esc(name) : ''}`, 'Your <em>Well Mind</em>', 'Space to notice. Knowledge to use. A step that fits.')}
-  <div class="levelbar" style="margin:-6px 2px 18px"><span class="pill"><b>Level ${lv.n}</b></span><div class="track"><div class="fill" style="width:${Math.round(lv.pct * 100)}%"></div></div><span class="small muted">${lv.next ? `${lv.next[0] - lv.sp} ✦ to Level ${lv.n + 1}` : 'Top level reached'}</span></div>
-  ${newStyleCard()}${easy() ? easyNowHtml() : ''}
-  <div class="section-h" style="margin-top:6px"><h2>Today</h2><span class="small muted">${pretty(d, { weekday: 'long', day: 'numeric', month: 'long' })}</span></div>
-  <div class="quests">${quests.join('')}</div>
+  const fk = focusList()[0], F = fk ? FOCUS[fk] : null, fDone = F ? F.ch.filter(([a, b]) => isLit(a, b)).length : 0;
+  const extras = quests.filter((q) => !q.includes('#today-am') && !q.includes('#today-pm'));
+  return page('home', `${hero(`${greeting()}${name ? ', ' + esc(name) : ''}`, 'Your <em>Well Mind</em>', 'Here is your plan for today.')}
+  ${newStyleCard()}
+  ${todayPlanHtml()}
+  ${extras.length ? `<div class="quests" style="margin-top:14px">${extras.join('')}</div>` : ''}
+  ${easy() ? easyNowHtml() : ''}
+  ${F ? `<a class="glass myfocus" href="#focus" style="--c:${F.hue}"><span class="fi">${F.ic}</span><span><small>My focus</small><b>${esc(F.t)}</b><small>${fDone} of ${F.ch.length} chapter${F.ch.length === 1 ? '' : 's'} done · tap to change</small></span><span class="go">›</span></a>` : `<a class="glass myfocus" href="#focus"><span class="fi">✧</span><span><small>My focus</small><b>Choose one area to work on</b></span><span class="go">›</span></a>`}
+  ${pathListHtml(5)}
+  ${!unlocked() ? `<div class="glass" style="margin-top:16px;text-align:center"><p style="margin:0 0 10px">🔒 Locked chapters have a free preview. Open any chapter to see inside.</p><button class="btn small" data-act="unlock">Unlock everything · ${PRICE.lifetime}</button></div>` : ''}
   ${showInstallCard() ? installCard() : ''}
-  ${!U.remindersAdded ? `<a class="nudge" href="#reminders">🔔 Get a gentle reminder each morning and evening ›</a>` : ''}
-  <div class="dcard"><div class="eyebrow">Today’s card</div><p>${esc(dailyCard())}</p></div>
-  <div class="section-h"><h2>Your focus</h2><a class="small linkbtn" href="#focus">${focusList().length ? 'Change' : 'Choose'}</a></div>
-  <div class="fcards">${focusCards()}</div>
-  ${contCard ? `<div class="quests" style="margin-top:10px">${contCard}</div>` : ''}
-  ${mem ? `<div class="glass memory"><div class="eyebrow">${mem.i >= 28 ? 'One month ago' : 'One week ago'} · ${pretty(mem.d, { weekday: 'long', day: 'numeric', month: 'short' })}</div><p>You wrote ${mem.l}: <q>${esc(mem.t.slice(0, 220))}</q></p><p class="small muted">Look how far you’ve come.</p></div>` : ''}
-  <div class="glass" style="padding:16px 18px;margin-top:16px"><div class="small muted">Days you showed up this month — no streaks, no pressure</div><div class="moons">${moons}</div>${wk.set ? `<p class="small muted" style="margin:10px 0 0">Last 7 days: ${fmt(wk.kept, 1).replace('.0', '')} of ${wk.set} priorities done ✦</p>` : ''}</div>
+  ${!U.remindersAdded ? `<a class="nudge" href="#reminders">🔔 Get a reminder each morning and evening ›</a>` : ''}
+  <div class="dcard"><div class="eyebrow">Today’s thought</div><p>${esc(dailyCard())}</p></div>
+  ${mem ? `<div class="glass memory"><div class="eyebrow">${mem.i >= 28 ? 'One month ago' : 'One week ago'} · ${pretty(mem.d, { weekday: 'long', day: 'numeric', month: 'short' })}</div><p>You wrote ${mem.l}: <q>${esc(mem.t.slice(0, 220))}</q></p></div>` : ''}
   ${bookCard(false)}
-  <div class="chips-row" style="margin-top:14px"><a class="mini" href="#find"><span>🧭</span>Find what you need</a><a class="mini" href="#week"><span>🗓</span>My week in view</a><a class="mini" href="#calm"><span>◯</span>Calm meter</a><a class="mini" href="#share"><span>✉</span>Share with Ger</a></div>
-  <div class="section-h"><h2>Your sky <span class="h2-note">(all chapters)</span></h2></div>
-  <div class="seg" role="tablist">${['ew', 'uy'].map((k) => `<button role="tab" class="${skyId === k ? 'on' : ''}" aria-selected="${skyId === k}" data-act="sky" data-sky="${k}"><b>${JOURNEYS[k].title}</b><small>${JOURNEYS[k].list.filter((c) => isLit(k, c.n)).length}/${JOURNEYS[k].list.length} lit</small></button>`).join('')}</div>
-  <p class="small muted" style="margin:10px 2px 4px;text-align:center">${esc(J.sub)} No chapter is a prerequisite — start anywhere that calls you.</p>
-  ${mapSvg(skyId)}
-  ${!unlocked() ? `<div class="glass" style="margin-top:20px;text-align:center"><p style="margin:0 0 10px">🔒 chapters have a free preview — open any star to see inside.</p><button class="btn small" data-act="unlock">Unlock everything · ${PRICE.lifetime}</button></div>` : ''}
+  <div class="chips-row" style="margin-top:14px"><a class="mini" href="#find"><span>🧭</span>Find what you need</a><a class="mini" href="#week"><span>🗓</span>My week</a><a class="mini" href="#calm"><span>◯</span>Calm meter</a><a class="mini" href="#tools"><span>🧰</span>All tools</a></div>
   <p class="small muted" style="text-align:center;margin:30px 0 0">For adult education and reflection, not diagnosis or therapy. You choose what to share.</p>`);
 }
 function mapSvg(j) {
@@ -2223,18 +2259,18 @@ function onboardingView() {
   if (key === 'style') body = `<h2>How do you like to do this?</h2><p>Both have everything in the app. You can switch any time on the Me page.</p>${styleChoiceHtml(false)}`;
   else if (key === 'feel') body = `<h2>What feels true for you right now?</h2><p>Tick as many as you like. There are no wrong answers — this just helps us point you to the right place.</p>${feelHtml()}`;
   else if (key === 'why') body = whyHtml(), next = 'Choose my focus';
-  else if (key === 'focus') body = `<h2>Choose up to three areas to focus on.</h2><p>${(U.feel || []).length ? 'We’ve suggested some from what you ticked — change them freely.' : 'These go to the top of your home page.'} Everything else stays open in your sky.</p>${focusPickHtml()}`;
+  else if (key === 'focus') body = `<h2>Choose one area to start with.</h2><p>${(U.feel || []).length ? 'We’ve picked one from what you ticked. Tap another to change it.' : 'Your path will start with it.'} All other chapters stay open too.</p>${focusPickHtml()}`;
   else if (key === 'you') body = `<h2>What should we call you?</h2>${foodOn() ? `<p>Because you chose food & body, a few details help suggest daily targets. Skip any you prefer not to give.</p>${P1()}` : `${pField('name', 'Your first name', 'text', { ph: 'Your first name' })}<p class="small" style="color:#6b7a73">Just for your greeting. It stays on this device.</p>`}`;
   else if (key === 'goal') body = `<h2>What would you like to work towards?</h2><p>This sets your daily food targets.</p>${P2()}`;
   else if (key === 'targets') { const t = autoTargets(); body = `<h2>Your daily targets.</h2><p>${t.blocked ? 'You can set your own targets now or later.' : 'Calculated from your answers. Use them as a starting point.'}</p>${targetsHtml(t)}<button class="tog ${t.blocked ? 'on' : ''}" data-act="ob-manual" id="ob-manual" aria-pressed="${!!t.blocked}" style="margin-top:14px"><i></i>I’d rather enter my own targets</button><div id="ob-manual-box" ${t.blocked ? '' : 'hidden'}>${manualInputs(t.blocked ? currentTargets() : t)}</div><div class="note">Estimates for adults, not prescriptions. Seek individual advice with low weight, unintended weight loss, an eating-disorder history, kidney disease, diabetes medicines or a prescribed diet.</div>`; }
   else body = `<h2>Your daily rhythm.</h2><p>Two minutes in the morning to set up your day. Two minutes in the evening to close it. That’s the whole habit.</p><div class="rhythm"><div><span>☀</span><b>Morning</b><small>Sleep, mood, your three priorities and a short meditation</small></div><div><span>☾</span><b>Evening</b><small>Did I do them? What went well? Steps — and a wind-down meditation</small></div></div><h3 class="ph">Want a reminder?</h3>${reminderHtml()}`;
   const last = step === steps.length - 1;
-  return `<div class="wrap">${prog}<article class="cardx" style="--c:#ecc97f">${body}<div style="display:flex;gap:10px;margin-top:22px">${step > 1 ? `<button class="btn ghost" ${DARK_BTN} data-act="ob-back">← Back</button>` : ''}<button class="btn" style="flex:1" data-act="${last ? 'ob-finish' : 'ob-next'}">${last ? 'Light up my sky ✦' : next}</button></div><p class="small" style="color:#6b7a73;margin-top:10px;text-align:center">${key === 'feel' || key === 'focus' || key === 'style' ? 'You can change this any time.' : 'Your answers save as you type, so you can leave and come back.'}</p></article></div>`;
+  return `<div class="wrap">${prog}<article class="cardx" style="--c:#ecc97f">${body}<div style="display:flex;gap:10px;margin-top:22px">${step > 1 ? `<button class="btn ghost" ${DARK_BTN} data-act="ob-back">← Back</button>` : ''}<button class="btn" style="flex:1" data-act="${last ? 'ob-finish' : 'ob-next'}">${last ? 'Go to my home page →' : next}</button></div><p class="small" style="color:#6b7a73;margin-top:10px;text-align:center">${key === 'feel' || key === 'focus' || key === 'style' ? 'You can change this any time.' : 'Your answers save as you type, so you can leave and come back.'}</p></article></div>`;
 }
 function welcomeHtml(returning) {
   return `<div class="welcome"><div style="max-width:520px"><div class="orbit" aria-hidden="true"><i></i><i></i><span class="core"><img src="assets/emblem.webp" alt=""></span></div><div class="eyebrow">Well Mind · Ger Boland · One Step Forward</div><h1>${returning ? 'A new look for <em>your journal</em>' : 'Stop reacting.<br><em>Start understanding yourself.</em>'}</h1><p class="sub">${returning ? 'Everything you wrote is still here.' : 'Feel calmer, make better choices and get on better with the people around you — at home, at your own pace.'}</p>
-  <div class="howto"><div><span>☀</span><p><b>Two minutes, morning and evening.</b> Set your priorities, check in with yourself, and close the day with a short meditation.</p></div><div><span>✦</span><p><b>Your own path.</b> Choose what matters to you — boundaries, calm, relationships, sleep… Each chapter is a star you light.</p></div><div><span>♡</span><p><b>Built by Ger, for real life.</b> Plain-English tools from his personal development sessions. No streaks to break.</p></div></div>
-  <button class="btn block" data-act="${returning ? 'seen-new' : 'ob-start'}">${returning ? 'Show me my sky ✦' : 'Let’s begin ✦'}</button>${returning ? '' : '<p class="small muted" style="margin-top:14px">Moving from another device? <a href="#restore">Restore a backup</a>.</p>'}<p class="small muted" style="margin-top:14px">For adult education and reflection, not diagnosis or therapy. Your entries stay on this device.</p></div></div>`;
+  <div class="howto"><div><span>☀</span><p><b>Two minutes, morning and evening.</b> Set your priorities, check in with yourself, and close the day with a short meditation.</p></div><div><span>✦</span><p><b>Your own path.</b> Choose what matters to you — boundaries, calm, relationships, sleep… Finish a chapter and it gets a tick ✓.</p></div><div><span>♡</span><p><b>Built by Ger, for real life.</b> Plain-English tools from his personal development sessions. Simple, clear steps.</p></div></div>
+  <button class="btn block" data-act="${returning ? 'seen-new' : 'ob-start'}">${returning ? 'Go to my home page →' : 'Let’s begin →'}</button>${returning ? '' : '<p class="small muted" style="margin-top:14px">Moving from another device? <a href="#restore">Restore a backup</a>.</p>'}<p class="small muted" style="margin-top:14px">For adult education and reflection, not diagnosis or therapy. Your entries stay on this device.</p></div></div>`;
 }
 function obFinish() {
   if (foodOn()) {
@@ -2245,7 +2281,7 @@ function obFinish() {
   }
   setProfile('onboardingStep', 'done'); setProfile('onboardedAt', today());
   U.seen = 'v6'; U.focusAsked = today(); saveAll(); burst('#ecc97f', 130); vibrate([20, 40, 30]);
-  toast(`Welcome${firstName() ? ', ' + firstName() : ''}. Your sky is ready ✦`);
+  toast(`Welcome${firstName() ? ', ' + firstName() : ''}. Your home page is ready ✓`);
   go('home');
 }
 function focusAskView() {
@@ -2318,13 +2354,13 @@ const TRUE_FOR_ME = [
   ['I feel lonely or disconnected', ['relationships']],
   ['I want to feel better in my body', ['food', 'move']],
 ];
-const focusList = () => (Array.isArray(U.focus) ? U.focus : []).filter((k) => FOCUS[k]).slice(0, 3);
+const focusList = () => (Array.isArray(U.focus) ? U.focus : []).filter((k) => FOCUS[k]).slice(0, 1);
 const hasFocus = (k) => focusList().includes(k);
 const foodOn = () => hasFocus('food');
 function suggestFocus() {
   const score = {};
   (U.feel || []).forEach((i) => (TRUE_FOR_ME[i]?.[1] || []).forEach((k, n) => (score[k] = (score[k] || 0) + 2 - n * 0.5)));
-  return Object.entries(score).sort((a, b) => b[1] - a[1]).slice(0, 3).map(([k]) => k);
+  return Object.entries(score).sort((a, b) => b[1] - a[1]).slice(0, 1).map(([k]) => k);
 }
 function feelHtml() {
   return `<div class="truth">${TRUE_FOR_ME.map(([t], i) => `<button class="truth-b ${(U.feel || []).includes(i) ? 'on' : ''}" data-feel="${i}" aria-pressed="${(U.feel || []).includes(i)}">${esc(t)}</button>`).join('')}</div>`;
@@ -2336,15 +2372,15 @@ function whyHtml() {
 }
 function focusPickHtml() {
   const cur = focusList();
-  return `<div class="focusgrid">${Object.entries(FOCUS).map(([k, f]) => `<button class="focus-b ${cur.includes(k) ? 'on' : ''}" style="--c:${f.hue}" data-focus="${k}" aria-pressed="${cur.includes(k)}"><span class="fi">${f.ic}</span><b>${esc(f.t)}</b><small>${esc(f.d)}</small></button>`).join('')}</div><p class="small" style="color:#6b7a73;margin-top:10px" data-focuscount>${cur.length} of 3 chosen · you can change these any time, and every chapter stays open in your sky.</p>`;
+  return `<div class="focusgrid">${Object.entries(FOCUS).map(([k, f]) => `<button class="focus-b ${cur.includes(k) ? 'on' : ''}" style="--c:${f.hue}" data-focus="${k}" aria-pressed="${cur.includes(k)}"><span class="fi">${f.ic}</span><b>${esc(f.t)}</b><small>${esc(f.d)}</small></button>`).join('')}</div><p class="small" style="color:#6b7a73;margin-top:10px" data-focuscount>Choose one. You can change it any time. All other chapters stay open too.</p>`;
 }
 function toggleFocus(k) {
-  const cur = focusList(), i = cur.indexOf(k);
-  if (i >= 0) cur.splice(i, 1); else if (cur.length < 3) cur.push(k); else { toast('You can pick up to 3 — tap one to swap it out.'); return false; }
-  U.focus = cur; saveU(); return true;
+  U.focus = focusList().includes(k) ? [] : [k]; saveU();
+  $$('.focus-b').forEach((b) => { const on = U.focus.includes(b.dataset.focus); b.classList.toggle('on', on); b.setAttribute('aria-pressed', on); });
+  return true;
 }
 function focusView() {
-  return page('home', `${hero('Make it yours', 'Choose your <em>focus</em>', 'Pick up to three areas. They go to the top of your home page. Everything else is still in your sky whenever you want it.')}
+  return page('home', `${hero('Make it yours', 'Choose your <em>focus</em>', 'Pick one area. Your path starts with it. All other chapters stay open too.')}
   <article class="cardx" style="--c:#ecc97f">${focusPickHtml()}<button class="btn block" style="margin-top:16px" data-act="focus-save">Save my focus ✦</button></article>`);
 }
 function nextInFocus(k) {
@@ -2357,7 +2393,7 @@ function focusCards() {
   if (!keys.length) return `<a class="quest" href="#focus"><div class="orb">✧</div><div><div class="eyebrow">Make it yours</div><h3>Choose your focus</h3><p>Pick up to three areas that matter to you right now.</p></div></a>`;
   return keys.map((k) => {
     const f = FOCUS[k], [j, c] = nextInFocus(k), pr = progressOf(j, c), lk = chLocked(j, c.n), done = f.ch.filter(([a, b]) => isLit(a, b)).length;
-    return `<div class="fcard" style="--c:${f.hue}"><div class="fhead"><span class="fi">${f.ic}</span><div><div class="eyebrow">Your focus · ${done}/${f.ch.length} stars lit</div><h3>${esc(f.t)}</h3></div></div><a class="fnext" href="#${rid(j, c.n)}"><span>${c.glyph}</span><span><b>${esc(c.title)}</b><small>${lk ? '🔒 Free preview' : pr.got ? `${pr.got} of ${pr.tot} prompts` : 'Start here'}</small></span><span class="go">›</span></a>${f.tool ? `<a class="linkbtn small" href="${f.tool[0]}">Quick tool: ${esc(f.tool[1])} ›</a>` : ''}</div>`;
+    return `<div class="fcard" style="--c:${f.hue}"><div class="fhead"><span class="fi">${f.ic}</span><div><div class="eyebrow">Your focus · ${done} of ${f.ch.length} chapters done</div><h3>${esc(f.t)}</h3></div></div><a class="fnext" href="#${rid(j, c.n)}"><span>${c.glyph}</span><span><b>${esc(c.title)}</b><small>${lk ? '🔒 Free preview' : pr.got ? `${pr.got} of ${pr.tot} prompts` : 'Start here'}</small></span><span class="go">›</span></a>${f.tool ? `<a class="linkbtn small" href="${f.tool[0]}">Quick tool: ${esc(f.tool[1])} ›</a>` : ''}</div>`;
   }).join('');
 }
 
@@ -2489,7 +2525,7 @@ async function redeem(code, quiet) {
 function unlockHtml(ch) {
   const pay = PAY.lifetime ? `<a class="plan best" href="${esc(PAY.lifetime)}" rel="noopener"><span class="tag">Launch price · one-off</span><b>Unlock for ${PRICE.lifetime}</b><small>Pay once — yours to keep, including all future updates.</small></a>` : `<button class="plan best" data-act="pay-soon"><span class="tag">Launch price · one-off</span><b>Unlock for ${PRICE.lifetime}</b><small>Pay once — yours to keep, including all future updates.</small></button>`;
   return `<div class="unlock"><div class="lock-orb">🔒</div><h2>${ch ? `Keep going with “${esc(ch.title)}”` : 'Unlock all of Well Mind'}</h2><p>${ch ? 'You’ve seen a preview of this chapter. ' : ''}Unlock all 25 chapters across both journeys, every tool and game, and everything Ger adds in future.</p>
-  <ul class="ticks"><li>Everyday Wellbeing and Understanding Yourself — every star</li><li>Boundary builder, values sort, calm plan, Wheel of Life and more</li><li>Your journal stays private on your phone</li></ul>
+  <ul class="ticks"><li>Everyday Wellbeing and Understanding Yourself — every chapter</li><li>Boundary builder, values sort, calm plan, Wheel of Life and more</li><li>Your journal stays private on your phone</li></ul>
   <div class="plans one">${pay}</div>
   <div class="codebox"><b>Have a code?</b><small>Enter it here to unlock the full app.</small><div class="coderow"><input type="text" data-code autocomplete="off" autocapitalize="characters" placeholder="Your code" aria-label="Unlock code"><button class="btn small" data-act="redeem">Unlock</button></div></div>
   <p class="small" style="margin-top:12px"><a href="https://www.wellmind.ie/gift/" target="_blank" rel="noopener">🎁 Give Well Mind as a gift</a></p>
@@ -2497,7 +2533,7 @@ function unlockHtml(ch) {
 }
 const unlockSheet = (ch) => sheet(`${unlockHtml(ch)}${closeBtn('Not now')}`);
 function lockedView(j, ch) {
-  return `<div class="player" style="--c:${ch.hue}"><div class="player-top"><a class="iconbtn" href="#home" aria-label="Back to your sky">←</a><div class="t"><div>${JOURNEYS[j].short} · ${pad(ch.n)}</div><strong>${esc(ch.title)}</strong></div><span class="pill">✦ <b data-sparks>${sparks()}</b></span><button class="iconbtn" data-act="support" aria-label="Need support?" style="color:#ffd5dc">♡</button></div><main class="deck" id="deck"><article class="cardx"><div class="intro-hero"><div class="big">${ch.glyph}</div><div><div class="eyebrow">${JOURNEYS[j].title} · ${pad(ch.n)}</div><h2 style="margin:4px 0 0;font-size:30px">${esc(ch.title)}</h2></div></div><div class="consider"><small>Consider</small>${esc(ch.consider)}</div>${unlockHtml(ch)}<p class="small" style="color:#6b7a73;text-align:center"><a href="#${rid(j, ch.n)}">← Back to the preview</a></p><p class="small" style="color:#6b7a73;text-align:center">Free in full: ${[...FREE_CH].map((k) => { const jj = k.slice(0, 2), c = chOf(jj, Number(k.slice(2))); return `<a href="#${rid(jj, c.n)}">${esc(c.title)}</a>`; }).join(' · ')}</p></article></main></div>`;
+  return `<div class="player" style="--c:${ch.hue}"><div class="player-top"><a class="iconbtn" href="#home" aria-label="Back to home">←</a><div class="t"><div>${JOURNEYS[j].short} · ${pad(ch.n)}</div><strong>${esc(ch.title)}</strong></div><span class="pill">✦ <b data-sparks>${sparks()}</b></span><button class="iconbtn" data-act="support" aria-label="Need support?" style="color:#ffd5dc">♡</button></div><main class="deck" id="deck"><article class="cardx"><div class="intro-hero"><div class="big">${ch.glyph}</div><div><div class="eyebrow">${JOURNEYS[j].title} · ${pad(ch.n)}</div><h2 style="margin:4px 0 0;font-size:30px">${esc(ch.title)}</h2></div></div><div class="consider"><small>Consider</small>${esc(ch.consider)}</div>${unlockHtml(ch)}<p class="small" style="color:#6b7a73;text-align:center"><a href="#${rid(j, ch.n)}">← Back to the preview</a></p><p class="small" style="color:#6b7a73;text-align:center">Free in full: ${[...FREE_CH].map((k) => { const jj = k.slice(0, 2), c = chOf(jj, Number(k.slice(2))); return `<a href="#${rid(jj, c.n)}">${esc(c.title)}</a>`; }).join(' · ')}</p></article></main></div>`;
 }
 function planCard() {
   if (unlocked()) return `<div class="glass plan-own"><div class="eyebrow">Your access</div><h3>${planName(U.plan.type)} ✦</h3><p class="muted small">${U.plan.type === 'present' ? 'Someone gave you Well Mind as a gift. Every chapter is open — including future updates. Enjoy ✦' : U.plan.type === 'founder' ? 'Thank you for being one of the first. Full access, free — including future updates.' : U.plan.type === 'client' ? 'Every chapter is open, including future updates.' : 'Every chapter is open, including future updates.'}${U.plan.at ? ` Since ${pretty(U.plan.at)}.` : ''}</p></div>`;
@@ -2710,12 +2746,94 @@ function easyGame(ch, name) {
 }
 function easyCardHtml(ch, st, i, back) {
   const E5 = EASY[ch.key];
-  if (st.step) return `<article class="cardx easycard ${back}"><div class="eyebrow">Last card</div><h2>My one small step 🌱</h2><p>Pick one thing to try this week. Small is perfect.</p>${ecGroup(ch, 'e.step', 'This week I’ll…', E5.step, ch.hue, true)}${E5.note ? `<div class="note">${esc(E5.note)}</div>` : ''}<p class="small" style="color:#6b7a73;margin-top:14px">Next: light this star ✦ — and if you want the full chapter, switch to “Go deeper” on the Me page.</p></article>`;
+  if (st.step) return `<article class="cardx easycard ${back}"><div class="eyebrow">Last card</div><h2>My one small step 🌱</h2><p>Pick one thing to try this week. Small is perfect.</p>${ecGroup(ch, 'e.step', 'This week I’ll…', E5.step, ch.hue, true)}${E5.note ? `<div class="note">${esc(E5.note)}</div>` : ''}<p class="small" style="color:#6b7a73;margin-top:14px">Next: tap “Next” and mark this chapter as done ✓. Want the full chapter? Tap “📖 Go deeper” at the top.</p></article>`;
   return `<article class="cardx easycard ${back}"><div class="eyebrow">Card ${i} · ⚡ Quick</div><h2>${esc(st.title)}</h2>${st.p ? `<p>${esc(st.p)}</p>` : ''}${st.game ? easyGame(ch, st.game) : ''}${(st.g || []).map(([k, q, o, single]) => ecGroup(ch, 'e.' + k, q, o, ch.hue, single)).join('')}</article>`;
 }
 function easyKeys(ch) { const E5 = EASY[ch.key]; if (!E5) return []; return [...E5.cards.flatMap((c) => (c.g || []).map((g) => ['e.' + g[0], g[1]])), ['e.step', 'My one small step']]; }
 function easyProgress(ch) { const ks = easyKeys(ch); return { got: ks.filter(([k]) => UA(fid(ch, k)).trim()).length, tot: ks.length }; }
 function easyText(ch) { return easyKeys(ch).map(([k, l]) => [l, UA(fid(ch, k)).trim()]).filter(([, v]) => v).map(([l, v]) => `• ${l}\n  ${v}`).join('\n'); }
+
+// ---------------- My path: one clear next step every day ----------------
+// A recommended order through all 25 chapters. The person's focus chapters go first.
+const PATH_ORDER = [['uy', 1], ['uy', 7], ['ew', 1], ['ew', 5], ['uy', 13], ['uy', 2], ['uy', 10], ['uy', 8], ['uy', 4], ['uy', 6], ['uy', 9], ['ew', 2], ['ew', 4], ['ew', 6], ['uy', 3], ['uy', 5], ['uy', 11], ['uy', 12], ['uy', 14], ['ew', 3], ['ew', 7], ['ew', 8], ['uy', 15], ['ew', 9], ['uy', 16]];
+function myPath() {
+  const first = focusList().flatMap((k) => FOCUS[k].ch), seen = new Set(), out = [];
+  for (const [j, n] of [...first, ...PATH_ORDER]) { const k = j + n; if (seen.has(k)) continue; seen.add(k); out.push([j, chOf(j, n)]); }
+  return out;
+}
+const doneToday = () => Object.entries(U.done).filter(([, d]) => d === today()).map(([k]) => k);
+// Today's step: the first chapter on the path that isn't done (a chapter finished today counts as today's step).
+function todaysStep() {
+  const path = myPath(), todayKey = doneToday()[0];
+  if (todayKey) { const hit = path.find(([j, c]) => doneKey(j, c.n) === todayKey); if (hit) return { j: hit[0], ch: hit[1], done: true, next: path.find(([j, c]) => !isLit(j, c.n) && !chLocked(j, c.n)) || path.find(([j, c]) => !isLit(j, c.n)) || null }; }
+  // Free users: free chapters first, so today's step is never a locked page while free ones are left.
+  const nx = path.find(([j, c]) => !isLit(j, c.n) && !chLocked(j, c.n)) || path.find(([j, c]) => !isLit(j, c.n));
+  return nx ? { j: nx[0], ch: nx[1], done: false } : null;
+}
+const stepMins = () => (easy() ? '3 minutes' : '10 minutes');
+const stepLine = (ch) => (easy() && EASY[ch.key] ? EASY[ch.key].line : ch.consider || '');
+// A day counts if any of the three daily things was done.
+function dayActive(d) { return amDone(d) || pmDone(d) || Object.values(U.done).includes(d); }
+function streak() { let n = 0, d = today(); if (!dayActive(d)) d = shift(d, -1); while (dayActive(d) && n < 999) { n++; d = shift(d, -1); } return n; }
+
+function todayPlanHtml() {
+  const d = today(), st = todaysStep(), am = amDone(d), pm = pmDone(d), stepDone = !!st?.done;
+  const items = [
+    { k: 'am', ic: '☀', t: 'Morning check-in', s: am ? 'Done ✓' : '1 minute · how you slept, how you feel', href: '#today-am', done: am },
+    st ? { k: 'step', ic: '🌱', t: 'Today’s step', s: stepDone ? `Done ✓ · ${esc(st.ch.title)}` : `${esc(st.ch.title)} · ${stepMins()}`, href: `#${rid(st.j, st.ch.n)}`, done: stepDone } : { k: 'step', ic: '🎉', t: 'Today’s step', s: 'You have finished every chapter!', href: '#path', done: true },
+    { k: 'pm', ic: '☾', t: 'Evening check-in', s: pm ? 'Done ✓' : '1 minute · how your day went', href: '#today-pm', done: pm },
+  ];
+  // The next thing to do: in the evening, the evening check-in comes before an unfinished step.
+  let nextI = items.findIndex((x) => !x.done);
+  if (isEvening() && !pm && nextI === 1 && am) nextI = 1;
+  const doneN = items.filter((x) => x.done).length, C = 2 * Math.PI * 22, sk = streak();
+  return `<section class="dayplan glass" aria-label="My plan for today">
+    <div class="plan-head"><div class="ring" aria-label="${doneN} of 3 done today"><svg viewBox="0 0 52 52"><circle cx="26" cy="26" r="22" class="rt"/><circle cx="26" cy="26" r="22" class="rf" stroke-dasharray="${C}" stroke-dashoffset="${C * (1 - doneN / 3)}"/></svg><b>${doneN}/3</b></div>
+    <div><h2>My plan for today</h2><p>${doneN === 3 ? 'All done for today. Well done! 🎉' : 'Do these 3 things, from top to bottom.'}</p></div>${sk ? `<span class="streak" title="Days in a row">🔥 ${sk} day${sk === 1 ? '' : 's'}</span>` : ''}</div>
+    <ol class="plan-list">${items.map((x, i) => `<li><a class="plan-item ${x.done ? 'done' : ''} ${i === nextI ? 'next' : ''}" href="${x.href}"><span class="pn">${x.done ? '✓' : i + 1}</span><span class="pi" aria-hidden="true">${x.ic}</span><span class="pt"><b>${x.t}</b><small>${x.s}</small></span>${i === nextI ? '<span class="pgo">Start →</span>' : ''}</a></li>`).join('')}</ol>
+    ${st && !st.done ? `<p class="plan-why">${chLocked(st.j, st.ch.n) ? '🔒 Free preview of this chapter. ' : ''}${esc(stepLine(st.ch))}</p>` : ''}
+    ${st?.done && st.next ? `<p class="plan-why">Tomorrow’s step: <b>${esc(st.next[1].title)}</b>. <a href="#${rid(st.next[0], st.next[1].n)}">Do it now instead</a></p>` : ''}
+  </section>`;
+}
+
+function pathListHtml(limit) {
+  const path = myPath(), doneN = path.filter(([j, c]) => isLit(j, c.n)).length, st = todaysStep();
+  const cur = st ? doneKey(st.j, st.ch.n) : '';
+  const row = ([j, c], i) => {
+    const done = isLit(j, c.n), isCur = doneKey(j, c.n) === cur, lk = chLocked(j, c.n);
+    return `<li><a class="prow ${done ? 'done' : ''} ${isCur ? 'cur' : ''}" href="#${rid(j, c.n)}" style="--c:${c.hue}"><span class="pnum">${done ? '✓' : i + 1}</span><span class="ptitle"><b>${esc(c.title)}</b><small>${done ? 'Done' : isCur ? (st.done ? 'Done today' : 'Today’s step') : lk ? '🔒 Free preview' : JOURNEYS[j].short}</small></span><span class="go">›</span></a></li>`;
+  };
+  const firstOpen = Math.max(0, path.findIndex(([j, c]) => doneKey(j, c.n) === cur));
+  const start = Math.max(0, firstOpen - 1), shown = path.slice(start, start + limit);
+  return `<div class="section-h"><h2>My path</h2><span class="small muted">${doneN} of ${path.length} chapters done</span></div>
+  <p class="small muted" style="margin:-4px 2px 10px">Chapters in a good order for you. You can open any chapter, any time.</p>
+  <ol class="plist" start="${start + 1}">${shown.map((p, k) => row(p, start + k)).join('')}</ol>
+  <a class="btn ghost block" href="#path" style="margin-top:10px">See all ${path.length} chapters</a>`;
+}
+function pathView() {
+  const path = myPath();
+  return page('home', `${hero('All chapters', 'My <em>path</em>', 'A good order for you, starting with your focus. Tap any chapter to open it.')}
+  <ol class="plist">${path.map(([j, c], i) => { const done = isLit(j, c.n), lk = chLocked(j, c.n); return `<li><a class="prow ${done ? 'done' : ''}" href="#${rid(j, c.n)}" style="--c:${c.hue}"><span class="pnum">${done ? '✓' : i + 1}</span><span class="ptitle"><b>${esc(c.title)}</b><small>${done ? 'Done' : lk ? '🔒 Free preview' : JOURNEYS[j].short}</small></span><span class="go">›</span></a></li>`; }).join('')}</ol>
+  ${!unlocked() ? `<div class="glass" style="margin-top:20px;text-align:center"><p style="margin:0 0 10px">🔒 Locked chapters have a free preview. Open any chapter to see inside.</p><button class="btn small" data-act="unlock">Unlock everything · ${PRICE.lifetime}</button></div>` : ''}`);
+}
+
+// After a check-in or a chapter: say what to do next.
+function nextSheet(from) {
+  const d = today(), st = todaysStep();
+  let h = '', go = '', label = '';
+  if (from === 'am') {
+    h = 'Morning check-in done ✓';
+    if (st && !st.done) { go = `#${rid(st.j, st.ch.n)}`; label = `Start today’s step · ${stepMins()}`; }
+  } else if (from === 'step') {
+    h = 'Chapter done ✓';
+    if (!pmDone(d)) { go = '#today-pm'; label = 'Tonight: evening check-in'; }
+  }
+  if (!go) return false;
+  sheet(`<h2>${h}</h2><p><b>Next:</b> ${from === 'am' ? esc(st.ch.title) : 'your evening check-in, later today.'}</p>
+  <div style="display:grid;gap:10px;margin-top:14px"><button class="btn" data-act="next-go" data-href="${go}">${label} →</button><button class="btn ghost" data-act="close">Later</button></div>`);
+  return true;
+}
+document.addEventListener('click', (e) => { const a = e.target.closest('[data-act="next-go"]'); if (a) { closeOverlay(); location.hash = a.dataset.href; } });
 
 'use strict';
 // =====================================================================
@@ -2805,8 +2923,8 @@ function shareView() {
 // ---------------- ME & ABOUT ----------------
 function meView() {
   const lv = level(), lit = Object.keys(U.done).length;
-  const cards = (j) => JOURNEYS[j].list.map((c) => isLit(j, c.n) ? `<button class="cc got" style="--c:${c.hue}" data-act="reveal" data-j="${j}" data-n="${c.n}"><span class="g">${c.glyph}</span>${pad(c.n)}</button>` : `<a class="cc" href="#${rid(j, c.n)}" aria-label="${esc(c.title)}, not yet lit"><span class="g">${c.glyph}</span>${pad(c.n)}</a>`).join('');
-  return page('me', `${hero('This journal belongs to', firstName() ? esc(firstName()) : 'Me', `Level ${lv.n} · ${lv.sp} sparks · ${lit} star${lit === 1 ? '' : 's'} lit`)}
+  const cards = (j) => JOURNEYS[j].list.map((c) => isLit(j, c.n) ? `<button class="cc got" style="--c:${c.hue}" data-act="reveal" data-j="${j}" data-n="${c.n}"><span class="g">${c.glyph}</span>${pad(c.n)}</button>` : `<a class="cc" href="#${rid(j, c.n)}" aria-label="${esc(c.title)}, not done yet"><span class="g">${c.glyph}</span>${pad(c.n)}</a>`).join('');
+  return page('me', `${hero('This journal belongs to', firstName() ? esc(firstName()) : 'Me', `Level ${lv.n} · ${lv.sp} points · ${lit} chapter${lit === 1 ? '' : 's'} done`)}
   ${planCard()}
   <div class="section-h"><h2>Insight cards</h2></div><p class="small muted" style="margin:-6px 2px 8px">Everyday Wellbeing</p><div class="collection">${cards('ew')}</div><p class="small muted" style="margin:14px 2px 8px">Understanding Yourself</p><div class="collection">${cards('uy')}</div>
   <div class="section-h"><h2>My journal</h2></div>
@@ -2867,6 +2985,7 @@ function render() {
   else if (r === 'reminders') html = remindersView();
   else if (r === 'week') html = weekView();
   else if (r === 'find') html = findView();
+  else if (r === 'path') html = pathView();
   else if (r === 'track') html = trackView();
   else if (r === 'food') html = foodView();
   else if (r === 'move') html = moveView();
@@ -2958,7 +3077,7 @@ document.addEventListener('click', (e) => {
   const fl = e.target.closest('[data-feel]');
   if (fl) { const i = Number(fl.dataset.feel), cur = U.feel || (U.feel = []), at = cur.indexOf(i); if (at >= 0) cur.splice(at, 1); else cur.push(i); U.focus = suggestFocus(); saveU(); fl.classList.toggle('on', at < 0); fl.setAttribute('aria-pressed', at < 0); vibrate(6); return; }
   const fo = e.target.closest('[data-focus]');
-  if (fo) { if (toggleFocus(fo.dataset.focus)) { const on = focusList().includes(fo.dataset.focus); fo.classList.toggle('on', on); fo.setAttribute('aria-pressed', on); vibrate(6); const c = $('[data-focuscount]'); if (c) c.firstChild.textContent = `${focusList().length} of 3 chosen · you can change these any time, and every chapter stays open in your sky.`; } return; }
+  if (fo) { if (toggleFocus(fo.dataset.focus)) { const on = focusList().includes(fo.dataset.focus); fo.classList.toggle('on', on); fo.setAttribute('aria-pressed', on); vibrate(6); const c = $('[data-focuscount]'); if (c) c.firstChild.textContent = 'Choose one. You can change it any time. All other chapters stay open too.'; } return; }
   const ds = e.target.closest('[data-dset]');
   if (ds) { const k = ds.dataset.dset, v = daily(tDate)[k] === ds.dataset.v ? '' : ds.dataset.v, before = pmDone(tDate); setDaily(tDate, k, v); if (v === 'done') { burst('#b6f08f', 40); vibrate([10, 30, 10]); } if (!before && pmDone(tDate)) { floater(ds, '+3 ✦'); updateChrome(); } return rerender(); }
   const dc = e.target.closest('[data-dchip]');
@@ -2991,7 +3110,7 @@ document.addEventListener('click', (e) => {
     case 'mday': mDate = step(mDate, act.dataset.delta); actDraft = null; return rerender();
     case 'open-day': tDate = act.dataset.d; e.preventDefault(); scrollTo(0, 0); return render();
     case 'dclear': setDaily(tDate, act.dataset.k, ''); return rerender();
-    case 'today-done': { const pt = act.dataset.part, ok = pt === 'pm' ? pmDone(tDate) : amDone(tDate); if (!ok) return toast(pt === 'pm' ? 'Add anything at all — a tick, a number or a few words.' : 'Add anything at all — a priority, a number or a feeling.'); burst(pt === 'pm' ? '#9db8ff' : '#ffd27a', 80); vibrate([20, 40, 20]); toast(pt === 'pm' ? 'Day closed ✦ Rest well.' : `Have a good day${firstName() ? ', ' + firstName() : ''} ✦ See you this evening.`); return go('home'); }
+    case 'today-done': { const pt = act.dataset.part, ok = pt === 'pm' ? pmDone(tDate) : amDone(tDate); if (!ok) return toast(pt === 'pm' ? 'Add anything at all — a tick, a number or a few words.' : 'Add anything at all — a priority, a number or a feeling.'); burst(pt === 'pm' ? '#9db8ff' : '#ffd27a', 80); vibrate([20, 40, 20]); if (pt === 'pm') { toast('Evening check-in done ✓ Rest well.'); return go('home'); } go('home'); setTimeout(() => { if (!nextSheet('am')) toast(`Morning check-in done ✓ Have a good day${firstName() ? ', ' + firstName() : ''}.`); }, 250); return; }
     case 'tpart': tPart = act.dataset.part; if (route().startsWith('today')) { history.replaceState(null, '', '#today-' + tPart); scrollTo(0, 0); return render(); } return go('today-' + tPart);
     case 'med': { const k = act.dataset.k, on = daily(tDate)[k] !== 'done'; setDaily(tDate, k, on ? 'done' : ''); if (on) { floater(act, '+2 ✦'); burst('#c4b2ff', 40); } return rerender(); }
     case 'yt': { const box = act.closest('[data-yt]'); box.innerHTML = `<iframe src="https://www.youtube-nocookie.com/embed/${encodeURIComponent(act.dataset.id)}?autoplay=1&rel=0" title="Meditation video" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>`; return; }
