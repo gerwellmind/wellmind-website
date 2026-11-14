@@ -780,6 +780,34 @@ body.tod-day #sky::after{opacity:1;background:radial-gradient(900px 520px at 70%
 .ob-install small{display:block;color:#4a5953;font-size:13px;line-height:1.4}
 .ob-install .btn{grid-column:1 / -1}
 
+
+/* My moods (week/month colour grid + replay) */
+.mm-tabs{display:flex;gap:8px;margin:4px 0 14px}
+.mm-tabs button{flex:1;padding:10px;border-radius:999px;border:0;font:600 15px system-ui,sans-serif;background:rgba(255,255,255,.07);color:var(--ink);cursor:pointer}
+.mm-tabs button.on{background:#ecc97f;color:#13211c}
+.mm-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}
+.mm-head h2{margin:0;font:400 24px Georgia,serif;text-align:center;flex:1}
+.mm-nav{width:40px;height:40px;border-radius:50%;border:0;background:rgba(255,255,255,.08);color:var(--ink);font-size:20px;cursor:pointer}
+.mm-nav[disabled]{opacity:.25;cursor:default}
+.mm-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:7px;max-width:560px;margin:0 auto}
+.mm-dow{text-align:center;font:600 11px system-ui,sans-serif;letter-spacing:.08em;color:var(--muted);padding-bottom:2px}
+.mm-cell{position:relative;aspect-ratio:1;border-radius:14px;display:flex;align-items:center;justify-content:center;padding-top:5px;box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.13);font-size:clamp(14px,4.6vw,26px);line-height:1}
+.mm-cell .dn{position:absolute;top:4px;left:7px;font:600 10px system-ui,sans-serif;color:rgba(255,255,255,.55)}
+.mm-cell.blank{box-shadow:none}
+.mm-cell.future{opacity:.35}
+.mm-cell.today{box-shadow:inset 0 0 0 2px #ecc97f}
+.mm-cell.has{box-shadow:none;background:var(--mc)}
+.mm-cell.has .dn{color:rgba(19,33,28,.6)}
+.mm-cell.m2{--mc:#7f93c9}.mm-cell.m4{--mc:#b39be0}.mm-cell.m6{--mc:#e7cf92}.mm-cell.m8{--mc:#86dcc6}.mm-cell.m10{--mc:#ffb488}.mm-cell.mx{--mc:rgba(255,255,255,.22)}
+.mm-week .mm-grid{gap:9px}
+.mm-week .mm-cell{aspect-ratio:.62;border-radius:20px;padding-top:16px;font-size:clamp(22px,7vw,40px)}
+.mm-week .mm-cell .dn{top:9px;left:0;right:0;text-align:center;font-size:11px}
+.mm-grid.play .mm-cell.has{animation:mmIn .5s cubic-bezier(.2,.8,.3,1.35) backwards;animation-delay:calc(var(--i) * var(--step))}
+@keyframes mmIn{from{opacity:0;transform:scale(.25)}}
+.mm-cap{text-align:center;font:400 18px Georgia,serif;margin:18px 0 4px}
+.mm-legend{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin:14px 0;font-size:13px;color:var(--muted)}
+.mm-legend i{display:inline-block;width:12px;height:12px;border-radius:4px;margin-right:5px;vertical-align:-1px}
+.mm-replay{display:block;margin:16px auto 6px}
 </style>
 </head>
 <body>
@@ -1746,7 +1774,7 @@ function setToggle(key, on) {
 
 // ---------------- shell ----------------
 const NAV = [['home', '✦', 'Home'], ['today', '☾', 'Today'], ['track', '◎', 'Track'], ['tools', '✧', 'Toolkit'], ['me', '♡', 'Me']];
-const SECTION = { focus: 'home', reminders: 'me', home: 'home', find: 'home', path: 'home', today: 'today', week: 'today', track: 'track', food: 'track', move: 'track', checkin: 'track', progress: 'track', tools: 'tools', calm: 'tools', minute: 'tools', me: 'me', profile: 'me', share: 'me', about: 'me' };
+const SECTION = { focus: 'home', reminders: 'me', home: 'home', find: 'home', path: 'home', today: 'today', week: 'today', track: 'track', moods: 'track', food: 'track', move: 'track', checkin: 'track', progress: 'track', tools: 'tools', calm: 'tools', minute: 'tools', me: 'me', profile: 'me', share: 'me', about: 'me' };
 function navbar(on) { return `<div class="navbar"><nav aria-label="Main">${NAV.map(([r, i, l]) => `<a href="#${r}" class="${on === r ? 'on' : ''}" ${on === r ? 'aria-current="page"' : ''}><span aria-hidden="true">${i}</span>${l}</a>`).join('')}</nav></div>`; }
 function topbar() { return `<div class="topbar"><a class="brand" href="#home" aria-label="Well Mind home"><span class="mark"><img src="assets/emblem.webp" alt="" width="30" height="30"></span><span>Well Mind</span></a><div class="spacer"></div><span class="pill" title="Points you earn for using the app">⭐ <b data-sparks>${sparks()}</b> pts</span><button class="support-btn" data-act="support">Need support?</button></div>`; }
 function warnings() {
@@ -2177,7 +2205,7 @@ function trackView() {
   const d = today(), s = periodSummary(d), lw = lastWeight(), t = currentTargets();
   const card = (href, ic, title, big, sub, c) => `<a class="tcard" href="${href}" style="--c:${c}"><span class="ic">${ic}</span><b>${title}</b><strong>${big}</strong><small>${sub}</small></a>`;
   return page('track', `${hero('Your numbers, gently', 'Track <em>what helps</em>', 'Optional numbers that help you notice a pattern. Blank means “not recorded”, never zero.')}
-  <div class="tgrid">${card('#food', '❦', 'Food totals', dayHasFood(d) ? fmt(dayTotals(d).calories.value) + ' kcal' : '—', t.calories ? `Target ${fmt(t.calories)} kcal today` : 'Add from your food app', '#b6f08f')}${card('#move', '✶', 'Movement', `${s.sessions} <small>this week</small>`, `${fmt(s.minutes)} min · ${s.activeDays} active day${s.activeDays === 1 ? '' : 's'}`, '#ff9f7a')}${card('#checkin', '◷', 'Weekly check-in', checkinIsDue() ? 'Ready' : pretty(checkinDue(), { day: 'numeric', month: 'short' }), checkinIsDue() ? 'About two minutes' : 'Next one opens then', '#7fd8c6')}${card('#progress', '↗', 'Progress', lw ? fmt(lw.value, 1) + ' kg' : '—', lw ? `Weight on ${pretty(lw.date, { day: 'numeric', month: 'short' })}` : 'Weight trend & past weeks', '#c4b2ff')}</div>
+  <div class="tgrid">${card('#food', '❦', 'Food totals', dayHasFood(d) ? fmt(dayTotals(d).calories.value) + ' kcal' : '—', t.calories ? `Target ${fmt(t.calories)} kcal today` : 'Add from your food app', '#b6f08f')}${card('#move', '✶', 'Movement', `${s.sessions} <small>this week</small>`, `${fmt(s.minutes)} min · ${s.activeDays} active day${s.activeDays === 1 ? '' : 's'}`, '#ff9f7a')}${card('#moods', '✿', 'My moods', `${(() => { const t = today(), m = monday(t); return Array.from({ length: 7 }, (_, i) => shift(m, i)).filter((d) => d <= t && mmDay(d)).length; })()} <small>this week</small>`, 'Your week and month in colour', '#ffb488')}${card('#checkin', '◷', 'Weekly check-in', checkinIsDue() ? 'Ready' : pretty(checkinDue(), { day: 'numeric', month: 'short' }), checkinIsDue() ? 'About two minutes' : 'Next one opens then', '#7fd8c6')}${card('#progress', '↗', 'Progress', lw ? fmt(lw.value, 1) + ' kg' : '—', lw ? `Weight on ${pretty(lw.date, { day: 'numeric', month: 'short' })}` : 'Weight trend & past weeks', '#c4b2ff')}</div>
   <div class="section-h"><h2>Last 7 days</h2></div>${summaryTiles(s)}`);
 }
 function summaryTiles(s) {
@@ -2971,6 +2999,53 @@ function celebrateDay() {
   return true;
 }
 
+
+// --- My moods: week / month colour grid with replay (for screen recording) ---
+let mmMode = 'month', mmRef = null;
+const MM_LEGEND = [[2, '😞'], [4, '😕'], [6, '😐'], [8, '🙂'], [10, '😄']];
+function mmDay(d) {
+  const f = daily(d), m = f.mood !== undefined && f.mood !== '' ? f.mood : f.dayScore, n = Number(m);
+  if (m !== undefined && m !== '' && n >= 0) { const b = n <= 2 ? 2 : n <= 4 ? 4 : n <= 6 ? 6 : n <= 8 ? 8 : 10; return { cls: 'm' + b, e: MOOD_EMOJI(n) }; }
+  return dayActive(d) ? { cls: 'mx', e: '✓' } : null;
+}
+function moodsView() {
+  const t = today(); mmRef = mmRef || t;
+  const week = mmMode === 'week';
+  let days, title, lead = 0, isCurrent;
+  if (week) {
+    const m = monday(mmRef); days = Array.from({ length: 7 }, (_, i) => shift(m, i));
+    title = `${pretty(days[0], { day: 'numeric', month: 'short' })} – ${pretty(days[6], { day: 'numeric', month: 'short' })}`;
+    isCurrent = days.includes(t);
+  } else {
+    const r = parseDate(mmRef), first = isoOf(new Date(r.getFullYear(), r.getMonth(), 1)), n = new Date(r.getFullYear(), r.getMonth() + 1, 0).getDate();
+    days = Array.from({ length: n }, (_, i) => shift(first, i)); lead = (parseDate(first).getDay() + 6) % 7;
+    title = parseDate(first).toLocaleDateString('en-IE', { month: 'long', year: 'numeric' });
+    isCurrent = t.slice(0, 7) === first.slice(0, 7);
+  }
+  const past = days.filter((d) => d <= t), filled = past.filter((d) => mmDay(d)).length;
+  const step = week ? 0.45 : Math.min(0.28, 6.5 / Math.max(filled, 1));
+  let k = 0;
+  const cells = days.map((d) => {
+    const x = d <= t ? mmDay(d) : null, dn = parseDate(d).getDate();
+    const cls = ['mm-cell', x ? 'has ' + x.cls : '', d > t ? 'future' : '', d === t ? 'today' : ''].join(' ');
+    const lab = week ? `<span class="dn">${pretty(d, { weekday: 'short' }).slice(0, 2)} ${dn}</span>` : `<span class="dn">${dn}</span>`;
+    return `<div class="${cls}" ${x ? `style="--i:${k++}"` : ''} aria-label="${esc(pretty(d))}${x ? '' : ': no check-in'}">${lab}${x ? `<span aria-hidden="true">${x.e}</span>` : ''}</div>`;
+  });
+  const dow = week ? '' : ['M', 'T', 'W', 'T', 'F', 'S', 'S'].map((x) => `<div class="mm-dow">${x}</div>`).join('');
+  const blanks = '<div class="mm-cell blank"></div>'.repeat(lead);
+  return page('track', `${hero('My moods', week ? 'My week <em>in colour</em>' : 'My month <em>in colour</em>', 'Each square is a day you checked in. The colour comes from your mood (or “today overall”).')}
+  <div class="mm-tabs" role="group" aria-label="Week or month"><button data-act="mm-mode" data-v="week" class="${week ? 'on' : ''}" aria-pressed="${week}">Week</button><button data-act="mm-mode" data-v="month" class="${week ? '' : 'on'}" aria-pressed="${!week}">Month</button></div>
+  <div class="glass ${week ? 'mm-week' : ''}"><div class="mm-head"><button class="mm-nav" data-act="mm-prev" aria-label="Previous">‹</button><h2>${title}</h2><button class="mm-nav" data-act="mm-next" aria-label="Next" ${isCurrent ? 'disabled' : ''}>›</button></div>
+  <div class="mm-grid" id="mm-grid" style="--step:${step.toFixed(3)}s">${dow}${blanks}${cells.join('')}</div>
+  <p class="mm-cap">${filled ? 'Each emoji is how I felt that day.' : 'Your colours will appear here as you check in.'}</p>
+  <div class="mm-legend">${MM_LEGEND.map(([v, e]) => `<span><i style="background:${{ 2: '#7f93c9', 4: '#b39be0', 6: '#e7cf92', 8: '#86dcc6', 10: '#ffb488' }[v]}"></i>${e}</span>`).join('')}</div></div>
+  ${filled ? `<button class="btn mm-replay" data-act="mm-replay">▶ Replay my ${week ? 'week' : 'month'}</button><p class="muted" style="text-align:center;font-size:13px">${filled} of ${past.length} day${past.length === 1 ? '' : 's'} checked in</p>` : `<p style="text-align:center"><a class="btn" href="#today">Do today’s check-in</a></p>`}`);
+}
+function mmReplay() {
+  const g = $('#mm-grid'); if (!g) return;
+  g.classList.remove('play'); void g.offsetWidth; g.classList.add('play');
+}
+
 // --- weekly emoji card (image to share) ---
 const MOOD_EMOJI = (v) => { const n = Number(v); if (!(n >= 0)) return null; return n <= 2 ? '😞' : n <= 4 ? '😕' : n <= 6 ? '😐' : n <= 8 ? '🙂' : '😄'; };
 function weekData() {
@@ -3081,6 +3156,9 @@ document.addEventListener('click', (e) => {
   if (!a) return;
   const k = a.dataset.act;
   if (k === 'week-card') return weekCardSheet();
+  if (k === 'mm-mode') { mmMode = a.dataset.v; mmRef = today(); return rerender(); }
+  if (k === 'mm-prev' || k === 'mm-next') { const n = k === 'mm-prev' ? -1 : 1, r = parseDate(mmRef || today()); if (mmMode === 'week') mmRef = shift(mmRef || today(), 7 * n); else mmRef = isoOf(new Date(r.getFullYear(), r.getMonth() + n, 1)); if (mmRef > today()) mmRef = today(); return rerender(); }
+  if (k === 'mm-replay') return mmReplay();
   if (k === 'week-share') return weekShare();
   if (k === 'week-save') return weekSave();
 });
@@ -3239,6 +3317,7 @@ function render() {
   else if (r === 'find') html = findView();
   else if (r === 'path') html = pathView();
   else if (r === 'track') html = trackView();
+  else if (r === 'moods') html = moodsView();
   else if (r === 'food') html = foodView();
   else if (r === 'move') html = moveView();
   else if (base === 'checkin') html = checkinView(r.length > 8 ? r.slice(8) : '');
