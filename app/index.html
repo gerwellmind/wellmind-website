@@ -1618,7 +1618,7 @@ function level(sp = sparks()) {
 // ---------------- router ----------------
 let dir = 1;
 const route = () => (location.hash || '').replace('#', '') || 'home';
-function go(r) { if (route() === r) render(); else location.hash = r; }
+function go(r) { if (route() === r) { render(); window.scrollTo(0, 0); } else location.hash = r; }
 window.addEventListener('hashchange', () => { render(); window.scrollTo(0, 0); });
 
 // ---------------- FX ----------------
