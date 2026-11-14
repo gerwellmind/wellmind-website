@@ -727,6 +727,53 @@ details.explain ol{padding-left:18px;color:#33433c}
 /* buttons on light cream cards: dark, readable text */
 .cardx .btn.ghost{background:#fff;color:#1d2b26;box-shadow:inset 0 0 0 1.5px #c9bfa9}
 .cardx .btn.ghost:hover{background:#fff7e3}
+/* ---------- Sizzle ---------- */
+/* time-of-day looks */
+#sky::after{content:'';position:absolute;inset:0;pointer-events:none;opacity:0;transition:opacity 1.2s}
+body.tod-morning #sky::after{opacity:1;background:radial-gradient(900px 520px at 50% -8%,rgba(255,176,112,.42) 0%,rgba(255,206,150,.16) 45%,transparent 70%),linear-gradient(180deg,rgba(255,190,140,.14) 0%,transparent 45%)}
+body.tod-day #sky::after{opacity:1;background:radial-gradient(900px 520px at 70% -10%,rgba(236,201,127,.22) 0%,transparent 65%)}
+/* badges */
+.badges{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+.badge{border-radius:18px;padding:14px 12px;background:rgba(255,255,255,.04);box-shadow:inset 0 0 0 1px rgba(255,255,255,.08);text-align:center;opacity:.55}
+.badge.got{opacity:1;background:rgba(236,201,127,.12);box-shadow:inset 0 0 0 1px rgba(236,201,127,.45)}
+.badge .bi{display:block;font-size:34px;line-height:1.1;margin-bottom:6px}
+.badge b{display:block;font-size:14px}
+.badge small{display:block;font-size:12px;opacity:.75;line-height:1.35;margin-top:2px}
+.badgepop{position:fixed;left:50%;top:calc(18px + var(--safe-t));transform:translate(-50%,-140%);z-index:60;display:flex;align-items:center;gap:12px;background:#fff7e3;color:#13211c;border-radius:20px;padding:12px 18px 12px 14px;box-shadow:0 14px 40px rgba(0,0,0,.4),inset 0 0 0 2px #ecc97f;animation:bpIn .5s cubic-bezier(.2,1.4,.4,1) forwards}
+.badgepop.out{animation:bpOut .45s ease forwards}
+.badgepop .bi{font-size:36px;animation:bpWiggle 1s ease .4s}
+.badgepop small{display:block;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#8a6a2a}
+.badgepop b{display:block;font-size:17px}
+@keyframes bpIn{to{transform:translate(-50%,0)}}
+@keyframes bpOut{from{transform:translate(-50%,0)}to{transform:translate(-50%,-160%);opacity:0}}
+@keyframes bpWiggle{0%,100%{transform:rotate(0)}25%{transform:rotate(-14deg) scale(1.15)}60%{transform:rotate(10deg)}}
+/* day complete */
+.daydone{display:grid;place-items:center;padding:20px}
+.dd-inner{max-width:420px;width:100%;text-align:center;background:linear-gradient(180deg,#fff7e3,#f6ecd4);color:#13211c;border-radius:30px;padding:30px 24px 22px;box-shadow:0 30px 80px rgba(0,0,0,.5),inset 0 0 0 2px #ecc97f;animation:ddIn .6s cubic-bezier(.2,1.3,.4,1)}
+.dd-emoji{font-size:74px;line-height:1;animation:bpWiggle 1.2s ease .3s}
+.dd-inner h2{font-family:var(--display);font-weight:400;font-size:34px;margin:10px 0 4px}
+.dd-sub{margin:0;color:#4a5953}
+.dd-streak{display:inline-block;margin-top:12px;background:#ffe2c6;color:#7a3d10;border-radius:999px;padding:7px 14px;font-weight:700}
+.dd-inner blockquote{margin:18px 0 18px;font-family:var(--display);font-style:italic;font-size:20px;line-height:1.35;color:#16302a}
+.dd-inner cite{display:block;font-family:var(--body);font-style:normal;font-size:13px;color:#8a6a2a;margin-top:6px;font-weight:700}
+@keyframes ddIn{from{transform:scale(.8) translateY(30px);opacity:0}}
+/* weekly card */
+.weekpromo{display:flex;align-items:center;gap:12px;width:100%;text-align:left;border:0;cursor:pointer;color:var(--ink);font:inherit;padding:14px 16px;margin:0 0 16px}
+.weekpromo .wp-emojis{font-size:18px;letter-spacing:1px;flex:none;max-width:44%;overflow:hidden;white-space:nowrap}
+.weekpromo b{display:block;font-size:16px}
+.weekpromo small{display:block;font-size:12.5px;opacity:.75}
+.weekpromo .go{margin-left:auto;opacity:.6;font-size:22px}
+.weekimg{display:block;width:100%;max-width:360px;margin:12px auto 0;border-radius:18px;box-shadow:0 10px 30px rgba(0,0,0,.25)}
+/* small animations */
+.plan-item.justdone .pn{animation:tickPop .7s cubic-bezier(.2,1.6,.4,1)}
+.plan-item.justdone{animation:rowGlow 1.2s ease}
+@keyframes tickPop{0%{transform:scale(.2)}60%{transform:scale(1.35)}100%{transform:scale(1)}}
+@keyframes rowGlow{0%{box-shadow:inset 0 0 0 2px #7fd8c6,0 0 0 0 rgba(127,216,198,.5)}100%{box-shadow:inset 0 0 0 1px rgba(255,255,255,.08),0 0 0 14px rgba(127,216,198,0)}}
+.pill.bump{animation:pillBump .6s ease}
+@keyframes pillBump{40%{transform:scale(1.18)}}
+@media (prefers-reduced-motion: reduce){.badgepop,.dd-inner,.dd-emoji,.plan-item.justdone,.plan-item.justdone .pn,.pill.bump{animation:none!important}.badgepop{transform:translate(-50%,0)}}
+.dd-inner h2{color:#13211c!important}
+.sheet .btn.ghost{background:#fff;color:#1d2b26;box-shadow:inset 0 0 0 1.5px #c9bfa9}
 
 </style>
 </head>
@@ -2020,6 +2067,7 @@ function homeView() {
   return page('home', `${hero(`${greeting()}${name ? ', ' + esc(name) : ''}`, 'Your <em>Well Mind</em>', 'Here is your plan for today.')}
   ${newStyleCard()}
   ${todayPlanHtml()}
+  ${weekCardPromo()}
   ${extras.length ? `<div class="quests" style="margin-top:14px">${extras.join('')}</div>` : ''}
   ${easy() ? easyNowHtml() : ''}
   ${F ? `<a class="glass myfocus" href="#focus" style="--c:${F.hue}"><span class="fi">${F.ic}</span><span><small>My focus</small><b>${esc(F.t)}</b><small>${fDone} of ${F.ch.length} chapter${F.ch.length === 1 ? '' : 's'} done · tap to change</small></span><span class="go">›</span></a>` : `<a class="glass myfocus" href="#focus"><span class="fi">✧</span><span><small>My focus</small><b>Choose one area to work on</b></span><span class="go">›</span></a>`}
@@ -2838,6 +2886,200 @@ function nextSheet(from) {
 }
 document.addEventListener('click', (e) => { const a = e.target.closest('[data-act="next-go"]'); if (a) { closeOverlay(); location.hash = a.dataset.href; } });
 
+// ---------------- Sizzle: celebrations, badges, weekly card, time-of-day look, small animations ----------------
+
+// --- badges (plain names) ---
+const BADGES = [
+  ['checkin1', '🌅', 'First check-in', 'Do your first morning or evening check-in'],
+  ['chapter1', '🌱', 'First chapter', 'Finish your first chapter'],
+  ['calmplan', '🏆', 'Calm plan made', 'Finish “My calm plan”'],
+  ['fullday', '🎉', 'First full day', 'Do all 3 things in one day'],
+  ['streak3', '🔥', '3 days in a row', 'Use the app 3 days in a row'],
+  ['streak7', '⭐', '7 days in a row', 'Use the app 7 days in a row'],
+  ['chapters5', '💪', '5 chapters done', 'Finish 5 chapters'],
+  ['chapters10', '🚀', '10 chapters done', 'Finish 10 chapters'],
+  ['streak30', '👑', '30 days in a row', 'Use the app 30 days in a row'],
+  ['chapters25', '🏅', 'All 25 chapters', 'Finish every chapter'],
+];
+const dayFull = (d) => amDone(d) && pmDone(d) && Object.values(U.done).includes(d);
+function badgeEarnedNow(id) {
+  const lit = Object.keys(U.done).length, sk = streak();
+  switch (id) {
+    case 'checkin1': return entries().some((e) => e.kind === 'daily' && (amDone(e.date) || pmDone(e.date)));
+    case 'chapter1': return lit >= 1;
+    case 'calmplan': return isLit('uy', 7);
+    case 'fullday': return dayFull(today()) || Object.values(U.done).some((d) => dayFull(d));
+    case 'streak3': return sk >= 3;
+    case 'streak7': return sk >= 7;
+    case 'streak30': return sk >= 30;
+    case 'chapters5': return lit >= 5;
+    case 'chapters10': return lit >= 10;
+    case 'chapters25': return lit >= 25;
+  }
+  return false;
+}
+// Returns badges earned since last check (and saves them). Badges are kept once earned.
+function checkBadges() {
+  U.badges = U.badges || {};
+  const fresh = BADGES.filter(([id]) => !U.badges[id] && badgeEarnedNow(id));
+  if (fresh.length) { fresh.forEach(([id]) => (U.badges[id] = today())); saveU(true); }
+  return fresh;
+}
+function badgeShelfHtml() {
+  const got = U.badges || {}, n = BADGES.filter(([id]) => got[id]).length;
+  return `<div class="section-h"><h2>My badges</h2><span class="small muted">${n} of ${BADGES.length}</span></div>
+  <div class="badges">${BADGES.map(([id, ic, t, how]) => `<div class="badge ${got[id] ? 'got' : ''}" title="${esc(how)}"><span class="bi" aria-hidden="true">${got[id] ? ic : '🔒'}</span><b>${esc(t)}</b><small>${got[id] ? `Earned ${pretty(got[id], { day: 'numeric', month: 'short' })}` : esc(how)}</small></div>`).join('')}</div>`;
+}
+function badgePop(list) {
+  if (!list.length) return;
+  const [id, ic, t] = list[0];
+  const el = document.createElement('div');
+  el.className = 'badgepop'; el.setAttribute('role', 'status');
+  el.innerHTML = `<span class="bi">${ic}</span><span><small>New badge!</small><b>${esc(t)}</b></span>`;
+  document.body.append(el); vibrate([15, 30, 15]); burst('#ecc97f', 60);
+  setTimeout(() => el.classList.add('out'), 3200); setTimeout(() => { el.remove(); badgePop(list.slice(1)); }, 3700);
+}
+
+// --- day complete celebration ---
+const GER_LINES = [
+  'Small steps every day add up to big change.',
+  'You showed up for yourself today. That matters.',
+  'Calm is a skill — and you practised it today.',
+  'Be proud of today. Rest well tonight.',
+  'One good day at a time. You’re doing it.',
+  'Look after yourself like you look after others.',
+];
+function celebrateDay() {
+  U.celebrated = U.celebrated || {};
+  if (U.celebrated[today()]) return false;
+  U.celebrated[today()] = 1; saveU(true);
+  const sk = streak(), line = GER_LINES[new Date().getDate() % GER_LINES.length];
+  closeOverlay();
+  const o = document.createElement('div');
+  o.className = 'overlay daydone'; o.setAttribute('role', 'dialog'); o.setAttribute('aria-label', 'Day complete');
+  o.innerHTML = `<div class="dd-inner"><div class="dd-emoji" aria-hidden="true">🎉</div><h2>Day complete${firstName() ? `, ${esc(firstName())}` : ''}!</h2>
+  <p class="dd-sub">You did all 3 things today.</p>${sk > 1 ? `<div class="dd-streak">🔥 ${sk} days in a row</div>` : ''}
+  <blockquote>“${esc(line)}”<cite>— Ger</cite></blockquote><button class="btn block" data-act="close">Thank you ✓</button></div>`;
+  document.body.append(o);
+  vibrate([30, 50, 30, 50, 60]); burst('#ecc97f', 160); setTimeout(() => burst('#7fd8c6', 120), 500); setTimeout(() => burst('#ff9fb0', 100), 1000);
+  $('[data-act="close"]', o).focus();
+  return true;
+}
+
+// --- weekly emoji card (image to share) ---
+const MOOD_EMOJI = (v) => { const n = Number(v); if (!(n >= 0)) return null; return n <= 2 ? '😞' : n <= 4 ? '😕' : n <= 6 ? '😐' : n <= 8 ? '🙂' : '😄'; };
+function weekData() {
+  const days = [];
+  for (let i = 6; i >= 0; i--) {
+    const d = shift(today(), -i), f = daily(d), m = f.mood !== undefined && f.mood !== '' ? f.mood : f.dayScore;
+    days.push({ d, label: new Date(d + 'T12:00').toLocaleDateString('en-IE', { weekday: 'short' }).slice(0, 2), e: MOOD_EMOJI(m) || (dayActive(d) ? '✅' : null) });
+  }
+  const from = shift(today(), -6);
+  return { days, active: days.filter((x) => dayActive(x.d)).length, chapters: Object.values(U.done).filter((d) => d >= from).length, streak: streak() };
+}
+function drawWeekCard() {
+  const w = weekData(), W = 1080, H = 1350, c = document.createElement('canvas'); c.width = W; c.height = H;
+  const g = c.getContext('2d');
+  const bg = g.createLinearGradient(0, 0, 0, H); bg.addColorStop(0, '#163a31'); bg.addColorStop(0.55, '#0e211c'); bg.addColorStop(1, '#1d1a3a'); g.fillStyle = bg; g.fillRect(0, 0, W, H);
+  const glow = g.createRadialGradient(W * 0.8, 120, 10, W * 0.8, 120, 600); glow.addColorStop(0, 'rgba(236,201,127,.35)'); glow.addColorStop(1, 'rgba(236,201,127,0)'); g.fillStyle = glow; g.fillRect(0, 0, W, H);
+  for (let i = 0; i < 90; i++) { g.fillStyle = `rgba(255,255,255,${(0.2 + Math.random() * 0.5).toFixed(2)})`; g.beginPath(); g.arc(Math.random() * W, Math.random() * H, Math.random() * 2.2 + 0.4, 0, 7); g.fill(); }
+  g.textAlign = 'center'; g.fillStyle = '#ecc97f'; g.font = '700 34px system-ui, sans-serif'; g.fillText('MY WEEK WITH WELL MIND', W / 2, 150);
+  g.fillStyle = '#fffaf0'; g.font = '400 84px Georgia, serif'; g.fillText(firstName() ? `${firstName()}’s week` : 'My week', W / 2, 260);
+  // 7 days
+  const x0 = 110, step = (W - 2 * x0) / 6;
+  w.days.forEach((x, i) => {
+    const cx = x0 + i * step;
+    g.fillStyle = x.e ? 'rgba(255,255,255,.12)' : 'rgba(255,255,255,.05)'; g.beginPath(); g.arc(cx, 470, 62, 0, 7); g.fill();
+    g.font = '72px "Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif'; g.fillStyle = '#fff'; g.fillText(x.e || '·', cx, 497);
+    g.font = '600 30px system-ui, sans-serif'; g.fillStyle = '#c6d3cc'; g.fillText(x.label, cx, 580);
+  });
+  // stats
+  const stats = [[`${w.active}/7`, 'days I showed up'], [String(w.chapters), w.chapters === 1 ? 'chapter done' : 'chapters done'], [`🔥 ${w.streak}`, w.streak === 1 ? 'day in a row' : 'days in a row']];
+  stats.forEach(([big, small], i) => {
+    const cx = W / 2 + (i - 1) * 310, y = 690;
+    g.fillStyle = 'rgba(255,250,240,.08)'; roundRect(g, cx - 140, y, 280, 220, 36); g.fill();
+    g.fillStyle = '#f7e2ad'; g.font = '400 78px Georgia, "Times New Roman", serif, "Apple Color Emoji", "Noto Color Emoji"'; g.fillText(big, cx, y + 110);
+    g.fillStyle = '#eef0e8'; g.font = '500 30px system-ui, sans-serif'; g.fillText(small, cx, y + 170);
+  });
+  g.fillStyle = '#fffaf0'; g.font = 'italic 400 46px Georgia, serif'; g.fillText(w.active >= 5 ? 'A strong week. Well done!' : w.active >= 3 ? 'Small steps, every day.' : 'Every step counts.', W / 2, 1060);
+  g.fillStyle = '#ecc97f'; roundRect(g, W / 2 - 300, 1150, 600, 96, 48); g.fill();
+  g.fillStyle = '#13211c'; g.font = '700 40px system-ui, sans-serif'; g.fillText('wellmind.ie/app', W / 2, 1212);
+  return c;
+}
+function roundRect(g, x, y, w, h, r) { g.beginPath(); g.moveTo(x + r, y); g.arcTo(x + w, y, x + w, y + h, r); g.arcTo(x + w, y + h, x, y + h, r); g.arcTo(x, y + h, x, y, r); g.arcTo(x, y, x + w, y, r); g.closePath(); }
+function weekCardSheet() {
+  const url = drawWeekCard().toDataURL('image/png');
+  sheet(`<h2>My week card</h2><p>Share it with friends, or keep it for yourself.</p><img class="weekimg" src="${url}" alt="My week with Well Mind: mood emojis for each day and my numbers">
+  <div style="display:grid;gap:10px;margin-top:14px"><button class="btn" data-act="week-share">Share my week ↗</button><button class="btn ghost" data-act="week-save" style="color:#1d2b26;box-shadow:inset 0 0 0 1.5px #c9bfa9;background:#fff">Save the picture</button></div>${closeBtn()}`);
+}
+async function weekCardBlob() { const c = drawWeekCard(); return await new Promise((r) => c.toBlob(r, 'image/png')); }
+async function weekShare() {
+  const blob = await weekCardBlob(), file = new File([blob], 'my-week-well-mind.png', { type: 'image/png' });
+  try {
+    if (navigator.canShare && navigator.canShare({ files: [file] })) { await navigator.share({ files: [file], text: 'My week with Well Mind ✨ wellmind.ie/app' }); return; }
+  } catch (e) { if (e && e.name === 'AbortError') return; }
+  weekSave(blob); toast('Saved — now you can share the picture from your photos.');
+}
+async function weekSave(blob) { blob = blob || (await weekCardBlob()); const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'my-week-well-mind.png'; document.body.append(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 4000); }
+function weekCardPromo() {
+  const w = weekData();
+  if (w.active < 2) return '';
+  const dow = new Date().getDay(); // 0 Sun, 5 Fri, 6 Sat, 1 Mon
+  if (![0, 1, 5, 6].includes(dow)) return '';
+  return `<button class="glass weekpromo" data-act="week-card"><span class="wp-emojis" aria-hidden="true">${w.days.map((x) => x.e || '·').join('')}</span><span><b>Your week card is ready ✨</b><small>See your week in emojis — and share it</small></span><span class="go">›</span></button>`;
+}
+
+// --- morning / day / evening look ---
+function timeOfDay() { const h = new Date().getHours(); return h >= 5 && h < 12 ? 'morning' : h >= 12 && h < 17 ? 'day' : 'evening'; }
+function applyTimeLook() { const t = timeOfDay(); document.body.classList.remove('tod-morning', 'tod-day', 'tod-evening'); document.body.classList.add('tod-' + t); }
+
+// --- small animations ---
+let lastPlanDone = null, lastPoints = null;
+function animatePlan(app) {
+  const plan = $('.dayplan', app);
+  if (!plan) return;
+  const done = new Set($$('.plan-item.done', plan).map((a) => a.getAttribute('href')));
+  if (lastPlanDone) $$('.plan-item.done', plan).forEach((a) => { if (!lastPlanDone.has(a.getAttribute('href'))) a.classList.add('justdone'); });
+  // ring fills from the last value
+  const rf = $('.rf', plan);
+  if (rf && lastPlanDone && lastPlanDone.size !== done.size) {
+    const C = parseFloat(rf.getAttribute('stroke-dasharray')), to = rf.getAttribute('stroke-dashoffset');
+    rf.style.transition = 'none'; rf.setAttribute('stroke-dashoffset', C * (1 - lastPlanDone.size / 3));
+    requestAnimationFrame(() => requestAnimationFrame(() => { rf.style.transition = 'stroke-dashoffset .9s cubic-bezier(.2,.8,.2,1)'; rf.setAttribute('stroke-dashoffset', to); }));
+  }
+  lastPlanDone = done;
+}
+function countUpPoints() {
+  const sp = sparks();
+  if (lastPoints !== null && sp > lastPoints && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    const from = lastPoints, t0 = performance.now();
+    const tick = (t) => { const k = Math.min(1, (t - t0) / 700), v = Math.round(from + (sp - from) * k); $$('[data-sparks]').forEach((e) => (e.textContent = v)); if (k < 1) requestAnimationFrame(tick); else $$('.pill [data-sparks]').forEach((e) => { const p = e.closest('.pill'); p?.classList.add('bump'); setTimeout(() => p?.classList.remove('bump'), 700); }); };
+    requestAnimationFrame(tick);
+  }
+  lastPoints = sp;
+}
+
+// Called after every screen is drawn.
+function sizzleAfterRender(app, r) {
+  applyTimeLook();
+  countUpPoints();
+  if (!onboarded()) return;
+  if (r === 'home' || r === '') animatePlan(app);
+  const fresh = checkBadges();
+  const isHome = r === 'home' || r === '';
+  if (isHome && dayFull(today()) && !(U.celebrated || {})[today()]) setTimeout(() => { if (route() === 'home' || route() === '') celebrateDay(); badgePop(fresh); }, 600);
+  else if (fresh.length) setTimeout(() => badgePop(fresh), 500);
+}
+
+document.addEventListener('click', (e) => {
+  const a = e.target.closest('[data-act]');
+  if (!a) return;
+  const k = a.dataset.act;
+  if (k === 'week-card') return weekCardSheet();
+  if (k === 'week-share') return weekShare();
+  if (k === 'week-save') return weekSave();
+});
+
 'use strict';
 // =====================================================================
 // Well Mind — views part 3: share, me, sheets, render and events.
@@ -2929,6 +3171,8 @@ function meView() {
   const cards = (j) => JOURNEYS[j].list.map((c) => isLit(j, c.n) ? `<button class="cc got" style="--c:${c.hue}" data-act="reveal" data-j="${j}" data-n="${c.n}"><span class="g">${c.glyph}</span>${pad(c.n)}</button>` : `<a class="cc" href="#${rid(j, c.n)}" aria-label="${esc(c.title)}, not done yet"><span class="g">${c.glyph}</span>${pad(c.n)}</a>`).join('');
   return page('me', `${hero('This journal belongs to', firstName() ? esc(firstName()) : 'Me', `Level ${lv.n} · ${lv.sp} points · ${lit} chapter${lit === 1 ? '' : 's'} done`)}
   ${planCard()}
+  ${badgeShelfHtml()}
+  <button class="glass weekpromo" data-act="week-card" style="margin-top:14px"><span class="wp-emojis" aria-hidden="true">📅</span><span><b>My week card</b><small>See your last 7 days in emojis — and share it</small></span><span class="go">›</span></button>
   <div class="section-h"><h2>Main messages from my chapters</h2></div><p class="small muted" style="margin:-6px 2px 8px">Everyday Wellbeing</p><div class="collection">${cards('ew')}</div><p class="small muted" style="margin:14px 2px 8px">Understanding Yourself</p><div class="collection">${cards('uy')}</div>
   <div class="section-h"><h2>My journal</h2></div>
   <div class="list"><button class="item" data-act="style-sheet"><span class="ic">${easy() ? '⚡' : '📖'}</span><span><b>How I use Well Mind</b><small>${easy() ? 'Quick & easy — tap, don’t type' : 'Go deeper — the full chapters and journaling'} · tap to switch</small></span><span class="go">›</span></button><a class="item" href="#focus"><span class="ic">✧</span><span><b>My focus</b><small>${focusList().length ? focusList().map((k) => FOCUS[k].t).join(' · ') : 'Choose up to three areas'}</small></span><span class="go">›</span></a>
@@ -3012,6 +3256,7 @@ const P0 = (r) => /^unlock/.test(r);
 function rerender() { const y = scrollY, f = document.activeElement?.id; render(); scrollTo(0, y); if (f) document.getElementById(f)?.focus({ preventScroll: true }); }
 function afterRender(app, r, P) {
   bindFields(app);
+  try { sizzleAfterRender(app, r); } catch (e) { console.warn(e); }
   $$('textarea', app).forEach((t) => !t.dataset.f && autosize(t));
   // daily check-in
   $$('[data-d]', app).forEach((t) => t.addEventListener('input', () => { if (t.tagName === 'TEXTAREA') autosize(t); const before = checkedIn(tDate); setDaily(tDate, t.dataset.d, t.value.slice(0, 4000)); t.closest('.field')?.classList.toggle('answered', !!t.value.trim()); if (!before && checkedIn(tDate)) { floater(t, '+3 ✦'); updateChrome(); } }));
