@@ -724,6 +724,9 @@ details.explain ol{padding-left:18px;color:#33433c}
 .prow.done{opacity:.7}
 .prow.cur{box-shadow:inset 0 0 0 2px #ecc97f}
 .prow.cur .pnum{background:#ecc97f;color:#13211c}
+/* buttons on light cream cards: dark, readable text */
+.cardx .btn.ghost{background:#fff;color:#1d2b26;box-shadow:inset 0 0 0 1.5px #c9bfa9}
+.cardx .btn.ghost:hover{background:#fff7e3}
 
 </style>
 </head>
@@ -1730,9 +1733,9 @@ function finishCard(j, ch) {
   const pr = progressOf(j, ch), done = isLit(j, ch.n);
   return `<article class="cardx finish ${dir < 0 ? 'back' : ''}"><div class="big">${ch.glyph}</div><div class="eyebrow">End of ${esc(ch.title)}</div><h2>${done ? 'Chapter done ✓' : 'Finished this chapter?'}</h2>
   <p>${done ? `You finished it on ${pretty(U.done[doneKey(j, ch.n)])}. You can come back and add to it any time.` : 'There is no test. Tap the button below to mark this chapter as done.'}</p>
-  <div class="stat-row"><div class="stat"><b>${pr.got}</b><span>of ${pr.tot} prompts</span></div><div class="stat"><b>${done ? '✓' : '+10'}</b><span>${done ? 'done' : 'points'}</span></div></div>
-  <div style="display:grid;gap:10px;margin-top:14px">${done ? `<button class="btn" data-act="reveal" data-j="${j}" data-n="${ch.n}">See my insight card</button>` : `<button class="btn" data-act="light" data-j="${j}" data-n="${ch.n}">Mark chapter as done ✓</button>`}
-  ${easy() ? `<button class="btn ghost" data-act="style-sheet">📖 Want the full chapter? Switch to Go deeper</button>` : ''}<a class="btn ghost" href="#share" data-act="share-ch" data-j="${j}" data-n="${ch.n}">Share this chapter with Ger</a><a class="btn ghost" href="${BOOK_URL}" target="_blank" rel="noopener">Talk it through with Ger</a><a class="btn ghost" href="#${rid(j, ch.n, pdeck(j, ch).length)}" data-dir="-1">← Back to the last card</a><a class="linkbtn" href="#home" style="margin-top:6px">Back to home</a></div></article>`;
+  <div class="stat-row">${easy() ? '' : `<div class="stat"><b>${pr.got}</b><span>of ${pr.tot} questions answered</span></div>`}<div class="stat"><b>${done ? '✓' : '+10'}</b><span>${done ? 'done' : 'points'}</span></div></div>
+  <div style="display:grid;gap:10px;margin-top:14px">${done ? `<button class="btn" data-act="reveal" data-j="${j}" data-n="${ch.n}">See the main message of this chapter</button>` : `<button class="btn" data-act="light" data-j="${j}" data-n="${ch.n}">Mark chapter as done ✓</button>`}
+  ${easy() ? `<button class="btn ghost" data-act="style-sheet">📖 Read the full chapter</button>` : ''}<a class="btn ghost" href="#share" data-act="share-ch" data-j="${j}" data-n="${ch.n}">Share this chapter with Ger</a><a class="btn ghost" href="${BOOK_URL}" target="_blank" rel="noopener">Talk it through with Ger</a><a class="btn ghost" href="#${rid(j, ch.n, pdeck(j, ch).length)}" data-dir="-1">← Back to the last card</a><a class="linkbtn" href="#home" style="margin-top:6px">Back to home</a></div></article>`;
 }
 function tableHtml(t) { return `<div style="overflow-x:auto"><table class="tbl"><thead><tr>${t.head.map((h) => `<th>${esc(h)}</th>`).join('')}</tr></thead><tbody>${t.rows.map((r) => `<tr>${r.map((c) => `<td>${esc(c)}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`; }
 function stepCard(j, ch, st, i) {
@@ -1831,7 +1834,7 @@ function lightChapter(j, n) {
 function revealInsight(j, ch, fresh) {
   closeOverlay();
   const o = document.createElement('div');
-  o.className = 'overlay'; o.setAttribute('role', 'dialog'); o.setAttribute('aria-label', 'Insight card'); o.style.setProperty('--c', ch.hue);
+  o.className = 'overlay'; o.setAttribute('role', 'dialog'); o.setAttribute('aria-label', 'The main message of this chapter'); o.style.setProperty('--c', ch.hue);
   o.innerHTML = `<div class="overlay-inner">${fresh ? '<h2>Chapter done ✓</h2>' : ''}<div class="insight" data-act="flip" tabindex="0" aria-label="Tap to turn the card"><div class="inner"><div class="face front"><div class="g">${ch.glyph}</div><div class="eyebrow" style="color:#fff;margin-top:16px">${JOURNEYS[j].short} · ${pad(ch.n)}</div><p style="font-family:var(--display);font-size:22px;margin:6px 0 0">${esc(ch.title)}</p><p class="small" style="opacity:.8;margin-top:18px">Tap to turn over</p></div><div class="face back"><div class="g">${ch.glyph}</div><q>${esc(ch.insight)}</q><div class="small" style="color:#6b7a73">${esc(ch.title)} · ${JOURNEYS[j].title}</div></div></div></div><div class="actions"><button class="btn" data-act="close">${fresh ? 'Back to home' : 'Close'}</button></div></div>`;
   document.body.append(o);
   setTimeout(() => $('.insight', o)?.classList.add('flip'), fresh ? 900 : 200);
@@ -2926,7 +2929,7 @@ function meView() {
   const cards = (j) => JOURNEYS[j].list.map((c) => isLit(j, c.n) ? `<button class="cc got" style="--c:${c.hue}" data-act="reveal" data-j="${j}" data-n="${c.n}"><span class="g">${c.glyph}</span>${pad(c.n)}</button>` : `<a class="cc" href="#${rid(j, c.n)}" aria-label="${esc(c.title)}, not done yet"><span class="g">${c.glyph}</span>${pad(c.n)}</a>`).join('');
   return page('me', `${hero('This journal belongs to', firstName() ? esc(firstName()) : 'Me', `Level ${lv.n} · ${lv.sp} points · ${lit} chapter${lit === 1 ? '' : 's'} done`)}
   ${planCard()}
-  <div class="section-h"><h2>Insight cards</h2></div><p class="small muted" style="margin:-6px 2px 8px">Everyday Wellbeing</p><div class="collection">${cards('ew')}</div><p class="small muted" style="margin:14px 2px 8px">Understanding Yourself</p><div class="collection">${cards('uy')}</div>
+  <div class="section-h"><h2>Main messages from my chapters</h2></div><p class="small muted" style="margin:-6px 2px 8px">Everyday Wellbeing</p><div class="collection">${cards('ew')}</div><p class="small muted" style="margin:14px 2px 8px">Understanding Yourself</p><div class="collection">${cards('uy')}</div>
   <div class="section-h"><h2>My journal</h2></div>
   <div class="list"><button class="item" data-act="style-sheet"><span class="ic">${easy() ? '⚡' : '📖'}</span><span><b>How I use Well Mind</b><small>${easy() ? 'Quick & easy — tap, don’t type' : 'Go deeper — the full chapters and journaling'} · tap to switch</small></span><span class="go">›</span></button><a class="item" href="#focus"><span class="ic">✧</span><span><b>My focus</b><small>${focusList().length ? focusList().map((k) => FOCUS[k].t).join(' · ') : 'Choose up to three areas'}</small></span><span class="go">›</span></a>
   ${!isStandalone() ? `<button class="item" data-act="install"><span class="ic">📲</span><span><b>Add to my home screen</b><small>Open Well Mind like a normal app, with its own icon</small></span><span class="go">›</span></button>` : ''}
