@@ -643,6 +643,43 @@ details.explain ol{padding-left:18px;color:#33433c}
 .gcal-tip ol{margin:6px 0;padding-left:20px}
 .gcal-tip p{margin:6px 0}
 .zone h3{flex-wrap:wrap}.zone h3>span{white-space:nowrap;flex:none}.zone h3 small{flex-basis:100%;margin-left:0!important}
+/* ---------- Easy mode ---------- */
+.stylepicks{display:grid;gap:12px;margin-top:14px}
+.stylepick{display:flex;gap:14px;align-items:center;text-align:left;border:0;border-radius:20px;padding:16px 18px;background:#f4eee2;color:#1d2b26;box-shadow:inset 0 0 0 2px transparent;transition:transform .15s,box-shadow .2s,background .2s;cursor:pointer}
+.stylepick b{display:block;font-family:var(--display);font-size:21px;margin-bottom:2px}
+.stylepick small{display:block;color:#5d6b64;font-size:14px;line-height:1.4}
+.stylepick .sp-ic{font-size:34px;line-height:1}
+.stylepick.on{background:#fff7e3;box-shadow:inset 0 0 0 2px #e0b85c;transform:scale(1.01)}
+.quickver{display:inline-block;background:#fff3cf;color:#6d5317;border-radius:999px;padding:6px 12px;font-size:13px;font-weight:700;margin:4px 0 10px}
+.ec-how{font-size:16px}
+.ec{display:grid;gap:14px;margin-top:6px}
+.ecz{border-radius:20px;padding:14px 14px 6px;background:color-mix(in srgb,var(--z) 16%,#fff);box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--z) 45%,transparent)}
+.ecz h3{display:flex;gap:12px;align-items:center;margin:0 0 6px;font-family:var(--display);font-size:22px;color:#1d2b26}
+.ecz h3 small{display:block;font-family:var(--body);font-size:12px;font-weight:700;letter-spacing:.06em;color:#6b7a73}
+.ecface{font-size:34px}
+.ecq{font-weight:700;color:#1d2b26;margin:12px 0 8px}
+.ecchips{display:flex;flex-wrap:wrap;gap:8px}
+.ecchip{border:0;border-radius:16px;padding:10px 13px;background:#fff;color:#2c3c35;font-weight:600;font-size:15px;box-shadow:0 1px 0 rgba(0,0,0,.06);transition:transform .12s,background .2s;cursor:pointer}
+.ecchip.on{background:var(--z);color:#13211c;transform:scale(1.04)}
+.ecown{width:100%;border:0;border-radius:12px;padding:10px 12px;background:#fff;color:#1d2b26;font:inherit;margin-top:8px}
+.efold{margin:12px 0 4px}
+.efold>summary{cursor:pointer;color:#6b5a2e;font-weight:700;font-size:14px;list-style:none}
+.efold>summary::-webkit-details-marker{display:none}
+.efold>summary::before{content:'＋ '}
+.efold[open]>summary::before{content:'－ '}
+.efold.own>summary::before{content:''}
+.efold.own>summary{color:#6b7a73;font-weight:600;font-size:13px}
+.emo{margin-top:6px}
+.emorow{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+.emob{border:0;border-radius:16px;background:#f1ebdd;padding:10px 0 8px;display:flex;flex-direction:column;align-items:center;gap:2px;cursor:pointer;transition:transform .12s,background .2s}
+.emob span{font-size:30px;line-height:1.1}
+.emob small{font-size:11px;color:#5d6b64;font-weight:600}
+.emob.on{background:var(--c,#ffd27a);transform:scale(1.08);box-shadow:0 4px 14px rgba(0,0,0,.12)}
+.nowpick{padding:16px 18px;margin:0 0 16px}
+.nowrow{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-top:10px}
+.nowb{display:flex;flex-direction:column;align-items:center;gap:4px;text-decoration:none;color:var(--ink);font-size:12px;font-weight:600;text-align:center;padding:10px 2px;border-radius:16px;background:rgba(255,255,255,.06);box-shadow:inset 0 0 0 1px rgba(255,255,255,.1)}
+.nowb span{font-size:30px}
+.newstyle{padding:16px 18px;margin:0 0 16px}
 
 </style>
 </head>
@@ -1091,6 +1128,122 @@ const FIND = [
   ['What am I learning over time?', { label: 'My week in view', to: 'week' }, { label: 'My personal blueprint', to: 'uy-15' }],
 ];
 
+// Quick & easy versions of every chapter: short, tap-only cards.
+// Answers are stored as U.answers[`${ch.key}.e.${key}`] (comma-separated choices + anything typed in "Add my own").
+// Card fields: t = title, p = one short line, g = [key, question, options, single?], game = an existing tap tool.
+const EASY = {
+  // ---------------- Everyday Wellbeing ----------------
+  ew1: { line: 'Better rest starts with small things you can actually control.', cards: [
+    { t: 'How I sleep', p: 'No judgement — just notice.', g: [['sleepnow', 'Most nights I…', ['😴 Sleep well', '🌀 Struggle to fall asleep', '⏰ Wake in the night', '🌅 Wake too early', '📱 Scroll in bed', '🥱 Wake up tired']]] },
+    { t: 'What gets in the way?', p: 'Tap anything that sounds familiar.', g: [['blocks', 'Things that keep me up', ['💭 A busy mind', '📱 My phone', '☕ Late caffeine', '🍷 Alcohol', '👶 Kids or pets', '🔊 Noise or light', '🍕 Eating late', '💼 Work on my mind']]] },
+    { t: 'What helps me wind down', p: 'Pick a few to try this week.', g: [['helps', 'Tonight I could…', ['📵 Phone away at 10', '🛁 A warm shower', '📖 Read a few pages', '🌬️ Slow breathing', '✍️ Write tomorrow’s list', '🌙 Same bedtime', '🎧 A sleep meditation', '🌑 A darker room']]] },
+  ], step: ['📵 Phone out of the bedroom', '🌙 Bed at the same time', '☕ No coffee after 2pm', '🎧 Evening meditation', '🛁 A wind-down routine'] },
+  ew2: { line: 'Self-care is the small, kind stuff that keeps you going — not bubble baths on demand.', cards: [
+    { t: 'What needs attention?', p: 'Where am I running low?', g: [['low', 'I’m running low on…', ['😴 Rest', '🍲 Proper food', '🤝 People', '🌳 Fresh air', '🧘 Quiet time', '😂 Fun', '🏃 Movement', '🩺 Looking after my health']]] },
+    { t: 'On a low-energy day', p: 'A smaller, kinder version of the day.', g: [['lowday', 'On hard days I can…', ['🛋️ Do the bare minimum', '🍞 Easy food is fine', '📞 Text a friend', '🚶 Five minutes outside', '🛏️ Go to bed early', '🙅 Say no to one thing', '🎵 Put music on', '🚿 Just shower']]] },
+  ], step: ['🌳 Ten minutes outside daily', '🍲 One proper meal a day', '📞 Message one friend', '🙅 Say no to one thing', '🛏️ An early night'] },
+  ew3: { line: 'Food that supports your life — no rules, no guilt.', cards: [
+    { t: 'Food and me', p: 'What’s true most days?', g: [['now', 'Most days I…', ['⏭️ Skip breakfast', '🍫 Snack when stressed', '🥗 Eat pretty well', '🍕 Eat on the go', '💧 Forget to drink water', '🌙 Eat late', '🥱 Run out of energy mid-afternoon']]] },
+    { t: 'What I’d like food to help with', p: '', g: [['want', 'I’d like more…', ['⚡ Energy', '😌 Calm around food', '💪 Strength', '🍳 Simple meals', '🥦 Veg', '💧 Water', '⏰ Regular meals']]] },
+  ], step: ['💧 A glass of water each morning', '🍳 A proper breakfast', '🥦 Veg with dinner', '🍎 Healthy snacks to hand', '🍽️ Eat sitting down'] },
+  ew4: { line: 'Your phone is a tool. Let’s make it work for you, not the other way round.', cards: [
+    { t: 'My phone and me', p: 'Tap what fits.', g: [['habits', 'I tend to…', ['🌅 Check it first thing', '🛏️ Scroll in bed', '🔁 Pick it up without thinking', '😬 Feel worse after scrolling', '🔔 Jump at notifications', '🍽️ Use it at meals']]] },
+    { t: 'What I’d rather do', p: 'With some of that time back, I’d…', g: [['rather', 'More time for…', ['📖 Reading', '🚶 Walking', '👨‍👩‍👧 Family', '😴 Sleep', '🎨 A hobby', '🤝 Friends', '🧘 Just being']]] },
+  ], step: ['🔕 Notifications off', '🛏️ Phone charges outside the bedroom', '🍽️ No phones at meals', '⏰ A daily screen limit', '🌅 No phone for the first 30 minutes'] },
+  ew5: { line: 'A short pause — you don’t have to feel calm afterwards for it to count.', cards: [
+    { t: 'One minute, right now', p: 'Press start and just notice.', game: 'minute' },
+    { t: 'How was that?', p: '', g: [['felt', 'Afterwards I felt…', ['😌 A bit calmer', '😐 About the same', '😴 Sleepy', '🌀 Restless', '🙂 More awake', '💭 Thoughts everywhere']]] },
+  ], step: ['☀ The morning meditation', '☾ The evening meditation', '⏱️ One minute at lunch', '🌬️ Three slow breaths before I react'] },
+  ew6: { line: 'See where you are in eight areas of life, then pick one small step.', cards: [
+    { t: 'My Wheel of Life', p: 'Slide each area from 1 to 10, then save.', game: 'wheel' },
+    { t: 'Where I’ll focus', p: 'Just one, for now.', g: [['area', 'The area I want to work on', ['😴 Rest & energy', '✨ Meaning & self', '🍲 Food & body', '🎨 Play & creativity', '🏃 Movement', '🏡 Home & support', '❤️ Relationships', '💼 Work & money'], true]] },
+  ], step: ['📅 Plan one thing this week', '🤝 Ask someone for help', '🗓️ Book time in my diary', '✂️ Drop one thing that drains me'] },
+  ew7: { line: 'Movement that fits your real life — whatever that looks like.', cards: [
+    { t: 'Movement right now', p: 'Honest answers only!', g: [['now', 'Most weeks I…', ['🚶 Walk a fair bit', '🪑 Sit most of the day', '🏋️ Train regularly', '🧘 Stretch sometimes', '😩 Mean to but don’t', '🤕 Hold back because of pain']]] },
+    { t: 'What I’d enjoy', p: '', g: [['enjoy', 'I could see myself…', ['🚶 Walking', '🏊 Swimming', '🚲 Cycling', '💃 Dancing', '🧘 Yoga or stretching', '🏋️ Strength work', '⚽ A team sport', '🌳 Gardening']]] },
+  ], step: ['🚶 A 10-minute walk daily', '🪜 Take the stairs', '🧘 Stretch before bed', '📅 Two workouts this week', '👟 Walk with a friend'] },
+  ew8: { line: 'Notice how your body feels when you move — no diagnosis, just noticing.', cards: [
+    { t: 'Where I notice it', p: 'Tap anywhere that feels stiff or sore.', g: [['where', 'I notice discomfort in my…', ['🦴 Neck', '💪 Shoulders', '🔙 Lower back', '🦵 Hips', '🦿 Knees', '🦶 Feet or ankles', '✋ Hands or wrists', '🙂 Nowhere really']]] },
+    { t: 'What changes it', p: '', g: [['better', 'It feels better with…', ['🚶 Moving', '🔥 Heat', '😴 Rest', '🧘 Stretching', '🛁 A warm bath', '💆 Massage']], ['worse', 'It feels worse with…', ['🪑 Sitting long', '🏋️ Lifting', '😰 Stress', '😴 Poor sleep', '🥶 Cold', '🏃 Too much at once']]] },
+  ], step: ['🧘 Gentle stretching daily', '🪑 Get up every hour', '🚶 Walk after meals', '🩺 Get it checked out', '🔥 Heat before bed'], note: 'If pain is severe, new, or getting worse, please get it checked by a health professional.' },
+  ew9: { line: 'Keep what helps. Let go of what doesn’t.', cards: [
+    { t: 'What’s helped me', p: 'Looking back over the last while…', g: [['helped', 'Things that helped', ['☀ Morning check-ins', '☾ Evening check-ins', '🧘 Meditation', '😴 Better sleep', '🚶 Moving more', '📵 Less phone', '🤝 Talking to someone', '🎯 Small priorities']]] },
+    { t: 'What I’ll let go of', p: '', g: [['drop', 'I’ll stop…', ['😤 Being so hard on myself', '📱 Late scrolling', '🙋 Saying yes to everything', '🏃 Rushing', '😬 Skipping meals', '🧮 Counting everything']]] },
+  ], step: ['☀ Keep my morning check-in', '🧘 Keep meditating', '🎯 Keep one priority a day', '📅 Review again next month'] },
+
+  // ---------------- Understanding Yourself ----------------
+  c01: { line: 'Thoughts and feelings come and go. Noticing them is the first skill.', cards: [
+    { t: 'Right now I feel…', p: 'Tap as many as fit.', g: [['feel', 'My feelings', ['😌 Calm', '😟 Worried', '😤 Frustrated', '😔 Sad', '😊 Content', '😩 Overwhelmed', '😶 Numb', '🙂 Hopeful', '😠 Angry', '😳 Embarrassed']]] },
+    { t: 'Where do I feel it?', p: 'Feelings show up in the body.', g: [['body', 'I notice it in my…', ['🧠 Head', '😬 Jaw', '💪 Shoulders', '💓 Chest', '🌀 Stomach', '✋ Hands', '🦵 Legs', '🤷 Not sure']]] },
+    { t: 'Reflection or rumination?', p: 'Tap what’s true right now.', game: 'rumination' },
+  ], step: ['📝 Name my feeling once a day', '🌬️ Breathe before I react', '⏱️ Give worries a 10-minute slot', '🗣️ Tell someone how I feel'] },
+  c02: { line: 'Your values are your compass. Let’s find your top three.', cards: [
+    { t: 'What matters to me', p: 'Tap your top three — the ones that feel most like you.', g: [['top', 'My values', ['👨‍👩‍👧 Family', '💛 Kindness', '🗽 Freedom', '🤝 Loyalty', '✅ Honesty', '🌱 Growth', '😂 Fun', '🧘 Peace', '💪 Courage', '🎨 Creativity', '🏡 Security', '🙋 Helping others', '🎯 Achievement', '🙏 Faith', '🌍 Adventure', '❤️ Love']]] },
+    { t: 'Living them', p: '', g: [['live', 'I live my values most when I’m…', ['👨‍👩‍👧 With family', '💼 At work', '🤝 With friends', '🌳 On my own', '🏃 Being active', '🎨 Creating', '🙋 Helping others']]] },
+  ], step: ['🎯 Do one thing for my top value', '🙅 Say no to something that clashes', '📌 Put my three values somewhere I’ll see them', '🗣️ Tell someone what matters to me'] },
+  c03: { line: 'Knowing yourself includes how others see you — and you choose what to share.', cards: [
+    { t: 'How I see myself', p: 'Tap the words that fit.', g: [['me', 'I am…', ['💛 Kind', '😂 Funny', '🧠 Thoughtful', '💪 Strong', '🎯 Driven', '😌 Calm', '🌀 Anxious', '🤝 Loyal', '🔥 Passionate', '🙈 Shy']]] },
+    { t: 'How others might see me', p: 'What would a friend say?', g: [['others', 'Others would say I’m…', ['💛 Kind', '😂 Funny', '🧠 Thoughtful', '💪 Strong', '🎯 Driven', '😌 Calm', '😤 Short-tempered', '🤝 Loyal', '🔥 Passionate', '🙈 Quiet']]] },
+    { t: 'The Johari Window', p: 'Tap each box to explore it.', game: 'johari' },
+  ], step: ['🗣️ Ask a friend one thing they value in me', '👂 Listen to feedback without defending', '💬 Share one thing I usually hide', '📝 Notice when I’m at my best'] },
+  c04: { line: 'How we connect with people often starts with how we learned to connect.', cards: [
+    { t: 'When someone pulls away', p: 'My first reaction is usually…', g: [['react', 'I tend to…', ['🏃 Chase after them', '🧊 Go cold', '😰 Worry what I did', '🤷 Shrug it off', '📱 Keep checking my phone', '🗣️ Ask what’s wrong']]] },
+    { t: 'In a disagreement', p: '', g: [['conflict', 'I usually…', ['🔥 Get heated', '🤐 Go quiet', '🚪 Walk away', '🙇 Give in to keep the peace', '🗣️ Talk it through', '😭 Get upset']]] },
+    { t: 'What I need', p: 'To feel close and safe, I need…', g: [['need', 'I need…', ['🤗 Reassurance', '🧘 Space', '🗣️ Honest talk', '⏰ Time', '🤝 Reliability', '😂 Fun together', '👂 To be listened to']]] },
+  ], step: ['⏸️ Pause before I react', '🗣️ Say what I need, kindly', '🤝 Make a repair after a row', '👂 Ask before assuming'] },
+  c05: { line: 'Congruence means what you do matches what matters to you.', cards: [
+    { t: 'Am I living my way?', p: 'Tap what’s true lately.', g: [['now', 'Lately I…', ['🙂 Feel like myself', '🎭 Put on a front', '🙋 Say yes when I mean no', '😩 Feel stretched', '🎯 Act on what matters', '🤐 Hold back what I think']]] },
+    { t: 'What would help', p: '', g: [['help', 'I’d feel more like me if I…', ['🗣️ Spoke up more', '🙅 Said no more', '⏰ Made time for me', '🎨 Did what I love', '🤝 Spent time with my people', '🌳 Slowed down']]] },
+  ], step: ['🗣️ Speak up once this week', '🙅 Say no to one thing', '⏰ Block an hour for me', '🎨 Do something I love'] },
+  c06: { line: 'Sometimes we mean well but don’t quite reach each other.', cards: [
+    { t: 'How I show care', p: 'Tap the ways you show love.', g: [['give', 'I show care by…', ['🗣️ Kind words', '🤗 Hugs', '🎁 Little gifts', '🧹 Doing jobs', '⏰ Spending time', '📱 Checking in']]] },
+    { t: 'How I like to receive it', p: '', g: [['get', 'I feel cared for when someone…', ['🗣️ Says it', '🤗 Hugs me', '🎁 Surprises me', '🧹 Helps me out', '⏰ Gives me time', '👂 Really listens']]] },
+  ], step: ['🗣️ Tell someone how I like to be cared for', '❓ Ask someone how they like it', '🧹 Do one helpful thing', '⏰ Plan time together'] },
+  c07: { line: 'Your own plan for staying calm — ready when you need it.', cards: [
+    { t: 'My 1–10 scale', p: '', game: 'calmscale' },
+    { t: 'Pressures & supports', p: 'Tap what stresses you, and what helps.', game: 'pressures' },
+  ], step: ['📌 Save my plan where I can find it', '🗣️ Tell someone my early signs', '🚪 Practise stepping away', '🌬️ Breathe when I hit 5'] },
+  c08: { line: 'Anger is a normal feeling. A feeling is different from an action.', cards: [
+    { t: 'What sets me off', p: 'Tap what fits.', g: [['trigger', 'I get angry when…', ['🙉 I’m not listened to', '⚖️ Things feel unfair', '😴 I’m tired', '🍽️ I’m hungry', '🕒 I’m rushed', '😒 I’m disrespected', '🏠 There’s chaos at home', '💼 Work piles up']]] },
+    { t: 'What’s under it?', p: 'Anger sometimes sits on top of…', g: [['under', 'Underneath I might feel…', ['😟 Worried', '😔 Hurt', '😩 Overwhelmed', '😳 Embarrassed', '😞 Let down', '🤷 Just angry']]] },
+    { t: 'A two-minute pause', p: 'Try it now, or when anger rises.', game: 'pause' },
+  ], step: ['⏸️ Pause before I respond', '🚪 Step away when I hit 7', '🍽️ Don’t argue hungry or tired', '🗣️ Say “I need a minute”'] },
+  c09: { line: 'Everyone feels lonely sometimes. Connection can start small.', cards: [
+    { t: 'Connection lately', p: '', g: [['now', 'Lately I feel…', ['🤝 Well connected', '😶 A bit lonely', '🏝️ Very alone', '😩 Too busy for people', '🙈 Shy about reaching out', '📱 Connected online, not in person']]] },
+    { t: 'Who’s there for me', p: 'Tap the people and places that help.', g: [['who', 'I can turn to…', ['👨‍👩‍👧 Family', '🤝 A friend', '💑 My partner', '🐶 My pet', '💼 Someone at work', '⛪ A group or club', '🩺 A professional', '📞 A helpline']]] },
+  ], step: ['📞 Ring someone this week', '☕ Meet a friend for coffee', '👋 Say hello to a neighbour', '🏃 Join a class or group'] },
+  c10: { line: 'Boundaries protect what matters to you — they’re not walls.', cards: [
+    { t: 'Where I need a boundary', p: '', g: [['where', 'I need a boundary with…', ['💼 Work', '👨‍👩‍👧 Family', '🤝 A friend', '💑 My partner', '📱 My phone', '🙋 Saying yes too much']]] },
+    { t: 'What I need', p: 'Tap what you’d like to ask for.', g: [['ask', 'I’d like…', ['⏰ More time for me', '📵 No work messages late', '🗣️ To be spoken to kindly', '🧹 A fair share of jobs', '🙅 To say no without guilt', '🧘 Some space']]] },
+    { t: 'How I feel saying it', p: '', g: [['feel', 'Setting this boundary feels…', ['😬 Scary', '😕 Awkward', '💪 Necessary', '😌 Freeing', '😟 Like I’ll upset someone']]] },
+  ], step: ['🙅 Say no once this week', '📵 Set a work-message cut-off', '🗣️ Use the boundary builder', '⏰ Protect one evening for me'] },
+  c11: { line: 'The child you were still shapes how you feel and react today.', cards: [
+    { t: 'As a child I…', p: 'Tap what fits.', g: [['child', 'As a child I…', ['😂 Loved to play', '🙈 Was shy', '🎨 Was creative', '😟 Worried a lot', '🙋 Tried to please', '🏃 Was always on the go', '📚 Loved learning']]] },
+    { t: 'What I needed then', p: '', g: [['needed', 'I needed more…', ['🤗 Hugs', '🗣️ Encouragement', '👂 Listening', '😂 Fun', '🛡️ Safety', '⏰ Time', '🙌 Being told I’m enough']]] },
+  ], step: ['😂 Do something just for fun', '💛 Speak to myself kindly', '🎨 Play or create something', '🤗 Give myself what I needed then'] },
+  c12: { line: 'Play isn’t only for kids. It’s good for your mind.', cards: [
+    { t: 'What I enjoy', p: 'Tap anything that lights you up.', g: [['enjoy', 'I enjoy…', ['🎨 Drawing or painting', '🎵 Music', '💃 Dancing', '🍳 Cooking', '🌳 Being outdoors', '📸 Photos', '🎲 Games', '✍️ Writing', '🧩 Puzzles', '🪴 Gardening']]] },
+    { t: 'What stops me', p: '', g: [['stop', 'I don’t play because…', ['⏰ No time', '😳 Feel silly', '😩 Too tired', '💸 Cost', '🤷 Forgot how']]] },
+  ], step: ['🎵 Put on music and dance', '🎨 Doodle for five minutes', '🎲 A game night', '📸 A photo walk'] },
+  c13: { line: 'Talk to yourself the way you’d talk to a good friend.', cards: [
+    { t: 'My inner voice', p: 'When things go wrong, I tell myself…', g: [['voice', 'I usually say…', ['😤 “You idiot”', '😔 “Typical”', '🤷 “Whatever”', '💛 “It’s okay”', '🙄 “You always do this”', '💪 “You’ll get there”']]] },
+    { t: 'Kinder words', p: 'Pick one to try instead.', g: [['kind', 'I could say…', ['💛 “I’m doing my best”', '🤗 “Anyone would find this hard”', '🌱 “I’m learning”', '😌 “One step at a time”', '💪 “I’ve got through hard days before”'], true]] },
+  ], step: ['💛 Catch one harsh thought a day', '🤗 Treat myself like a friend', '😴 Rest without guilt', '📝 Note one thing I did well'] },
+  c14: { line: 'See where you are, then choose a step that feels possible.', cards: [
+    { t: 'My Wheel of Life', p: 'Slide each area from 1 to 10, then save.', game: 'wheel' },
+    { t: 'My focus', p: 'Just one, for now.', g: [['area', 'The area I want to work on', ['😴 Rest & energy', '✨ Meaning & self', '🍲 Food & body', '🎨 Play & creativity', '🏃 Movement', '🏡 Home & support', '❤️ Relationships', '💼 Work & money'], true]] },
+  ], step: ['📅 Plan one thing this week', '🤝 Ask for help', '🗓️ Put it in my diary', '✂️ Drop one thing that drains me'] },
+  c15: { line: 'Your blueprint pulls together what you’ve learned about yourself.', cards: [
+    { t: 'What keeps me steady', p: '', g: [['steady', 'I feel steady when…', ['😴 I sleep well', '🚶 I move', '🤝 I see my people', '🧘 I get quiet time', '🎯 I have a plan', '🌳 I’m outdoors']]] },
+    { t: 'My early warning signs', p: '', g: [['signs', 'I know I’m overloaded when I…', ['😤 Snap', '📱 Scroll', '🛏️ Can’t sleep', '🍫 Comfort eat', '🤐 Go quiet', '😭 Cry easily']]] },
+    { t: 'What I need most', p: '', g: [['need', 'What helps me most', ['🗣️ Talking it out', '🧘 Space', '🤗 A hug', '🚶 A walk', '🎵 Music', '😴 Sleep']]] },
+  ], step: ['📌 Keep my blueprint handy', '🗣️ Share it with someone close', '📅 Check in with it monthly'] },
+  c16: { line: 'Look back at how far you’ve come.', cards: [
+    { t: 'Since I started', p: 'Tap what’s changed.', g: [['changed', 'I’ve noticed I…', ['😌 Feel calmer', '⏸️ Pause more', '🗣️ Speak up more', '😴 Sleep better', '💛 Am kinder to myself', '🤝 Connect more', '🙅 Say no more', '🤷 Not sure yet']]] },
+    { t: 'What I’m proud of', p: '', g: [['proud', 'I’m proud that I…', ['💪 Kept going', '🧘 Took time for me', '🗣️ Had a hard conversation', '📝 Showed up for myself', '🌱 Tried something new']]] },
+  ], step: ['📅 Come back in a month', '🗓️ Book a session with Ger', '🌱 Start a new chapter', '🎉 Celebrate how far I’ve come'] },
+};
+
 'use strict';
 // =====================================================================
 // Well Mind — data layer.
@@ -1258,7 +1411,7 @@ function setDaily(d, k, v) {
 }
 const listOf = (s) => String(s || '').split('|').filter(Boolean);
 const DAILY_BOUNDS = { sleep: [0, 24], mood: [0, 10], energy: [0, 10], dayScore: [0, 10], steps: [0, 200000], screenHours: [0, 24], screenMinutes: [0, 59], dayKcal: [0, 30000], dayProtein: [0, 2000], dayCarbs: [0, 3000], dayFat: [0, 1000] };
-function checkedIn(d) { const f = daily(d); return ['sleep', 'mood', 'energy', 'mind', 'action', 'care', 'feelings', 'words', 'helps', 'p1', 'p2', 'p3', 'd1', 'd2', 'd3', 'well', 'dayScore', 'medAm', 'medPm'].some((k) => String(f[k] ?? '').trim()); }
+function checkedIn(d) { const f = daily(d); return ['sleep', 'mood', 'energy', 'mind', 'action', 'care', 'feelings', 'words', 'helps', 'p1', 'p2', 'p3', 'd1', 'd2', 'd3', 'well', 'dayScore', 'medAm', 'medPm', 'wellTags'].some((k) => String(f[k] ?? '').trim()); }
 
 // ---------------- Food totals ----------------
 const DAY_KEYS = { calories: 'dayKcal', protein: 'dayProtein', carbs: 'dayCarbs', fat: 'dayFat' };
@@ -1383,6 +1536,7 @@ function uyFields(ch) {
 }
 const pageFields = (n) => (EW_PAGES.find((p) => p.number === n)?.items || []).filter((i) => i.k === 'f').map((i) => i.id);
 function progressOf(j, ch) {
+  if (easy() && EASY[ch.key]) return easyProgress(ch);
   if (j === 'uy') { const ids = uyFields(ch); return { got: ids.filter((id) => UA(id).trim()).length, tot: ids.length }; }
   let got = 0, tot = 0;
   for (const n of ch.pages) for (const id of pageFields(n)) { tot++; const v = pageVal(n, id); if (String(v).trim() && v !== 'false') got++; }
@@ -1511,11 +1665,11 @@ function parseCh(r) {
   if (!m) return null;
   const ch = chOf(m[1], Number(m[2]));
   if (!ch) return null;
-  const total = deck(m[1], ch).length + 2;
+  const total = pdeck(m[1], ch).length + 2;
   return { j: m[1], ch, i: Math.min(Math.max(Number(m[3] || 0), 0), total - 1), total };
 }
 function playerView(P) {
-  const { j, ch, i, total } = P, steps = deck(j, ch);
+  const { j, ch, i, total } = P, steps = pdeck(j, ch);
   const dots = Array.from({ length: total }, (_, k) => `<i class="${k < i ? 'on' : ''} ${k === i ? 'cur' : ''}"></i>`).join('');
   const body = i === 0 ? introCard(j, ch) : i === total - 1 ? finishCard(j, ch) : stepCard(j, ch, steps[i - 1], i);
   const isLast = i === total - 1;
@@ -1525,8 +1679,8 @@ function playerView(P) {
 function introCard(j, ch) {
   const pr = progressOf(j, ch);
   return `<article class="cardx ${dir < 0 ? 'back' : ''}"><div class="intro-hero"><div class="big">${ch.glyph}</div><div><div class="eyebrow">${JOURNEYS[j].title} · ${pad(ch.n)}</div><h2 style="margin:4px 0 0;font-size:32px">${esc(ch.title)}</h2></div></div>
-  ${chLocked(j, ch.n) ? `<div class="preview-tag">Free preview · the first ${PREVIEW_CARDS === 1 ? 'card is' : PREVIEW_CARDS + ' cards are'} open to try</div>` : ''}  <div class="consider"><small>Consider</small>${esc(ch.consider)}</div>${ch.intro.map((p) => `<p class="lead">${esc(p)}</p>`).join('')}
-  <p class="small" style="color:#6b7a73;margin-top:16px">${deck(j, ch).length} cards · answer what helps, skip what doesn’t${pr.got ? ` · you’ve answered ${pr.got} already` : ''}.${isLit(j, ch.n) ? ' ✦ This star is lit.' : ''}</p></article>`;
+  ${chLocked(j, ch.n) ? `<div class="preview-tag">Free preview · the first ${PREVIEW_CARDS === 1 ? 'card is' : PREVIEW_CARDS + ' cards are'} open to try</div>` : ''}  ${easy() && EASY[ch.key] ? `<p class="lead">${esc(EASY[ch.key].line)}</p>` : `<div class="consider"><small>Consider</small>${esc(ch.consider)}</div>${ch.intro.map((p) => `<p class="lead">${esc(p)}</p>`).join('')}`}
+  <p class="small" style="color:#6b7a73;margin-top:16px">${easy() ? '⚡ Quick version · ' : ''}${pdeck(j, ch).length} cards · ${easy() ? 'tap what fits, skip the rest' : 'answer what helps'}, skip what doesn’t${pr.got ? ` · you’ve answered ${pr.got} already` : ''}.${isLit(j, ch.n) ? ' ✦ This star is lit.' : ''}</p></article>`;
 }
 function finishCard(j, ch) {
   const pr = progressOf(j, ch), done = isLit(j, ch.n);
@@ -1534,11 +1688,12 @@ function finishCard(j, ch) {
   <p>${done ? `You lit it on ${pretty(U.done[doneKey(j, ch.n)])}. You can return and add to it any time.` : 'There’s no score to reach. Light it whenever it feels finished enough for now.'}</p>
   <div class="stat-row"><div class="stat"><b>${pr.got}</b><span>of ${pr.tot} prompts</span></div><div class="stat"><b>${done ? '✓' : '+10'}</b><span>${done ? 'lit' : 'sparks'}</span></div></div>
   <div style="display:grid;gap:10px;margin-top:14px">${done ? `<button class="btn" data-act="reveal" data-j="${j}" data-n="${ch.n}">See my insight card</button>` : `<button class="btn" data-act="light" data-j="${j}" data-n="${ch.n}">Light this star ✦</button>`}
-  <a class="btn ghost" href="#share" data-act="share-ch" data-j="${j}" data-n="${ch.n}">Share this chapter with Ger</a><a class="btn ghost" href="${BOOK_URL}" target="_blank" rel="noopener">Talk it through with Ger</a><a class="btn ghost" href="#${rid(j, ch.n, deck(j, ch).length)}" data-dir="-1">← Back to the last card</a><a class="linkbtn" href="#home" style="margin-top:6px">Back to my sky (all chapters)</a></div></article>`;
+  ${easy() ? `<button class="btn ghost" data-act="style-sheet">📖 Want the full chapter? Switch to Go deeper</button>` : ''}<a class="btn ghost" href="#share" data-act="share-ch" data-j="${j}" data-n="${ch.n}">Share this chapter with Ger</a><a class="btn ghost" href="${BOOK_URL}" target="_blank" rel="noopener">Talk it through with Ger</a><a class="btn ghost" href="#${rid(j, ch.n, pdeck(j, ch).length)}" data-dir="-1">← Back to the last card</a><a class="linkbtn" href="#home" style="margin-top:6px">Back to my sky (all chapters)</a></div></article>`;
 }
 function tableHtml(t) { return `<div style="overflow-x:auto"><table class="tbl"><thead><tr>${t.head.map((h) => `<th>${esc(h)}</th>`).join('')}</tr></thead><tbody>${t.rows.map((r) => `<tr>${r.map((c) => `<td>${esc(c)}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`; }
 function stepCard(j, ch, st, i) {
   const back = dir < 0 ? 'back' : '';
+  if (st.t === 'easy') return easyCardHtml(ch, st, i, back);
   if (st.t === 'page') return pageCard(ch, st.n, back);
   if (st.t === 'leader') return `<article class="cardx leader-card ${back}"><div class="crown" aria-hidden="true">♛</div><div class="eyebrow" style="color:var(--gold)">A different lens</div><h2>What would a great leader do?</h2><p class="lead">${esc(st.q)}</p>${uq(ch, st.key, 'My answer')}</article>`;
   if (st.t === 'next') {
@@ -1671,6 +1826,7 @@ const GAMES = {
   },
   calmscale: {
     html(ch) {
+      if (easy()) return easyCalmHtml(ch);
       const Z = [['1', '1–3', 'Calm', 'I feel like myself', '#8fe3a8', 'What I’m like at this level (body, thoughts, what I do):', 'What keeps me here:'], ['2', '4–6', 'Getting wound up', 'Irritable, tense, on edge', '#ffc86b', 'The early signs I notice:', 'What helps me calm down again:'], ['3', '7–10', 'About to explode', 'Or shut down, or fall apart', '#ff8a7a', 'The signs I need to stop and step away:', 'What I need right now (space, a person, fewer demands):']];
       return `<p><b>How it works:</b> 1 is you at your calmest, 5 is getting wound up, and 10 is the moment you explode or shut down. For each stage, write what it looks like for you and what helps. Your plan then powers the <b>Calm meter</b> in your toolkit, so it’s there when you need it.</p>
       <div class="calm-eg"><b>For example</b><span><i style="--z:#8fe3a8">1–3</i>I’m chatty, sleeping well, patient with the kids. <em>Helps:</em> my morning walk.</span><span><i style="--z:#ffc86b">4–6</i>Tight shoulders, short answers, scrolling my phone. <em>Helps:</em> 10 minutes on my own, a glass of water.</span><span><i style="--z:#ff8a7a">7–10</i>Raised voice, slamming doors — or going silent. <em>Helps:</em> leave the room, say “I need 20 minutes”.</span></div>
@@ -1814,6 +1970,7 @@ function homeView() {
   const mem = memory(), wk = prioritySummary(7);
   return page('home', `${hero(`${greeting()}${name ? ', ' + esc(name) : ''}`, 'Your <em>Well Mind</em>', 'Space to notice. Knowledge to use. A step that fits.')}
   <div class="levelbar" style="margin:-6px 2px 18px"><span class="pill"><b>Level ${lv.n}</b></span><div class="track"><div class="fill" style="width:${Math.round(lv.pct * 100)}%"></div></div><span class="small muted">${lv.next ? `${lv.next[0] - lv.sp} ✦ to Level ${lv.n + 1}` : 'Top level reached'}</span></div>
+  ${newStyleCard()}${easy() ? easyNowHtml() : ''}
   <div class="section-h" style="margin-top:6px"><h2>Today</h2><span class="small muted">${pretty(d, { weekday: 'long', day: 'numeric', month: 'long' })}</span></div>
   <div class="quests">${quests.join('')}</div>
   ${showInstallCard() ? installCard() : ''}
@@ -1857,6 +2014,7 @@ function dArea(k, label, ph = 'Optional') { const v = daily(tDate)[k] || ''; ret
 function dNum(k, label, unit, max) { const v = daily(tDate)[k] ?? ''; return `<div class="field"><label for="d-${k}">${label}</label><div class="input-unit"><input type="number" inputmode="numeric" id="d-${k}" min="0" max="${max}" data-dnum="${k}" value="${esc(v)}" placeholder="—"><span>${unit}</span></div></div>`; }
 let tPart = null;
 function todayView(part) {
+  if (easy() && !fullToday) return easyTodayView(part);
   const f = daily(tDate), feel = listOf(f.feelings), helps = listOf(f.helps);
   const pt = part === 'am' || part === 'pm' ? part : tPart || (tDate === today() && isEvening() ? 'pm' : 'am');
   tPart = pt;
@@ -2050,15 +2208,16 @@ function profileView() {
 }
 
 // ---------------- ONBOARDING ----------------
-const obSteps = () => ['welcome', 'feel', 'why', 'focus', 'you', ...(foodOn() ? ['goal', 'targets'] : []), 'rhythm'];
-const OB_LABEL = { feel: 'You', why: 'Why', focus: 'Focus', you: 'Name', goal: 'Goal', targets: 'Targets', rhythm: 'Rhythm' };
+const obSteps = () => ['welcome', 'style', 'feel', 'why', 'focus', 'you', ...(foodOn() ? ['goal', 'targets'] : []), 'rhythm'];
+const OB_LABEL = { style: 'Style', feel: 'You', why: 'Why', focus: 'Focus', you: 'Name', goal: 'Goal', targets: 'Targets', rhythm: 'Rhythm' };
 const obStep = () => { const s = Number(profile().onboardingStep || 0), n = obSteps().length; return Number.isFinite(s) && s >= 0 ? Math.min(s, n - 1) : 0; };
 function onboardingView() {
   const steps = obSteps(), step = obStep(), key = steps[step], p = profile();
   if (key === 'welcome') return welcomeHtml(false);
   const prog = `<ol class="obprog">${steps.slice(1).map((s, i) => `<li class="${i + 1 === step ? 'cur' : i + 1 < step ? 'done' : ''}"><span>${i + 1 < step ? '✓' : i + 1}</span>${OB_LABEL[s]}</li>`).join('')}</ol>`;
   let body, next = 'Continue';
-  if (key === 'feel') body = `<h2>What feels true for you right now?</h2><p>Tick as many as you like. There are no wrong answers — this just helps us point you to the right place.</p>${feelHtml()}`;
+  if (key === 'style') body = `<h2>How do you like to do this?</h2><p>Both have everything in the app. You can switch any time on the Me page.</p>${styleChoiceHtml(false)}`;
+  else if (key === 'feel') body = `<h2>What feels true for you right now?</h2><p>Tick as many as you like. There are no wrong answers — this just helps us point you to the right place.</p>${feelHtml()}`;
   else if (key === 'why') body = whyHtml(), next = 'Choose my focus';
   else if (key === 'focus') body = `<h2>Choose up to three areas to focus on.</h2><p>${(U.feel || []).length ? 'We’ve suggested some from what you ticked — change them freely.' : 'These go to the top of your home page.'} Everything else stays open in your sky.</p>${focusPickHtml()}`;
   else if (key === 'you') body = `<h2>What should we call you?</h2>${foodOn() ? `<p>Because you chose food & body, a few details help suggest daily targets. Skip any you prefer not to give.</p>${P1()}` : `${pField('name', 'Your first name', 'text', { ph: 'Your first name' })}<p class="small" style="color:#6b7a73">Just for your greeting. It stays on this device.</p>`}`;
@@ -2066,7 +2225,7 @@ function onboardingView() {
   else if (key === 'targets') { const t = autoTargets(); body = `<h2>Your daily targets.</h2><p>${t.blocked ? 'You can set your own targets now or later.' : 'Calculated from your answers. Use them as a starting point.'}</p>${targetsHtml(t)}<button class="tog ${t.blocked ? 'on' : ''}" data-act="ob-manual" id="ob-manual" aria-pressed="${!!t.blocked}" style="margin-top:14px"><i></i>I’d rather enter my own targets</button><div id="ob-manual-box" ${t.blocked ? '' : 'hidden'}>${manualInputs(t.blocked ? currentTargets() : t)}</div><div class="note">Estimates for adults, not prescriptions. Seek individual advice with low weight, unintended weight loss, an eating-disorder history, kidney disease, diabetes medicines or a prescribed diet.</div>`; }
   else body = `<h2>Your daily rhythm.</h2><p>Two minutes in the morning to set up your day. Two minutes in the evening to close it. That’s the whole habit.</p><div class="rhythm"><div><span>☀</span><b>Morning</b><small>Sleep, mood, your three priorities and a short meditation</small></div><div><span>☾</span><b>Evening</b><small>Did I do them? What went well? Steps — and a wind-down meditation</small></div></div><h3 class="ph">Want a reminder?</h3>${reminderHtml()}`;
   const last = step === steps.length - 1;
-  return `<div class="wrap">${prog}<article class="cardx" style="--c:#ecc97f">${body}<div style="display:flex;gap:10px;margin-top:22px">${step > 1 ? `<button class="btn ghost" ${DARK_BTN} data-act="ob-back">← Back</button>` : ''}<button class="btn" style="flex:1" data-act="${last ? 'ob-finish' : 'ob-next'}">${last ? 'Light up my sky ✦' : next}</button></div><p class="small" style="color:#6b7a73;margin-top:10px;text-align:center">${key === 'feel' || key === 'focus' ? 'You can change this any time.' : 'Your answers save as you type, so you can leave and come back.'}</p></article></div>`;
+  return `<div class="wrap">${prog}<article class="cardx" style="--c:#ecc97f">${body}<div style="display:flex;gap:10px;margin-top:22px">${step > 1 ? `<button class="btn ghost" ${DARK_BTN} data-act="ob-back">← Back</button>` : ''}<button class="btn" style="flex:1" data-act="${last ? 'ob-finish' : 'ob-next'}">${last ? 'Light up my sky ✦' : next}</button></div><p class="small" style="color:#6b7a73;margin-top:10px;text-align:center">${key === 'feel' || key === 'focus' || key === 'style' ? 'You can change this any time.' : 'Your answers save as you type, so you can leave and come back.'}</p></article></div>`;
 }
 function welcomeHtml(returning) {
   return `<div class="welcome"><div style="max-width:520px"><div class="orbit" aria-hidden="true"><i></i><i></i><span class="core"><img src="assets/emblem.webp" alt=""></span></div><div class="eyebrow">Well Mind · Ger Boland · One Step Forward</div><h1>${returning ? 'A new look for <em>your journal</em>' : 'Stop reacting.<br><em>Start understanding yourself.</em>'}</h1><p class="sub">${returning ? 'Everything you wrote is still here.' : 'Feel calmer, make better choices and get on better with the people around you — at home, at your own pace.'}</p>
@@ -2200,7 +2359,7 @@ function focusCards() {
 
 // ---------------- morning & evening ----------------
 const AM_KEYS = ['sleep', 'mood', 'energy', 'feelings', 'helps', 'p1', 'p2', 'p3', 'action', 'medAm'];
-const PM_KEYS = ['d1', 'd2', 'd3', 'dayScore', 'well', 'mind', 'words', 'steps', 'screenHours', 'screenMinutes', 'care', 'medPm'];
+const PM_KEYS = ['wellTags', 'd1', 'd2', 'd3', 'dayScore', 'well', 'mind', 'words', 'steps', 'screenHours', 'screenMinutes', 'care', 'medPm'];
 const amDone = (d) => AM_KEYS.some((k) => String(daily(d)[k] ?? '').trim());
 const pmDone = (d) => PM_KEYS.filter((k) => k !== 'steps' && k !== 'screenHours' && k !== 'screenMinutes').some((k) => String(daily(d)[k] ?? '').trim()) || (num(daily(d).steps) !== null && ['d1', 'd2', 'd3', 'well'].some((k) => daily(d)[k]));
 const isEvening = () => new Date().getHours() >= 15;
@@ -2378,6 +2537,174 @@ async function startInstall() {
   sheet(`<div class="install-sheet"><img class="install-logo" src="assets/icon-192.png" alt="Well Mind app icon" width="72" height="72"><h2>Put Well Mind on your home screen</h2>${body}</div><button class="btn block" data-act="install-done" style="margin-top:10px">Done ✦</button><button class="linkbtn" data-act="install-hide" style="display:block;margin:12px auto 0;color:#6b7a73">Don’t show this again</button>`);
 }
 
+// ---------------- Easy mode ("Quick & easy") ----------------
+// U.style: 'easy' | 'deep' | '' (not chosen yet = full version, as before).
+const easy = () => U.style === 'easy';
+let fullToday = false; // "show the full check-in" for this visit only
+
+function styleChoiceHtml(dark) {
+  const opt = (k, ic, t, s) => `<button class="stylepick ${U.style === k ? 'on' : ''} ${dark ? 'dark' : ''}" data-act="style-set" data-style="${k}" aria-pressed="${U.style === k}"><span class="sp-ic" aria-hidden="true">${ic}</span><span><b>${t}</b><small>${s}</small></span></button>`;
+  return `<div class="stylepicks">${opt('easy', '⚡', 'Quick & easy', 'Tap, don’t type. Short and simple, with emojis. Perfect if you don’t love reading or writing.')}${opt('deep', '📖', 'Go deeper', 'Read, reflect and write. The full chapters and journaling.')}</div>`;
+}
+function styleSheet() {
+  sheet(`<h2>How do you like to use Well Mind?</h2><p>Switch any time. Nothing you’ve written is lost either way.</p>${styleChoiceHtml(false)}${closeBtn('Done')}`);
+}
+const styleLabel = () => (easy() ? '⚡ Quick & easy' : '📖 Go deeper');
+
+// --- player helpers: a shorter deck in easy mode ---
+function pdeck(j, ch) {
+  const d = deck(j, ch);
+  if (!easy()) return d;
+  const E5 = EASY[ch.key];
+  if (E5) return [...E5.cards.map((c, k) => ({ ...c, title: c.t, t: 'easy', k })), { t: 'easy', step: true }];
+  const short = d.filter((st) => !(st.reflection || st.t === 'next' || st.t === 'leader'));
+  return short.length ? short : d;
+}
+// Move long reading and extra questions into "Read more" / "Write more" folds (easy mode only).
+function easyFold(app) {
+  const card = $('#deck > .cardx', app);
+  if (!card || card.classList.contains('finish') || card.classList.contains('easycard')) return;
+  const isIntro = !!$('.intro-hero', card);
+  const tapCard = !!$('.tog, .feel, .vchip, .ecchip, input[type=range], .calm-eg', card);
+  const read = [], write = [];
+  let seenP = false;
+  for (const el of [...card.children]) {
+    if (el.matches('h2, .eyebrow, .intro-hero, .preview-tag, .consider, .note, .resource, .quickver, .zones, .ec, .ptoggles, .rumi, .meter, .vchips, .sliders, .prios, [data-yt], .med')) continue;
+    if (el.matches('p')) {
+      if (el.matches('.small') && isIntro) continue;
+      if (!seenP) { seenP = true; continue; }
+      read.push(el); continue;
+    }
+    if (el.matches('.steps-list, .example, .quotes, .callout, .paths, .calm-eg, .leader-mini, h3.ph') || el.querySelector?.('table')) { read.push(el); continue; }
+    if (el.matches('.field')) write.push(el);
+  }
+  const fold = (els, label, cls) => { if (!els.length) return; const d = document.createElement('details'); d.className = 'efold ' + cls; d.innerHTML = `<summary>${label}</summary>`; els[0].before(d); els.forEach((x) => d.append(x)); };
+  fold(read, 'Read more', 'read');
+  const keep = tapCard || isIntro ? 0 : 1;
+  const extra = write.slice(keep);
+  fold(extra, keep ? `More questions (${extra.length}) · optional` : `Write something · optional`, 'write');
+}
+
+// --- the calm plan, tap version ---
+const CALM_EASY = {
+  1: { name: 'Calm', range: '1–3', c: '#8fe3a8', face: '😌',
+    sQ: 'When I’m calm, I’m…', s: ['😊 Chatty', '😌 Patient', '😴 Sleeping well', '😂 Laughing easily', '🎯 Focused', '🤗 Kind to myself', '🫶 Good company'],
+    hQ: 'What keeps me here?', h: ['🚶 A walk', '😴 Good sleep', '🎵 Music', '🤝 Time with people', '🌳 Being outside', '🍲 Eating well', '📵 Time off my phone', '🏋️ Exercise'] },
+  2: { name: 'Getting wound up', range: '4–6', c: '#ffc86b', face: '😤',
+    sQ: 'My early warning signs', s: ['😒 Irritable', '💬 Short answers', '💪 Tight shoulders', '📱 Scrolling my phone', '💭 Overthinking', '🙉 Not listening', '🍫 Snacking', '😫 Tired'],
+    hQ: 'What calms me down again?', h: ['🧍 10 minutes alone', '💧 A glass of water', '🌬️ Slow breaths', '🚶 A short walk', '🎧 Music', '🗣️ Telling someone', '✍️ Writing it down', '🚿 A shower'] },
+  3: { name: 'About to explode', range: '7–10', c: '#ff8a7a', face: '🤯',
+    sQ: 'The signs I need to stop', s: ['🗯️ Raised voice', '🚪 Slamming doors', '🤐 Going silent', '💓 Heart racing', '😭 Crying', '🥵 Feeling hot', '💥 Snapping at people', '🏃 Wanting to run'],
+    hQ: 'What I need right now', h: ['🚪 Leave the room', '⏱️ Say “I need 20 minutes”', '🧊 Cold water on my face', '📞 Call someone', '🌬️ Breathe out slowly', '🛋️ Somewhere quiet', '🙅 No big decisions now'] },
+};
+const ecPlain = (s) => s.replace(/^\S+\s/, ''); // drop the emoji
+function ecParts(id) { return UA(id).split(/\s*[,\n]\s*/).map((x) => x.trim()).filter(Boolean); }
+function ecGroup(ch, key, q, opts, c, single) {
+  const id = fid(ch, key), cur = ecParts(id), lc = cur.map((x) => x.toLowerCase());
+  const own = cur.filter((x) => !opts.some((o) => ecPlain(o).toLowerCase() === x.toLowerCase()));
+  return `<div class="ecg"><p class="ecq">${q}</p><div class="ecchips">${opts.map((o) => { const on = lc.includes(ecPlain(o).toLowerCase()); return `<button class="ecchip ${on ? 'on' : ''}" style="--z:${c}" data-ec="${esc(id)}" ${single ? 'data-single="1"' : ''} data-v="${esc(ecPlain(o))}" aria-pressed="${on}">${esc(o)}</button>`; }).join('')}</div>
+  <details class="efold own" ${own.length ? 'open' : ''}><summary>＋ Add my own</summary><input type="text" class="ecown" maxlength="200" data-ecown="${esc(id)}" value="${esc(own.join(', '))}" placeholder="Type your own, separated by commas" aria-label="${esc(q)} — my own"></details></div>`;
+}
+function easyCalmHtml(ch) {
+  return `<div class="quickver">⚡ Quick version · just tap what fits you</div>
+  <p class="ec-how">Think of your mood as a scale from <b>1</b> (calmest) to <b>10</b> (exploding). Tap what each stage looks like for you.</p>
+  <div class="ec">${[1, 2, 3].map((k) => { const z = CALM_EASY[k]; return `<section class="ecz" style="--z:${z.c}"><h3><span class="ecface" aria-hidden="true">${z.face}</span><span><small>${z.range}</small>${z.name}</span></h3>${ecGroup(ch, 'zone.s' + k, z.sQ, z.s, z.c)}${ecGroup(ch, 'zone.h' + k, z.hQ, z.h, z.c)}</section>`; }).join('')}</div>
+  <p class="small" style="color:#6b7a73;margin-top:14px">Your taps become your plan in the <b>Calm meter</b> (Toolkit), ready when you need it.</p>`;
+}
+function ecToggle(btn) {
+  const id = btn.dataset.ec, v = btn.dataset.v, cur = ecParts(id), i = cur.findIndex((x) => x.toLowerCase() === v.toLowerCase());
+  let next;
+  if (btn.dataset.single) { const opts = new Set($$(`[data-ec="${CSS.escape(id)}"]`).map((b) => b.dataset.v.toLowerCase())); next = cur.filter((x) => !opts.has(x.toLowerCase())); if (i < 0) next.unshift(v); $$(`[data-ec="${CSS.escape(id)}"]`).forEach((b) => { b.classList.remove('on'); b.setAttribute('aria-pressed', 'false'); }); }
+  else { next = cur.slice(); if (i >= 0) next.splice(i, 1); else next.push(v); }
+  const first = setUA(id, next.join(', '));
+  const on = i < 0; btn.classList.toggle('on', on); btn.setAttribute('aria-pressed', on); vibrate(6);
+  if (first) { floater(btn); updateChrome(); }
+}
+function ecOwn(input) {
+  const id = input.dataset.ecown, opts = new Set($$(`[data-ec="${CSS.escape(id)}"]`).map((b) => b.dataset.v.toLowerCase()));
+  const picked = ecParts(id).filter((x) => opts.has(x.toLowerCase()));
+  const own = input.value.split(',').map((x) => x.trim()).filter(Boolean);
+  setUA(id, [...picked, ...own].join(', '));
+}
+
+// --- check-ins, tap version ---
+const EMO = {
+  mood: [['😞', 2], ['😕', 4], ['😐', 6], ['🙂', 8], ['😄', 10]],
+  energy: [['🪫', 2], ['😮‍💨', 4], ['😐', 6], ['⚡', 8], ['🚀', 10]],
+  dayScore: [['😫', 2], ['😕', 4], ['😐', 6], ['🙂', 8], ['🤩', 10]],
+  sleep: [['😵‍💫', 4, 'Under 5h'], ['🥱', 5.5, '5–6h'], ['😌', 7, '7h'], ['😴', 8, '8h'], ['🛌', 9, '9h+']],
+};
+const WELL_TAGS = [['😂', 'A laugh'], ['🤝', 'Time with people'], ['🌳', 'Got outside'], ['🏃', 'Moved my body'], ['😴', 'Rested'], ['✅', 'Got stuff done'], ['🍲', 'Ate well'], ['🧘', 'A calm moment'], ['💛', 'Was kind to myself']];
+function emoRow(k, label) {
+  const cur = daily(tDate)[k];
+  return `<div class="emo"><p class="ecq">${label}</p><div class="emorow" role="group" aria-label="${esc(label)}">${EMO[k].map(([e, v, l]) => { const on = String(cur) === String(v); return `<button class="emob ${on ? 'on' : ''}" data-dset="${k}" data-v="${v}" aria-pressed="${on}" aria-label="${esc(l || `${v} out of 10`)}"><span aria-hidden="true">${e}</span>${l ? `<small>${l}</small>` : ''}</button>`; }).join('')}</div></div>`;
+}
+function easyTodayView(part) {
+  const f = daily(tDate), feel = listOf(f.feelings), tags = listOf(f.wellTags);
+  const pt = part === 'am' || part === 'pm' ? part : tPart || (tDate === today() && isEvening() ? 'pm' : 'am');
+  tPart = pt;
+  const chip = (group, v, ic, on) => `<button class="feel ${on ? 'on' : ''}" data-dchip="${group}" data-v="${esc(v)}" aria-pressed="${on}"><span aria-hidden="true">${ic}</span>${esc(v)}</button>`;
+  const tabs = `<div class="seg daypart" role="tablist">${[['am', '☀', 'Morning', amDone(tDate)], ['pm', '☾', 'Evening', pmDone(tDate)]].map(([k, ic, l, dn]) => `<button role="tab" class="${pt === k ? 'on' : ''}" aria-selected="${pt === k}" data-act="tpart" data-part="${k}"><b>${ic} ${l}</b><small>${dn ? '✓ done' : '30 seconds'}</small></button>`).join('')}</div>`;
+  const am = `<article class="cardx" style="--c:#ffd27a"><h2>Good morning${firstName() ? ', ' + esc(firstName()) : ''} ☀</h2>
+  ${emoRow('sleep', 'How did I sleep?')}${emoRow('mood', 'How am I feeling?')}${emoRow('energy', 'My energy')}
+  <p class="ecq">Anything else? <span class="small" style="color:#6b7a73;font-weight:500">tap any</span></p><div class="feel-chips">${FEELINGS.map((x) => chip('feelings', x, FEEL_IC[x], feel.includes(x))).join('')}</div>
+  <div class="field ${f.p1 ? 'answered' : ''}"><label for="d-p1">🎯 One thing for today <span class="small" style="color:#6b7a73;font-weight:500">· optional</span></label><input type="text" maxlength="140" data-d="p1" id="d-p1" value="${esc(f.p1 || '')}" placeholder="e.g. Call Mam, a 10-minute walk"></div>
+  ${medHtml('am')}</article>
+  <div style="margin-top:16px;display:flex;gap:10px;flex-wrap:wrap"><button class="btn" data-act="today-done" data-part="am">Start my day ✦</button></div>`;
+  const pm = `<article class="cardx" style="--c:#9db8ff"><h2>How was today? ☾</h2>
+  ${emoRow('dayScore', 'Today overall')}
+  ${priorities(tDate).length ? `<p class="ecq">My one thing</p>${prioReviewHtml()}` : ''}
+  <p class="ecq">What went well? <span class="small" style="color:#6b7a73;font-weight:500">tap any</span></p><div class="feel-chips">${WELL_TAGS.map(([ic, v]) => chip('wellTags', v, ic, tags.includes(v))).join('')}</div>
+  ${medHtml('pm')}</article>
+  <div style="margin-top:16px;display:flex;gap:10px;flex-wrap:wrap"><button class="btn" data-act="today-done" data-part="pm">Close my day ✦</button></div>`;
+  return page('today', `${hero(pretty(tDate, { weekday: 'long', day: 'numeric', month: 'long' }), pt === 'am' ? 'Set up <em>my day</em>' : 'Close <em>my day</em>', 'Just tap. Leave anything blank.')}
+  ${dateStepper(tDate, 'tday')}${tabs}${pt === 'am' ? am : pm}
+  <p class="small" style="text-align:center;margin-top:14px"><button class="linkbtn small" data-act="full-today">Want to write more? Open the full check-in</button></p>`);
+}
+
+// --- home: "How are you right now?" ---
+const NOW_PICKS = [['😤', 'Wound up', '#calm'], ['😰', 'Anxious', '#minute'], ['😔', 'Low', '#ew-02-4'], ['🥱', 'Can’t switch off', '#ew-01-2'], ['😌', 'Good', '#today']];
+function easyNowHtml() {
+  return `<div class="glass nowpick"><div class="eyebrow">How are you right now?</div><div class="nowrow">${NOW_PICKS.map(([e, l, h]) => `<a class="nowb" href="${h}"><span aria-hidden="true">${e}</span>${l}</a>`).join('')}</div></div>`;
+}
+function newStyleCard() {
+  if (U.style || U.styleHide) return '';
+  return `<div class="glass newstyle"><div class="eyebrow">New ✦ Quick & easy mode</div><p style="margin:6px 0 12px">Prefer tapping to typing? Switch to a shorter version with emojis — no long reading.</p><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn small" data-act="style-set" data-style="easy">⚡ Try Quick & easy</button><button class="btn small ghost" data-act="style-set" data-style="deep">📖 Keep the full version</button></div></div>`;
+}
+
+// --- events ---
+document.addEventListener('click', (e) => {
+  const ec = e.target.closest('[data-ec]');
+  if (ec) { ecToggle(ec); return; }
+  const a = e.target.closest('[data-act]');
+  if (!a) return;
+  const k = a.dataset.act;
+  if (k === 'style-set') {
+    const was = U.style; U.style = a.dataset.style; saveU(true); vibrate(8);
+    if (!onboarded()) { $$('.stylepick').forEach((b) => { const on = b.dataset.style === U.style; b.classList.toggle('on', on); b.setAttribute('aria-pressed', on); }); return; }
+    closeOverlay(); if (was !== U.style) toast(easy() ? 'Quick & easy is on ⚡' : 'Full version is on 📖'); return rerender();
+  }
+  if (k === 'style-sheet') return styleSheet();
+  if (k === 'full-today') { fullToday = true; return rerender(); }
+});
+document.addEventListener('change', (e) => { const i = e.target.closest?.('[data-ecown]'); if (i) ecOwn(i); });
+window.addEventListener('hashchange', () => { if (!route().startsWith('today')) fullToday = false; });
+
+// --- quick & easy chapter cards ---
+function easyGame(ch, name) {
+  if (name === 'wheel') return GAMES.wheel.html(ch, { mode: snapshots().length ? 'later' : 'first' });
+  if (name === 'values') return GAMES.values.html(ch, {});
+  return GAMES[name]?.html(ch, {}) || '';
+}
+function easyCardHtml(ch, st, i, back) {
+  const E5 = EASY[ch.key];
+  if (st.step) return `<article class="cardx easycard ${back}"><div class="eyebrow">Last card</div><h2>My one small step 🌱</h2><p>Pick one thing to try this week. Small is perfect.</p>${ecGroup(ch, 'e.step', 'This week I’ll…', E5.step, ch.hue, true)}${E5.note ? `<div class="note">${esc(E5.note)}</div>` : ''}<p class="small" style="color:#6b7a73;margin-top:14px">Next: light this star ✦ — and if you want the full chapter, switch to “Go deeper” on the Me page.</p></article>`;
+  return `<article class="cardx easycard ${back}"><div class="eyebrow">Card ${i} · ⚡ Quick</div><h2>${esc(st.title)}</h2>${st.p ? `<p>${esc(st.p)}</p>` : ''}${st.game ? easyGame(ch, st.game) : ''}${(st.g || []).map(([k, q, o, single]) => ecGroup(ch, 'e.' + k, q, o, ch.hue, single)).join('')}</article>`;
+}
+function easyKeys(ch) { const E5 = EASY[ch.key]; if (!E5) return []; return [...E5.cards.flatMap((c) => (c.g || []).map((g) => ['e.' + g[0], g[1]])), ['e.step', 'My one small step']]; }
+function easyProgress(ch) { const ks = easyKeys(ch); return { got: ks.filter(([k]) => UA(fid(ch, k)).trim()).length, tot: ks.length }; }
+function easyText(ch) { return easyKeys(ch).map(([k, l]) => [l, UA(fid(ch, k)).trim()]).filter(([, v]) => v).map(([l, v]) => `• ${l}\n  ${v}`).join('\n'); }
+
 'use strict';
 // =====================================================================
 // Well Mind — views part 3: share, me, sheets, render and events.
@@ -2385,7 +2712,8 @@ async function startInstall() {
 // ---------------- SHARE ----------------
 let shareSel = null;
 const shareInit = () => (shareSel = shareSel || { days: '7', parts: { overview: true, daily: true, food: true, move: true, checkins: true }, chapters: new Set(), note: '' });
-function chapterText(j, ch) {
+function chapterText(j, ch) { const t = chapterTextDeep(j, ch), e = easyText(ch); return e ? `${t}\n${e}` : t; }
+function chapterTextDeep(j, ch) {
   const L = [`${JOURNEYS[j].title.toUpperCase()} · ${ch.title.toUpperCase()}`];
   const add = (label, v) => { const t = String(v || '').trim(); if (t && t !== 'false') L.push(`• ${label}\n  ${t === 'true' ? '✓' : t.replace(/\n/g, '\n  ')}`); };
   if (j === 'ew') {
@@ -2427,7 +2755,7 @@ function shareText() {
   if (o.parts.daily) {
     const rows = dates.filter(checkedIn);
     L.push('', 'DAILY CHECK-INS'); if (!rows.length) L.push('None recorded.');
-    for (const d of rows) { const f = daily(d); L.push(`${pretty(d)}: ${[f.sleep && `Sleep ${f.sleep} h`, f.mood && `Mood ${f.mood}/10`, f.energy && `Energy ${f.energy}/10`, f.steps && `Steps ${f.steps}`, listOf(f.feelings).join(', ')].filter(Boolean).join(' · ') || '—'}`); for (const [k, l] of [['words', 'In my words'], ['mind', 'On my mind'], ['helps', 'Might help'], ['needElse', 'Also need'], ['action', 'For myself'], ['care', 'Self-care']]) if (f[k]) L.push(`   ${l}: ${k === 'helps' ? listOf(f[k]).join(', ') : f[k]}`); }
+    for (const d of rows) { const f = daily(d); L.push(`${pretty(d)}: ${[f.sleep && `Sleep ${f.sleep} h`, f.mood && `Mood ${f.mood}/10`, f.energy && `Energy ${f.energy}/10`, f.steps && `Steps ${f.steps}`, listOf(f.feelings).join(', '), f.dayScore && `Day ${f.dayScore}/10`, listOf(f.wellTags).length && `Went well: ${listOf(f.wellTags).join(', ')}`].filter(Boolean).join(' · ') || '—'}`); for (const [k, l] of [['words', 'In my words'], ['mind', 'On my mind'], ['helps', 'Might help'], ['needElse', 'Also need'], ['action', 'For myself'], ['care', 'Self-care']]) if (f[k]) L.push(`   ${l}: ${k === 'helps' ? listOf(f[k]).join(', ') : f[k]}`); }
   }
   if (o.parts.food) {
     const rows = dates.filter(dayHasFood);
@@ -2470,7 +2798,7 @@ function meView() {
   ${planCard()}
   <div class="section-h"><h2>Insight cards</h2></div><p class="small muted" style="margin:-6px 2px 8px">Everyday Wellbeing</p><div class="collection">${cards('ew')}</div><p class="small muted" style="margin:14px 2px 8px">Understanding Yourself</p><div class="collection">${cards('uy')}</div>
   <div class="section-h"><h2>My journal</h2></div>
-  <div class="list"><a class="item" href="#focus"><span class="ic">✧</span><span><b>My focus</b><small>${focusList().length ? focusList().map((k) => FOCUS[k].t).join(' · ') : 'Choose up to three areas'}</small></span><span class="go">›</span></a>
+  <div class="list"><button class="item" data-act="style-sheet"><span class="ic">${easy() ? '⚡' : '📖'}</span><span><b>How I use Well Mind</b><small>${easy() ? 'Quick & easy — tap, don’t type' : 'Go deeper — the full chapters and journaling'} · tap to switch</small></span><span class="go">›</span></button><a class="item" href="#focus"><span class="ic">✧</span><span><b>My focus</b><small>${focusList().length ? focusList().map((k) => FOCUS[k].t).join(' · ') : 'Choose up to three areas'}</small></span><span class="go">›</span></a>
   ${!isStandalone() ? `<button class="item" data-act="install"><span class="ic">📲</span><span><b>Add to my home screen</b><small>Open Well Mind like a normal app, with its own icon</small></span><span class="go">›</span></button>` : ''}
   <a class="item" href="https://www.wellmind.ie/gift/" target="_blank" rel="noopener"><span class="ic">🎁</span><span><b>Give Well Mind as a gift</b><small>A gift card to print or send — perfect for Christmas</small></span><span class="go">›</span></a>
   <a class="item" href="#reminders"><span class="ic">🔔</span><span><b>Reminders</b><small>Morning ${rhythm().am} · evening ${rhythm().pm}</small></span><span class="go">›</span></a>
@@ -2585,6 +2913,7 @@ function afterRender(app, r, P) {
   // share
   const sn = $('[data-sharenote]', app);
   if (sn) sn.addEventListener('input', () => { shareSel.note = sn.value.slice(0, 2000); const t = shareText(); $('[data-sharetext]').value = t; $('[data-sharemail]').href = mailto(t); });
+  if (P && easy()) easyFold(app);
   // swipe
   if (P) {
     const deckEl = $('#deck', app); let x0 = null, y0 = null;
@@ -2684,6 +3013,7 @@ document.addEventListener('click', (e) => {
       const key = obSteps()[obStep()];
       if (key === 'you' && !firstName()) { toast('Add your first name so the journal can greet you.'); return $('#p-name')?.focus(); }
       if (key === 'focus' && !focusList().length) return toast('Pick at least one area — you can change it later.');
+      if (key === 'style' && !U.style) return toast('Pick the one that sounds most like you — you can switch later.');
       if (key === 'feel' && !(U.feel || []).length) U.focus = U.focus || [];
       setProfile('onboardingStep', String(obStep() + 1)); scrollTo(0, 0); return render();
     }
