@@ -774,6 +774,11 @@ body.tod-day #sky::after{opacity:1;background:radial-gradient(900px 520px at 70%
 @media (prefers-reduced-motion: reduce){.badgepop,.dd-inner,.dd-emoji,.plan-item.justdone,.plan-item.justdone .pn,.pill.bump{animation:none!important}.badgepop{transform:translate(-50%,0)}}
 .dd-inner h2{color:#13211c!important}
 .sheet .btn.ghost{background:#fff;color:#1d2b26;box-shadow:inset 0 0 0 1.5px #c9bfa9}
+.ob-install{display:grid;grid-template-columns:52px 1fr;gap:10px 14px;align-items:center;background:#fff3cf;border-radius:20px;padding:14px;margin:0 0 20px;box-shadow:inset 0 0 0 2px #ecc97f}
+.ob-install img{border-radius:14px}
+.ob-install b{display:block;color:#13211c;font-size:16px}
+.ob-install small{display:block;color:#4a5953;font-size:13px;line-height:1.4}
+.ob-install .btn{grid-column:1 / -1}
 
 </style>
 </head>
@@ -2067,13 +2072,13 @@ function homeView() {
   return page('home', `${hero(`${greeting()}${name ? ', ' + esc(name) : ''}`, 'Your <em>Well Mind</em>', 'Here is your plan for today.')}
   ${newStyleCard()}
   ${todayPlanHtml()}
+  ${showInstallCard() ? installCard() : ''}
   ${weekCardPromo()}
   ${extras.length ? `<div class="quests" style="margin-top:14px">${extras.join('')}</div>` : ''}
   ${easy() ? easyNowHtml() : ''}
   ${F ? `<a class="glass myfocus" href="#focus" style="--c:${F.hue}"><span class="fi">${F.ic}</span><span><small>My focus</small><b>${esc(F.t)}</b><small>${fDone} of ${F.ch.length} chapter${F.ch.length === 1 ? '' : 's'} done · tap to change</small></span><span class="go">›</span></a>` : `<a class="glass myfocus" href="#focus"><span class="fi">✧</span><span><small>My focus</small><b>Choose one area to work on</b></span><span class="go">›</span></a>`}
   ${pathListHtml(5)}
   ${!unlocked() ? `<div class="glass" style="margin-top:16px;text-align:center"><p style="margin:0 0 10px">🔒 Locked chapters have a free preview. Open any chapter to see inside.</p><button class="btn small" data-act="unlock">Unlock everything · ${PRICE.lifetime}</button></div>` : ''}
-  ${showInstallCard() ? installCard() : ''}
   ${!U.remindersAdded ? `<a class="nudge" href="#reminders">🔔 Get a reminder each morning and evening ›</a>` : ''}
   <div class="dcard"><div class="eyebrow">Today’s thought</div><p>${esc(dailyCard())}</p></div>
   ${mem ? `<div class="glass memory"><div class="eyebrow">${mem.i >= 28 ? 'One month ago' : 'One week ago'} · ${pretty(mem.d, { weekday: 'long', day: 'numeric', month: 'short' })}</div><p>You wrote ${mem.l}: <q>${esc(mem.t.slice(0, 220))}</q></p></div>` : ''}
@@ -2314,7 +2319,7 @@ function onboardingView() {
   else if (key === 'you') body = `<h2>What should we call you?</h2>${foodOn() ? `<p>Because you chose food & body, a few details help suggest daily targets. Skip any you prefer not to give.</p>${P1()}` : `${pField('name', 'Your first name', 'text', { ph: 'Your first name' })}<p class="small" style="color:#6b7a73">Just for your greeting. It stays on this device.</p>`}`;
   else if (key === 'goal') body = `<h2>What would you like to work towards?</h2><p>This sets your daily food targets.</p>${P2()}`;
   else if (key === 'targets') { const t = autoTargets(); body = `<h2>Your daily targets.</h2><p>${t.blocked ? 'You can set your own targets now or later.' : 'Calculated from your answers. Use them as a starting point.'}</p>${targetsHtml(t)}<button class="tog ${t.blocked ? 'on' : ''}" data-act="ob-manual" id="ob-manual" aria-pressed="${!!t.blocked}" style="margin-top:14px"><i></i>I’d rather enter my own targets</button><div id="ob-manual-box" ${t.blocked ? '' : 'hidden'}>${manualInputs(t.blocked ? currentTargets() : t)}</div><div class="note">Estimates for adults, not prescriptions. Seek individual advice with low weight, unintended weight loss, an eating-disorder history, kidney disease, diabetes medicines or a prescribed diet.</div>`; }
-  else body = `<h2>Your daily rhythm.</h2><p>Two minutes in the morning to set up your day. Two minutes in the evening to close it. That’s the whole habit.</p><div class="rhythm"><div><span>☀</span><b>Morning</b><small>Sleep, mood, your three priorities and a short meditation</small></div><div><span>☾</span><b>Evening</b><small>Did I do them? What went well? Steps — and a wind-down meditation</small></div></div><h3 class="ph">Want a reminder?</h3>${reminderHtml()}`;
+  else body = `${showInstallCard() ? `<div class="ob-install"><img src="assets/icon-192.png" alt="" width="52" height="52"><div><b>First: put Well Mind on your phone</b><small>It opens like a normal app, with the Well Mind logo. Takes 10 seconds.</small></div><button class="btn small" data-act="install">Add to my phone</button></div>` : ''}<h2>Your daily rhythm.</h2><p>Two minutes in the morning to set up your day. Two minutes in the evening to close it. That’s the whole habit.</p><div class="rhythm"><div><span>☀</span><b>Morning</b><small>Sleep, mood, your three priorities and a short meditation</small></div><div><span>☾</span><b>Evening</b><small>Did I do them? What went well? Steps — and a wind-down meditation</small></div></div><h3 class="ph">Want a reminder?</h3>${reminderHtml()}`;
   const last = step === steps.length - 1;
   return `<div class="wrap">${prog}<article class="cardx" style="--c:#ecc97f">${body}<div style="display:flex;gap:10px;margin-top:22px">${step > 1 ? `<button class="btn ghost" ${DARK_BTN} data-act="ob-back">← Back</button>` : ''}<button class="btn" style="flex:1" data-act="${last ? 'ob-finish' : 'ob-next'}">${last ? 'Go to my home page →' : next}</button></div><p class="small" style="color:#6b7a73;margin-top:10px;text-align:center">${key === 'feel' || key === 'focus' || key === 'style' ? 'You can change this any time.' : 'Your answers save as you type, so you can leave and come back.'}</p></article></div>`;
 }
