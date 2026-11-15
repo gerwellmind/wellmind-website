@@ -850,6 +850,9 @@ body.tod-day #sky::after{opacity:1;background:radial-gradient(900px 520px at 70%
 .fl-grid.many{gap:3px}
 .fl-grid.many .fl-head b{font-size:9px;letter-spacing:-.02em;text-overflow:clip;overflow:visible}
 .fl-page{padding-left:6px;padding-right:6px}
+.feelnow{margin:14px 0 4px}
+.fl-nowhead{display:flex;align-items:baseline;justify-content:space-between;gap:10px}
+.fl-nowhead .fl-q{margin-bottom:10px}
 
 </style>
 </head>
@@ -1286,7 +1289,7 @@ const FIND = [
   ['What am I feeling?', { label: 'Daily check-in', to: 'today' }, { label: 'Thoughts & feelings', to: 'uy-01' }],
   ['How can I rest better?', { label: 'An evening routine', to: 'ew-01-2' }, { label: 'Sleep & recovery', to: 'ew-01' }],
   ['What matters to me?', { label: 'Values card sort', to: 'uy-02-1' }, { label: 'Morals & values', to: 'uy-02' }],
-  ['What helps when I feel overloaded?', { label: 'Calm meter', to: 'calm' }, { label: 'My calm plan', to: 'uy-07' }],
+  ['What helps when I feel overloaded?', { label: 'Log how I feel', to: 'feelings' }, { label: 'My calm plan', to: 'uy-07' }],
   ['What can I do on a low-energy day?', { label: 'My low-energy plan', to: 'ew-02-4' }, { label: 'Everyday self-care', to: 'ew-02' }],
   ['Why did I react like that?', { label: 'Before I react', to: 'uy-04-2' }, { label: 'Attachment & connection', to: 'uy-04' }],
   ['How can I set a boundary?', { label: 'Boundary builder', to: 'uy-10-3' }, { label: 'Healthy boundaries', to: 'uy-10' }],
@@ -1998,7 +2001,7 @@ const GAMES = {
     html(ch) {
       if (easy()) return easyCalmHtml(ch);
       const Z = [['1', '1–3', 'Calm', 'I feel like myself', '#8fe3a8', 'What I’m like at this level (body, thoughts, what I do):', 'What keeps me here:'], ['2', '4–6', 'Getting wound up', 'Irritable, tense, on edge', '#ffc86b', 'The early signs I notice:', 'What helps me calm down again:'], ['3', '7–10', 'About to explode', 'Or shut down, or fall apart', '#ff8a7a', 'The signs I need to stop and step away:', 'What I need right now (space, a person, fewer demands):']];
-      return `<p><b>How it works:</b> 1 is you at your calmest, 5 is getting wound up, and 10 is the moment you explode or shut down. For each stage, write what it looks like for you and what helps. Your plan then powers the <b>Calm meter</b> in your toolkit, so it’s there when you need it.</p>
+      return `<p><b>How it works:</b> 1 is you at your calmest, 5 is getting wound up, and 10 is the moment you explode or shut down. For each stage, write what it looks like for you and what helps. Your plan is saved in this chapter, so you can come back to it whenever you need it.</p>
       <div class="calm-eg"><b>For example</b><span><i style="--z:#8fe3a8">1–3</i>I’m chatty, sleeping well, patient with the kids. <em>Helps:</em> my morning walk.</span><span><i style="--z:#ffc86b">4–6</i>Tight shoulders, short answers, scrolling my phone. <em>Helps:</em> 10 minutes on my own, a glass of water.</span><span><i style="--z:#ff8a7a">7–10</i>Raised voice, slamming doors — or going silent. <em>Helps:</em> leave the room, say “I need 20 minutes”.</span></div>
       <div class="zones">${Z.map(([k, r, n, d, c, a, b]) => `<div class="zone" style="--z:${c}"><h3><span>${r}</span>${n}<small style="display:block;font-family:var(--body);font-size:13px;font-weight:500;color:#6b7a73;margin-top:2px">${d}</small></h3>${uq(ch, 'zone.s' + k, a)}${uq(ch, 'zone.h' + k, b)}</div>`).join('')}</div>`;
     },
@@ -2146,7 +2149,7 @@ function homeView() {
   ${showInstallCard() ? installCard() : ''}
   ${weekCardPromo()}
   ${extras.length ? `<div class="quests" style="margin-top:14px">${extras.join('')}</div>` : ''}
-  ${easy() ? easyNowHtml() : ''}
+  ${feelNowHtml()}
   ${F ? `<a class="glass myfocus" href="#focus" style="--c:${F.hue}"><span class="fi">${F.ic}</span><span><small>My focus</small><b>${esc(F.t)}</b><small>${fDone} of ${F.ch.length} chapter${F.ch.length === 1 ? '' : 's'} done · tap to change</small></span><span class="go">›</span></a>` : `<a class="glass myfocus" href="#focus"><span class="fi">✧</span><span><small>My focus</small><b>Choose one area to work on</b></span><span class="go">›</span></a>`}
   ${pathListHtml(5)}
   ${!unlocked() ? `<div class="glass" style="margin-top:16px;text-align:center"><p style="margin:0 0 10px">🔒 Locked chapters have a free preview. Open any chapter to see inside.</p><button class="btn small" data-act="unlock">Unlock everything · ${PRICE.lifetime}</button></div>` : ''}
@@ -2154,7 +2157,7 @@ function homeView() {
   <div class="dcard"><div class="eyebrow">Today’s thought</div><p>${esc(dailyCard())}</p></div>
   ${mem ? `<div class="glass memory"><div class="eyebrow">${mem.i >= 28 ? 'One month ago' : 'One week ago'} · ${pretty(mem.d, { weekday: 'long', day: 'numeric', month: 'short' })}</div><p>You wrote ${mem.l}: <q>${esc(mem.t.slice(0, 220))}</q></p></div>` : ''}
   ${bookCard(false)}
-  <div class="chips-row" style="margin-top:14px"><a class="mini" href="#feelings"><span>🎨</span>Log a feeling</a><a class="mini" href="#find"><span>🧭</span>Find what you need</a><a class="mini" href="#week"><span>🗓</span>My week</a><a class="mini" href="#calm"><span>◯</span>Calm meter</a><a class="mini" href="#tools"><span>🧰</span>All tools</a></div>
+  <div class="chips-row" style="margin-top:14px"><a class="mini" href="#find"><span>🧭</span>Find what you need</a><a class="mini" href="#week"><span>🗓</span>My week</a><a class="mini" href="#feelings"><span>🎨</span>My feelings</a><a class="mini" href="#tools"><span>🧰</span>All tools</a></div>
   <p class="small muted" style="text-align:center;margin:30px 0 0">For adult education and reflection, not diagnosis or therapy. You choose what to share.</p>`);
 }
 function mapSvg(j) {
@@ -2417,7 +2420,7 @@ function focusAskView() {
 
 // ---------------- TOOLS ----------------
 function toolsView() {
-  const items = [['#calm', '◯', 'Calm meter', 'Where am I on my 1–10 scale – and what helps?'], ['#minute', '◌', 'One-minute pause', 'Choose an anchor and notice'], ['#uy-08-3', '✺', 'Two-minute pause', 'A guided pause for when anger rises'], ['#uy-10-3', '▢', 'Boundary builder', '“When…, it affects… I am asking for…”'], ['#uy-02-1', '◆', 'Values card sort', U.values.three.length === 3 ? 'Your three: ' + U.values.three.join(', ') : 'Ten, then five, then three'], ['#ew-06-2', '✹', 'Wheel of Life', snapshots().length ? `${snapshots().length} snapshot(s) saved` : 'Score eight areas of life'], ['#ew-02-4', '♡', 'My low-energy plan', 'A smaller, kinder version of the day'], ['#ew-01-2', '☾', 'An evening routine', 'A wind-down that fits your life'], ['#uy-13-2', '✉', 'Dear me', 'A letter in the tone of a respected friend'], ['#uy-01-3', '✦', 'Reflection or rumination?', 'Notice which is happening; set a stopping point'], ['#find', '🧭', 'Find what you need', 'Thirteen questions, two routes each'], ['#week', '🗓', 'My week in view', 'Notice a pattern']];
+  const items = [['#feelings', '🎨', 'My feelings', 'Tap how you feel and colour in a box'], ['#minute', '◌', 'One-minute pause', 'Choose an anchor and notice'], ['#uy-08-3', '✺', 'Two-minute pause', 'A guided pause for when anger rises'], ['#uy-10-3', '▢', 'Boundary builder', '“When…, it affects… I am asking for…”'], ['#uy-02-1', '◆', 'Values card sort', U.values.three.length === 3 ? 'Your three: ' + U.values.three.join(', ') : 'Ten, then five, then three'], ['#ew-06-2', '✹', 'Wheel of Life', snapshots().length ? `${snapshots().length} snapshot(s) saved` : 'Score eight areas of life'], ['#ew-02-4', '♡', 'My low-energy plan', 'A smaller, kinder version of the day'], ['#ew-01-2', '☾', 'An evening routine', 'A wind-down that fits your life'], ['#uy-13-2', '✉', 'Dear me', 'A letter in the tone of a respected friend'], ['#uy-01-3', '✦', 'Reflection or rumination?', 'Notice which is happening; set a stopping point'], ['#find', '🧭', 'Find what you need', 'Thirteen questions, two routes each'], ['#week', '🗓', 'My week in view', 'Notice a pattern']];
   return page('tools', `${hero('Toolkit', 'Quick <em>tools</em>', 'The most useful exercises, one tap away.')}<div class="list">${items.map(([h, i, t, s]) => `<a class="item" href="${h}"><span class="ic" aria-hidden="true">${i}</span><span><b>${esc(t)}</b><small>${esc(s)}</small></span><span class="go" aria-hidden="true">›</span></a>`).join('')}</div>`);
 }
 let calmVal = 3;
@@ -2455,7 +2458,7 @@ const CODES = {
 
 // ---------------- focus areas ----------------
 const FOCUS = {
-  calm: { t: 'Calm & less reactive', d: 'Pause before you react, with a plan for hard moments.', ic: '◯', hue: '#7fd8c6', ch: [['uy', 7], ['uy', 8]], tool: ['#calm', 'Calm meter'], promise: 'Respond instead of react — with your own calm plan for hard moments.' },
+  calm: { t: 'Calm & less reactive', d: 'Pause before you react, with a plan for hard moments.', ic: '◯', hue: '#7fd8c6', ch: [['uy', 7], ['uy', 8]], tool: ['#uy-07-1', 'My calm plan'], promise: 'Respond instead of react — with your own calm plan for hard moments.' },
   emotions: { t: 'Understanding my emotions', d: 'Name what you feel and what it is telling you.', ic: '✦', hue: '#c4b2ff', ch: [['uy', 1], ['uy', 3]], tool: ['#uy-01-3', 'Reflection or rumination?'], promise: 'Make sense of your feelings instead of being run by them.' },
   boundaries: { t: 'Boundaries & saying no', d: 'Say what you need, kindly and clearly.', ic: '▢', hue: '#ffb3c7', ch: [['uy', 10]], tool: ['#uy-10-3', 'Boundary builder'], promise: 'Say no without the guilt, and yes when you mean it.' },
   relationships: { t: 'Relationships & connection', d: 'Feel closer, heard and understood.', ic: '♡', hue: '#ff9fb0', ch: [['uy', 4], ['uy', 6], ['uy', 9]], tool: null, promise: 'Feel more connected and understood by the people who matter.' },
@@ -2783,7 +2786,7 @@ function easyCalmHtml(ch) {
   return `<div class="quickver">⚡ Quick version · just tap what fits you</div>
   <p class="ec-how">Think of your mood as a scale from <b>1</b> (calmest) to <b>10</b> (exploding). Tap what each stage looks like for you.</p>
   <div class="ec">${[1, 2, 3].map((k) => { const z = CALM_EASY[k]; return `<section class="ecz" style="--z:${z.c}"><h3><span class="ecface" aria-hidden="true">${z.face}</span><span><small>${z.range}</small>${z.name}</span></h3>${ecGroup(ch, 'zone.s' + k, z.sQ, z.s, z.c)}${ecGroup(ch, 'zone.h' + k, z.hQ, z.h, z.c)}</section>`; }).join('')}</div>
-  <p class="small" style="color:#6b7a73;margin-top:14px">Your taps become your plan in the <b>Calm meter</b> (Toolkit), ready when you need it.</p>`;
+  <p class="small" style="color:#6b7a73;margin-top:14px">Your taps are saved as your calm plan. Come back to this chapter whenever you need it.</p>`;
 }
 function ecToggle(btn) {
   const id = btn.dataset.ec, v = btn.dataset.v, cur = ecParts(id), i = cur.findIndex((x) => x.toLowerCase() === v.toLowerCase());
@@ -3325,6 +3328,15 @@ document.addEventListener('click', (e) => {
   if (k === 'fl-custom-del') { U.fcustom = (U.fcustom || []).filter((f) => f.id !== a.dataset.e); saveU(true); closeOverlay(); return rerender(); }
 });
 document.addEventListener('keydown', (e) => { if (e.key === 'Enter' && e.target.id === 'fl-note') $('[data-act="fl-save"], [data-act="fl-edit"]')?.click(); });
+
+// Home: "How do you feel right now?" — tap to colour in a box straight away.
+function feelNowHtml() {
+  const tap = (f) => `<button class="fl-tap" style="--c:${f.c}" data-act="fl-add" data-e="${f.id}"><span aria-hidden="true">${f.ic}</span>${esc(f.label)}</button>`;
+  const todayN = flLog().filter((x) => x.t.slice(0, 10) === today()).length;
+  return `<div class="glass fl-add feelnow"><div class="fl-nowhead"><p class="fl-q">How do you feel right now?</p><a class="linkbtn small" href="#feelings">My feelings ›</a></div>
+  <div class="fl-taps"><div class="fl-row">${FEELS.filter((f) => f.tone === 'pos').map(tap).join('')}</div><div class="fl-row">${FEELS.filter((f) => f.tone !== 'pos').map(tap).join('')}</div></div>
+  <p class="small muted" style="margin:10px 0 0;text-align:center">${todayN ? `You’ve logged ${todayN} feeling${todayN === 1 ? '' : 's'} today. ` : ''}Tap one to colour in a box.</p></div>`;
+}
 
 'use strict';
 // =====================================================================
