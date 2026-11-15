@@ -780,7 +780,6 @@ body.tod-day #sky::after{opacity:1;background:radial-gradient(900px 520px at 70%
 .ob-install small{display:block;color:#4a5953;font-size:13px;line-height:1.4}
 .ob-install .btn{grid-column:1 / -1}
 
-
 /* My moods (week/month colour grid + replay) */
 .mm-tabs{display:flex;gap:8px;margin:4px 0 14px}
 .mm-tabs button{flex:1;padding:10px;border-radius:999px;border:0;font:600 15px system-ui,sans-serif;background:rgba(255,255,255,.07);color:var(--ink);cursor:pointer}
@@ -808,6 +807,7 @@ body.tod-day #sky::after{opacity:1;background:radial-gradient(900px 520px at 70%
 .mm-legend{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin:14px 0;font-size:13px;color:var(--muted)}
 .mm-legend i{display:inline-block;width:12px;height:12px;border-radius:4px;margin-right:5px;vertical-align:-1px}
 .mm-replay{display:block;margin:16px auto 6px}
+
 </style>
 </head>
 <body>
@@ -2646,18 +2646,21 @@ window.addEventListener('appinstalled', () => { installEvt = null; U.installed =
 try { if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {}); } catch (e) {}
 const isStandalone = () => { try { return matchMedia('(display-mode: standalone)').matches || navigator.standalone === true; } catch (e) { return false; } };
 const isIOS = () => /iphone|ipad|ipod/i.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+const isSamsungBrowser = () => /SamsungBrowser/i.test(navigator.userAgent);
+const chromeIntent = () => `intent://${location.host}${location.pathname}#Intent;scheme=https;package=com.android.chrome;S.browser_fallback_url=${encodeURIComponent(location.href)};end`;
 const isInAppBrowser = () => /FBAN|FBAV|Instagram|Line\/|WhatsApp|Messenger|Snapchat|TikTok/i.test(navigator.userAgent);
 const showInstallCard = () => !isStandalone() && !U.installHide && !U.installed;
 function installCard() {
   return `<button class="nudge install" data-act="install"><img src="assets/icon-192.png" alt="" width="40" height="40"><span><b>Put Well Mind on your home screen</b><small>${installEvt ? 'One tap — it opens like a normal app, with the Well Mind logo.' : 'Takes 10 seconds — it opens like a normal app, with the Well Mind logo.'}</small></span><span class="go">›</span></button>`;
 }
 async function startInstall() {
-  if (installEvt) { installEvt.prompt(); const r = await installEvt.userChoice.catch(() => null); installEvt = null; if (r && r.outcome === 'accepted') { U.installed = today(); saveU(); } return rerender(); }
+  if (installEvt && !isSamsungBrowser()) { installEvt.prompt(); const r = await installEvt.userChoice.catch(() => null); installEvt = null; if (r && r.outcome === 'accepted') { U.installed = today(); saveU(); } return rerender(); }
   const step = (n, t) => `<div class="istep"><span>${n}</span><p>${t}</p></div>`;
   let body;
   if (isInAppBrowser()) body = `<p>You’ve opened Well Mind inside another app (like WhatsApp or Instagram). First open it in your phone’s browser:</p>${step(1, 'Tap the <b>⋯</b> or <b>⋮</b> menu at the top or bottom of this screen.')}${step(2, `Choose <b>Open in ${isIOS() ? 'Safari' : 'Chrome'}</b> (or “Open in browser”).`)}${step(3, 'Then tap <b>Put Well Mind on your home screen</b> again.')}`;
+  else if (isSamsungBrowser()) body = `<p>You’re using <b>Samsung Internet</b>. Adding apps from Samsung Internet is not working properly at the moment (your phone may say the app was “built for an older version of Android”). Please use <b>Chrome</b> instead — it only takes a moment:</p><a class="btn block" href="${chromeIntent()}" style="margin:6px 0 14px">Open Well Mind in Chrome</a>${step(1, 'In Chrome, tap the <b>⋮</b> menu at the top right.')}${step(2, 'Tap <b>Add to Home screen</b> or <b>Install app</b>, then <b>Install</b>.')}<p class="small" style="color:#6b7a73">No Chrome? Get it free from the Play Store. Already wrote in Well Mind here? Back up first (Me → Back up my journal) and restore it in Chrome.</p>`;
   else if (isIOS()) body = `<p>On iPhone or iPad:</p>${step(1, 'Tap the <b>Share</b> button <span class="ico">⬆︎</span> — at the bottom of the screen in Safari (at the top right on iPad or in Chrome).')}${step(2, 'Scroll down and tap <b>Add to Home Screen</b> <span class="ico">⊞</span>.')}${step(3, 'Tap <b>Add</b>. The Well Mind logo appears on your home screen.')}<div class="callout" style="--c:#ecc97f"><b>Already written in Well Mind?</b>On iPhone, the home-screen app keeps its own copy of your journal. To bring your entries with you: in this screen go to <b>Me → Back up my journal</b> and copy the code, then open the new icon and use <b>Me → Restore from a backup</b>.</div><p class="small" style="color:#6b7a73">Icon showing the wrong picture? Open the old icon first and back up (Me → Back up my journal) — deleting an icon on iPhone also deletes the journal inside it. Then press and hold it → <b>Remove App</b> → <b>Delete from Home Screen</b>, add it again from Safari, and restore your backup.</p>`;
-  else body = `<p>On Android:</p>${step(1, 'Tap the <b>⋮</b> menu at the top right of Chrome.')}${step(2, 'Tap <b>Add to Home screen</b> or <b>Install app</b>.')}${step(3, 'Tap <b>Install</b> or <b>Add</b>. The Well Mind logo appears on your home screen.')}<p class="small" style="color:#6b7a73">Icon showing the wrong picture? Back up first to be safe (Me → Back up my journal). Then press and hold the old icon, remove it, and add it again.</p>`;
+  else body = `<p>On Android:</p>${step(1, 'Tap the <b>⋮</b> menu at the top right of Chrome.')}${step(2, 'Tap <b>Add to Home screen</b> or <b>Install app</b>.')}${step(3, 'Tap <b>Install</b> or <b>Add</b>. The Well Mind logo appears on your home screen.')}<p class="small" style="color:#6b7a73">If your phone warns that the app was “built for an older version of Android”, tap <b>More details → Install anyway</b>. This is a known Android glitch with web apps — Well Mind is safe. Or use Chrome, which works best.</p><p class="small" style="color:#6b7a73">Icon showing the wrong picture? Back up first to be safe (Me → Back up my journal). Then press and hold the old icon, remove it, and add it again.</p>`;
   sheet(`<div class="install-sheet"><img class="install-logo" src="assets/icon-192.png" alt="Well Mind app icon" width="72" height="72"><h2>Put Well Mind on your home screen</h2>${body}</div><button class="btn block" data-act="install-done" style="margin-top:10px">Done ✦</button><button class="linkbtn" data-act="install-hide" style="display:block;margin:12px auto 0;color:#6b7a73">Don’t show this again</button>`);
 }
 
@@ -2998,7 +3001,6 @@ function celebrateDay() {
   $('[data-act="close"]', o).focus();
   return true;
 }
-
 
 // --- My moods: week / month colour grid with replay (for screen recording) ---
 let mmMode = 'month', mmRef = null;
