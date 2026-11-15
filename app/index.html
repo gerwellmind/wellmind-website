@@ -3226,7 +3226,7 @@ const FEELS = [
 ];
 const CUSTOM_COLORS = ['#f2a7d8', '#9fd3ff', '#e7cf92', '#c4b2ff'];
 const CUSTOM_ICONS = ['😴', '😕', '🥰', '🤩', '😤', '😞', '😳', '🤯', '🥲', '😎', '🤗', '😶'];
-let flMode = 'month', flRef = null, flPending = null;
+let flMode = 'month', flRef = null, flPending = null, flPop = null;
 const allFeels = () => [...FEELS, ...(U.fcustom || []).map((f, i) => ({ ...f, c: CUSTOM_COLORS[i % CUSTOM_COLORS.length] }))];
 const feelOf = (id) => allFeels().find((f) => f.id === id);
 const flLog = () => (U.flog = U.flog || []);
@@ -3254,7 +3254,7 @@ function feelingsView() {
   const maxRows = Math.max(6, ...feels.map((f) => by[f.id].length));
   let k = 0;
   const cols = feels.map((f) => `<div class="fl-col" style="--c:${f.c}"><button class="fl-head" data-act="fl-notes" data-e="${f.id}" aria-label="${esc(f.label)}: ${by[f.id].length} times. Tap to see why."><span aria-hidden="true">${f.ic}</span><b>${esc(f.label)}</b><small>${by[f.id].length}</small></button>
-    <div class="fl-boxes">${Array.from({ length: maxRows }, (_, r) => { const x = by[f.id][r]; return x ? `<button class="fl-box on ${x.n ? 'hasnote' : ''}" style="--i:${k++}" data-act="fl-box" data-i="${x.i}" aria-label="${esc(f.label)}, ${esc(fmtWhen(x.t))}${x.n ? ': ' + esc(x.n) : ''}"></button>` : '<span class="fl-box"></span>'; }).join('')}</div></div>`).join('');
+    <div class="fl-boxes">${Array.from({ length: maxRows }, (_, r) => { const x = by[f.id][r]; return x ? `<button class="fl-box on ${x.n ? 'hasnote' : ''} ${x.i === flPop ? 'pop' : ''}" style="--i:${k++}" data-act="fl-box" data-i="${x.i}" aria-label="${esc(f.label)}, ${esc(fmtWhen(x.t))}${x.n ? ': ' + esc(x.n) : ''}"></button>` : '<span class="fl-box"></span>'; }).join('')}</div></div>`).join('');
   const tap = (f) => `<button class="fl-tap" style="--c:${f.c}" data-act="fl-add" data-e="${f.id}"><span aria-hidden="true">${f.ic}</span>${esc(f.label)}</button>`;
   return page('track', `${hero('My feelings', 'How I <em>felt</em>', 'Every time you feel something, tap it. A box gets coloured in, like ticking boxes on paper.')}
   <div class="glass fl-add"><p class="fl-q">How do you feel right now?</p>
@@ -3273,13 +3273,13 @@ function flAdd(id) {
   const f = feelOf(id); if (!f) return;
   flLog().push({ t: nowIso(), e: id, n: '' }); saveU(true);
   flRef = today();
-  vibrate(10); rerender();
+  vibrate(10);
   const i = flLog().length - 1;
-  requestAnimationFrame(() => { const b = $(`.fl-box[data-i="${i}"]`); if (b) b.classList.add('pop'); });
   flPending = i;
+  if (route() === 'feelings') { flPop = i; rerender(); }
   sheet(`<div class="fl-why"><div class="fl-big" style="--c:${f.c}">${f.ic}</div><h2>${esc(f.label)} ✓</h2><p>A box is coloured in. Want to add why? <span class="muted">(optional)</span></p>
   <input type="text" id="fl-note" maxlength="160" placeholder="${f.tone === 'pos' ? 'e.g. Coffee with a friend' : 'e.g. Too much at work'}" aria-label="Why I feel ${esc(f.label.toLowerCase())} (optional)">
-  <div style="display:grid;gap:10px;margin-top:14px"><button class="btn" data-act="fl-save">Save</button><button class="btn ghost" data-act="close">Skip</button></div></div>`);
+  <div style="display:grid;gap:10px;margin-top:14px"><button class="btn" data-act="fl-save">Save</button><button class="btn ghost" data-act="fl-skip">Skip</button></div></div>`);
   setTimeout(() => $('#fl-note')?.focus(), 150);
 }
 function flBoxSheet(i) {
@@ -3309,7 +3309,14 @@ document.addEventListener('click', (e) => {
   const a = e.target.closest('[data-act]'); if (!a) return;
   const k = a.dataset.act;
   if (k === 'fl-add') return flAdd(a.dataset.e);
-  if (k === 'fl-save') { const v = ($('#fl-note')?.value || '').trim(); if (flPending !== null && flLog()[flPending]) { flLog()[flPending].n = v; saveU(true); } flPending = null; closeOverlay(); if (v) toast('Saved ✓'); return rerender(); }
+  if (k === 'fl-save' || k === 'fl-skip') {
+    const v = k === 'fl-save' ? ($('#fl-note')?.value || '').trim() : '';
+    if (v && flPending !== null && flLog()[flPending]) { flLog()[flPending].n = v; saveU(true); }
+    flPop = flPending; flPending = null; closeOverlay(); if (v) toast('Saved ✓');
+    // Show the grid so you can see your new box
+    if (route() !== 'feelings') { flMode = 'month'; flRef = today(); location.hash = 'feelings'; setTimeout(() => { const b = $('.fl-box.pop'); if (b) b.scrollIntoView({ block: 'center', behavior: 'smooth' }); setTimeout(() => (flPop = null), 900); }, 120); return; }
+    rerender(); setTimeout(() => (flPop = null), 900); return;
+  }
   if (k === 'fl-box') return flBoxSheet(Number(a.dataset.i));
   if (k === 'fl-edit') { const x = flLog()[Number(a.dataset.i)]; if (x) { x.n = ($('#fl-note')?.value || '').trim(); saveU(true); } closeOverlay(); toast('Saved ✓'); return rerender(); }
   if (k === 'fl-del') { flLog().splice(Number(a.dataset.i), 1); saveU(true); closeOverlay(); toast('Box removed'); return rerender(); }
