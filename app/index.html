@@ -2500,8 +2500,9 @@ function suggestFocus() {
   return Object.entries(score).sort((a, b) => b[1] - a[1]).slice(0, 1).map(([k]) => k);
 }
 function feelHtml() {
-  return `<div class="truth">${TRUE_FOR_ME.map(([t], i) => `<button class="truth-b ${(U.feel || []).includes(i) ? 'on' : ''}" data-feel="${i}" aria-pressed="${(U.feel || []).includes(i)}">${esc(t)}</button>`).join('')}</div>`;
+  return `<div class="truth">${TRUE_FOR_ME.map(([t], i) => `<button class="truth-b ${(U.feel || []).includes(i) ? 'on' : ''}" data-feel="${i}" aria-pressed="${(U.feel || []).includes(i)}">${esc(t)}</button>`).join('')}</div><details class="efold own" ${U.feelOwn ? 'open' : ''} style="margin-top:12px"><summary>＋ Add your own</summary><input type="text" maxlength="160" data-feelown value="${esc(U.feelOwn || '')}" placeholder="In your own words, what’s going on for you?" aria-label="In my own words"></details>`;
 }
+document.addEventListener('input', (e) => { const i = e.target.closest?.('[data-feelown]'); if (i) { U.feelOwn = i.value.slice(0, 160); saveU(); } });
 function whyHtml() {
   const keys = focusList().length ? focusList() : suggestFocus();
   const lines = (keys.length ? keys : ['calm', 'emotions', 'values']).map((k) => `<li><span style="--c:${FOCUS[k].hue}">${FOCUS[k].ic}</span>${esc(FOCUS[k].promise)}</li>`).join('');
