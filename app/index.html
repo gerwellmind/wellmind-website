@@ -851,6 +851,12 @@ body.tod-day #sky::after{opacity:1;background:radial-gradient(900px 520px at 70%
 .fl-grid.many .fl-head b{font-size:9px;letter-spacing:-.02em;text-overflow:clip;overflow:visible}
 .fl-page{padding-left:6px;padding-right:6px}
 .feelnow{margin:14px 0 4px}
+.cardx .feelci{background:#fffaf0;border:1px solid #eadfca;box-shadow:none;backdrop-filter:none;color:#1d2b26;margin:18px 0 6px}
+.cardx .feelci .fl-q{color:#1d2b26}
+.cardx .feelci .muted,.cardx .feelci .small{color:#6b7a73}
+.cardx .feelci .fl-tap{color:#1d2b26}
+.cardx .feelci .linkbtn{color:#8a6a2a}
+.fl-nowhead .linkbtn{white-space:nowrap}
 .fl-nowhead{display:flex;align-items:baseline;justify-content:space-between;gap:10px}
 .fl-nowhead .fl-q{margin-bottom:10px}
 
@@ -1584,7 +1590,7 @@ function setDaily(d, k, v) {
 }
 const listOf = (s) => String(s || '').split('|').filter(Boolean);
 const DAILY_BOUNDS = { sleep: [0, 24], mood: [0, 10], energy: [0, 10], dayScore: [0, 10], steps: [0, 200000], screenHours: [0, 24], screenMinutes: [0, 59], dayKcal: [0, 30000], dayProtein: [0, 2000], dayCarbs: [0, 3000], dayFat: [0, 1000] };
-function checkedIn(d) { const f = daily(d); return ['sleep', 'mood', 'energy', 'mind', 'action', 'care', 'feelings', 'words', 'helps', 'p1', 'p2', 'p3', 'd1', 'd2', 'd3', 'well', 'dayScore', 'medAm', 'medPm', 'wellTags'].some((k) => String(f[k] ?? '').trim()); }
+function checkedIn(d) { const f = daily(d); return ['sleep', 'mood', 'energy', 'mind', 'action', 'care', 'feelings', 'words', 'helps', 'p1', 'p2', 'p3', 'd1', 'd2', 'd3', 'well', 'dayScore', 'medAm', 'medPm', 'wellTags', 'wellOwn', 'feelingsPm', 'helpsOwn'].some((k) => String(f[k] ?? '').trim()); }
 
 // ---------------- Food totals ----------------
 const DAY_KEYS = { calories: 'dayKcal', protein: 'dayProtein', carbs: 'dayCarbs', fat: 'dayFat' };
@@ -2193,13 +2199,14 @@ function todayView(part) {
   const tabs = `<div class="seg daypart" role="tablist">${[['am', '☀', 'Morning', amDone(tDate)], ['pm', '☾', 'Evening', pmDone(tDate)]].map(([k, ic, l, dn]) => `<button role="tab" class="${pt === k ? 'on' : ''}" aria-selected="${pt === k}" data-act="tpart" data-part="${k}"><b>${ic} ${l}</b><small>${dn ? '✓ done' : k === 'am' ? 'Set up my day' : 'Close my day'}</small></button>`).join('')}</div>`;
   const am = `<article class="cardx" style="--c:#ffd27a"><h2>Good morning${firstName() ? ', ' + esc(firstName()) : ''}</h2>${sliderField('sleep', 'Sleep last night', 14, 'hrs', 0.5)}${sliderField('mood', 'Mood', 10, '/ 10')}${sliderField('energy', 'Energy', 10, '/ 10')}<p class="small" style="color:#6b7a73">0 = very low · 10 = very good. Untouched means “not recorded”.</p>
   <h3 class="ph">My priorities for today</h3><p>Up to three. Small and specific works best — you’ll check them off tonight.</p>${prioHtml()}
-  <h3 class="ph">How am I feeling?</h3><div class="feel-chips">${FEELINGS.map((x) => chip('feelings', x, FEEL_IC[x], feel.includes(x))).join('')}</div>
-  <h3 class="ph">What might help me today?</h3><div class="feel-chips">${HELPS.map((x) => chip('helps', x, HELP_IC[x], helps.includes(x))).join('')}</div>${dArea('action', 'One small thing I can do for myself today', 'Something small is enough.')}${f.needElse ? dArea('needElse', 'Something else I need') : ''}
+  ${feelNowHtml('checkin')}
+  <h3 class="ph">What might help me today?</h3><div class="feel-chips">${HELPS.map((x) => chip('helps', x, HELP_IC[x], helps.includes(x))).join('')}</div>${ownField('helpsOwn')}${dArea('action', 'One small thing I can do for myself today', 'Something small is enough.')}${f.needElse ? dArea('needElse', 'Something else I need') : ''}
   ${medHtml('am')}</article>
   <div style="margin-top:16px;display:flex;gap:10px;flex-wrap:wrap"><button class="btn" data-act="today-done" data-part="am">Start my day ✦</button><button class="btn ghost" data-act="tpart" data-part="pm">Go to evening</button></div>`;
   const pm = `<article class="cardx" style="--c:#9db8ff"><h2>How did today go?</h2>
   <h3 class="ph" style="margin-top:4px">My priorities</h3>${prioReviewHtml()}
   ${sliderField('dayScore', 'Today overall', 10, '/ 10')}
+  ${feelNowHtml('checkin')}
   ${dArea('well', 'Something that went well today', 'However small.')}${dArea('mind', 'Anything still on my mind? Let it rest here.', 'Write it down so you don’t have to carry it to bed.')}${dArea('words', 'Anything else, in my own words')}
   <h3 class="ph">Steps & screen time</h3><div class="grid2">${dNum('steps', 'Steps today', 'steps', 200000)}<div class="grid2" style="gap:8px">${dNum('screenHours', 'Screen time', 'h', 24)}${dNum('screenMinutes', '&nbsp;', 'min', 59)}</div></div><p class="small" style="color:#6b7a73">Steps are in your phone’s Health or Fit app, or on your watch.</p>
   ${dArea('care', 'Something I did to care for myself')}
@@ -2215,7 +2222,7 @@ function todayView(part) {
 function pastCheckins() {
   const days = Object.keys(E.entries).filter((k) => k.startsWith('daily:')).map((k) => k.slice(6)).filter((d) => d !== tDate && checkedIn(d)).sort().reverse().slice(0, 21);
   if (!days.length) return '';
-  return `<div class="section-h"><h2>Earlier check-ins</h2></div><div class="past">${days.map((d) => { const f = daily(d); const bits = [f.sleep && `Sleep ${f.sleep} h`, f.mood && `Mood ${f.mood}/10`, f.energy && `Energy ${f.energy}/10`, listOf(f.feelings).join(', '), f.words, f.mind && 'On my mind: ' + f.mind, listOf(f.helps).length && 'Might help: ' + listOf(f.helps).join(', '), priorities(d).length && 'Priorities: ' + priorities(d).map((p) => `${p.t}${p.s === 'done' ? ' ✓' : p.s === 'part' ? ' ◐' : p.s === 'not' ? ' ○' : ''}`).join(' · '), f.action && 'For myself: ' + f.action, f.dayScore && `Today overall ${f.dayScore}/10`, f.well && 'Went well: ' + f.well, f.steps && `Steps ${f.steps}`, f.care && 'Care: ' + f.care].filter(Boolean); return `<details><summary>${pretty(d)} ${listOf(f.feelings).map((x) => FEEL_IC[x] || '').join(' ')}</summary>${bits.map((b) => `<p>${esc(b)}</p>`).join('')}<a class="linkbtn small" href="#today" data-act="open-day" data-d="${d}">Open this day</a></details>`; }).join('')}</div>`;
+  return `<div class="section-h"><h2>Earlier check-ins</h2></div><div class="past">${days.map((d) => { const f = daily(d); const bits = [f.sleep && `Sleep ${f.sleep} h`, f.mood && `Mood ${f.mood}/10`, f.energy && `Energy ${f.energy}/10`, [...listOf(f.feelings), ...listOf(f.feelingsPm)].join(', '), f.words, f.mind && 'On my mind: ' + f.mind, (listOf(f.helps).length || f.helpsOwn) && 'Might help: ' + [...listOf(f.helps), f.helpsOwn].filter(Boolean).join(', '), priorities(d).length && 'Priorities: ' + priorities(d).map((p) => `${p.t}${p.s === 'done' ? ' ✓' : p.s === 'part' ? ' ◐' : p.s === 'not' ? ' ○' : ''}`).join(' · '), f.action && 'For myself: ' + f.action, f.dayScore && `Today overall ${f.dayScore}/10`, f.well && 'Went well: ' + f.well, f.steps && `Steps ${f.steps}`, f.care && 'Care: ' + f.care].filter(Boolean); return `<details><summary>${pretty(d)} ${listOf(f.feelings).map((x) => FEEL_IC[x] || '').join(' ')}</summary>${bits.map((b) => `<p>${esc(b)}</p>`).join('')}<a class="linkbtn small" href="#today" data-act="open-day" data-d="${d}">Open this day</a></details>`; }).join('')}</div>`;
 }
 
 // ---------------- WEEK ----------------
@@ -2502,7 +2509,7 @@ function whyHtml() {
 }
 function focusPickHtml() {
   const cur = focusList();
-  return `<div class="focusgrid">${Object.entries(FOCUS).map(([k, f]) => `<button class="focus-b ${cur.includes(k) ? 'on' : ''}" style="--c:${f.hue}" data-focus="${k}" aria-pressed="${cur.includes(k)}"><span class="fi">${f.ic}</span><b>${esc(f.t)}</b><small>${esc(f.d)}</small></button>`).join('')}</div><p class="small" style="color:#6b7a73;margin-top:10px" data-focuscount>Choose one. You can change it any time. All other chapters stay open too.</p>`;
+  return `<div class="focusgrid">${Object.entries(FOCUS).map(([k, f]) => `<button class="focus-b ${cur.includes(k) ? 'on' : ''}" style="--c:${f.hue}" data-focus="${k}" aria-pressed="${cur.includes(k)}"><span class="fi">${f.ic}</span><b>${esc(f.t)}</b><small>${esc(f.d)}</small></button>`).join('')}</div><details class="efold own" ${U.focusOwn ? 'open' : ''} style="margin-top:12px"><summary>＋ Add your own focus</summary><input type="text" maxlength="80" data-focusown value="${esc(U.focusOwn || '')}" placeholder="In your own words, e.g. Feel less lonely" aria-label="My own focus"></details><p class="small" style="color:#6b7a73;margin-top:10px" data-focuscount>Choose one. You can change it any time. All other chapters stay open too.</p>`;
 }
 function toggleFocus(k) {
   U.focus = focusList().includes(k) ? [] : [k]; saveU();
@@ -2518,7 +2525,13 @@ function nextInFocus(k) {
   for (const [j, n] of f.ch) if (!isLit(j, n)) return [j, chOf(j, n)];
   return [f.ch[0][0], chOf(f.ch[0][0], f.ch[0][1])];
 }
+function focusOwnCard() { return U.focusOwn ? `<div class="fcard" style="--c:#c4b2ff"><div class="fhead"><span class="fi">✍</span><div><div class="eyebrow">My own focus</div><h3>${esc(U.focusOwn)}</h3></div></div><a class="linkbtn small" href="#focus">Change ›</a></div>` : ''; }
+document.addEventListener('input', (e) => { const i = e.target.closest?.('[data-focusown]'); if (i) { U.focusOwn = i.value.trim().slice(0, 80); saveU(); } });
 function focusCards() {
+  if (U.focusOwn && !focusList().length) return focusOwnCard();
+  return focusCardsBase() + focusOwnCard();
+}
+function focusCardsBase() {
   const keys = focusList();
   if (!keys.length) return `<a class="quest" href="#focus"><div class="orb">✧</div><div><div class="eyebrow">Make it yours</div><h3>Choose your focus</h3><p>Pick up to three areas that matter to you right now.</p></div></a>`;
   return keys.map((k) => {
@@ -2528,8 +2541,8 @@ function focusCards() {
 }
 
 // ---------------- morning & evening ----------------
-const AM_KEYS = ['sleep', 'mood', 'energy', 'feelings', 'helps', 'p1', 'p2', 'p3', 'action', 'medAm'];
-const PM_KEYS = ['wellTags', 'd1', 'd2', 'd3', 'dayScore', 'well', 'mind', 'words', 'steps', 'screenHours', 'screenMinutes', 'care', 'medPm'];
+const AM_KEYS = ['sleep', 'mood', 'energy', 'feelings', 'helps', 'helpsOwn', 'p1', 'p2', 'p3', 'action', 'medAm'];
+const PM_KEYS = ['wellTags', 'wellOwn', 'feelingsPm', 'd1', 'd2', 'd3', 'dayScore', 'well', 'mind', 'words', 'steps', 'screenHours', 'screenMinutes', 'care', 'medPm'];
 const amDone = (d) => AM_KEYS.some((k) => String(daily(d)[k] ?? '').trim());
 const pmDone = (d) => PM_KEYS.filter((k) => k !== 'steps' && k !== 'screenHours' && k !== 'screenMinutes').some((k) => String(daily(d)[k] ?? '').trim()) || (num(daily(d).steps) !== null && ['d1', 'd2', 'd3', 'well'].some((k) => daily(d)[k]));
 const isEvening = () => new Date().getHours() >= 15;
@@ -2823,15 +2836,16 @@ function easyTodayView(part) {
   const chip = (group, v, ic, on) => `<button class="feel ${on ? 'on' : ''}" data-dchip="${group}" data-v="${esc(v)}" aria-pressed="${on}"><span aria-hidden="true">${ic}</span>${esc(v)}</button>`;
   const tabs = `<div class="seg daypart" role="tablist">${[['am', '☀', 'Morning', amDone(tDate)], ['pm', '☾', 'Evening', pmDone(tDate)]].map(([k, ic, l, dn]) => `<button role="tab" class="${pt === k ? 'on' : ''}" aria-selected="${pt === k}" data-act="tpart" data-part="${k}"><b>${ic} ${l}</b><small>${dn ? '✓ done' : '30 seconds'}</small></button>`).join('')}</div>`;
   const am = `<article class="cardx" style="--c:#ffd27a"><h2>Good morning${firstName() ? ', ' + esc(firstName()) : ''} ☀</h2>
-  ${emoRow('sleep', 'How did I sleep?')}${emoRow('mood', 'How am I feeling?')}${emoRow('energy', 'My energy')}
-  <p class="ecq">Anything else? <span class="small" style="color:#6b7a73;font-weight:500">tap any</span></p><div class="feel-chips">${FEELINGS.map((x) => chip('feelings', x, FEEL_IC[x], feel.includes(x))).join('')}</div>
+  ${emoRow('sleep', 'How did I sleep?')}${emoRow('mood', 'My mood overall')}${emoRow('energy', 'My energy')}
+  ${feelNowHtml('checkin')}
   <div class="field ${f.p1 ? 'answered' : ''}"><label for="d-p1">🎯 One thing for today <span class="small" style="color:#6b7a73;font-weight:500">· optional</span></label><input type="text" maxlength="140" data-d="p1" id="d-p1" value="${esc(f.p1 || '')}" placeholder="e.g. Call Mam, a 10-minute walk"></div>
   ${medHtml('am')}</article>
   <div style="margin-top:16px;display:flex;gap:10px;flex-wrap:wrap"><button class="btn" data-act="today-done" data-part="am">Start my day ✦</button></div>`;
   const pm = `<article class="cardx" style="--c:#9db8ff"><h2>How was today? ☾</h2>
   ${emoRow('dayScore', 'Today overall')}
+  ${feelNowHtml('checkin')}
   ${priorities(tDate).length ? `<p class="ecq">My one thing</p>${prioReviewHtml()}` : ''}
-  <p class="ecq">What went well? <span class="small" style="color:#6b7a73;font-weight:500">tap any</span></p><div class="feel-chips">${WELL_TAGS.map(([ic, v]) => chip('wellTags', v, ic, tags.includes(v))).join('')}</div>
+  <p class="ecq">What went well? <span class="small" style="color:#6b7a73;font-weight:500">tap any</span></p><div class="feel-chips">${WELL_TAGS.map(([ic, v]) => chip('wellTags', v, ic, tags.includes(v))).join('')}</div>${ownField('wellOwn')}
   ${medHtml('pm')}</article>
   <div style="margin-top:16px;display:flex;gap:10px;flex-wrap:wrap"><button class="btn" data-act="today-done" data-part="pm">Close my day ✦</button></div>`;
   return page('today', `${hero(pretty(tDate, { weekday: 'long', day: 'numeric', month: 'long' }), pt === 'am' ? 'Set up <em>my day</em>' : 'Close <em>my day</em>', 'Just tap. Leave anything blank.')}
@@ -3272,6 +3286,7 @@ function feelingsView() {
 function flAdd(id) {
   const f = feelOf(id); if (!f) return;
   flLog().push({ t: nowIso(), e: id, n: '' }); saveU(true);
+  if (route().startsWith('today')) { const key = tPart === 'pm' ? 'feelingsPm' : 'feelings', cur = listOf(daily(tDate)[key]); if (!cur.includes(f.label)) { setDaily(tDate, key, [...cur, f.label].join('|')); updateChrome(); } }
   flRef = today();
   vibrate(10);
   const i = flLog().length - 1;
@@ -3314,6 +3329,7 @@ document.addEventListener('click', (e) => {
     if (v && flPending !== null && flLog()[flPending]) { flLog()[flPending].n = v; saveU(true); }
     flPop = flPending; flPending = null; closeOverlay(); if (v) toast('Saved ✓');
     // Show the grid so you can see your new box
+    if (route().startsWith('today')) { rerender(); setTimeout(() => (flPop = null), 900); return; }
     if (route() !== 'feelings') { flMode = 'month'; flRef = today(); location.hash = 'feelings'; setTimeout(() => { const b = $('.fl-box.pop'); if (b) b.scrollIntoView({ block: 'center', behavior: 'smooth' }); setTimeout(() => (flPop = null), 900); }, 120); return; }
     rerender(); setTimeout(() => (flPop = null), 900); return;
   }
@@ -3337,13 +3353,20 @@ document.addEventListener('click', (e) => {
 document.addEventListener('keydown', (e) => { if (e.key === 'Enter' && e.target.id === 'fl-note') $('[data-act="fl-save"], [data-act="fl-edit"]')?.click(); });
 
 // Home: "How do you feel right now?" — tap to colour in a box straight away.
-function feelNowHtml() {
+function feelNowHtml(ctx) {
   const tap = (f) => `<button class="fl-tap" style="--c:${f.c}" data-act="fl-add" data-e="${f.id}"><span aria-hidden="true">${f.ic}</span>${esc(f.label)}</button>`;
-  const todayN = flLog().filter((x) => x.t.slice(0, 10) === today()).length;
-  return `<div class="glass fl-add feelnow"><div class="fl-nowhead"><p class="fl-q">How do you feel right now?</p><a class="linkbtn small" href="#feelings">My feelings ›</a></div>
-  <div class="fl-taps"><div class="fl-row">${FEELS.filter((f) => f.tone === 'pos').map(tap).join('')}</div><div class="fl-row">${FEELS.filter((f) => f.tone !== 'pos').map(tap).join('')}</div></div>
-  <p class="small muted" style="margin:10px 0 0;text-align:center">${todayN ? `You’ve logged ${todayN} feeling${todayN === 1 ? '' : 's'} today. ` : ''}Tap one to colour in a box.</p></div>`;
+  const feels = allFeels();
+  const ci = ctx === 'checkin';
+  const todayL = flLog().filter((x) => x.t.slice(0, 10) === today());
+  const todayN = todayL.length;
+  const marks = ci && todayN ? `<p class="small" style="margin:10px 0 0;text-align:center">Today so far: <span style="font-size:20px;letter-spacing:2px">${todayL.slice(-12).map((x) => feelOf(x.e)?.ic || '').join('')}</span></p>` : '';
+  return `<div class="glass fl-add feelnow ${ci ? 'feelci' : ''}"><div class="fl-nowhead"><p class="fl-q">How do you feel right now?</p><a class="linkbtn small" href="#feelings">My feelings ›</a></div>
+  <div class="fl-taps"><div class="fl-row">${feels.filter((f) => f.tone === 'pos').map(tap).join('')}</div><div class="fl-row">${feels.filter((f) => f.tone !== 'pos').map(tap).join('')}</div></div>
+  <button class="linkbtn fl-own" data-act="fl-custom">＋ Add your own feeling</button>
+  ${marks}<p class="small muted" style="margin:10px 0 0;text-align:center">${!ci && todayN ? `You’ve logged ${todayN} feeling${todayN === 1 ? '' : 's'} today. ` : ''}Tap one to colour in a box${ci ? ' on your feelings board' : ''}. Tap as many as fit.</p></div>`;
 }
+// "Add your own" text box under a list of choices (check-ins)
+function ownField(k, label = '＋ Add your own') { const v = daily(tDate)[k] || ''; return `<details class="efold own" ${v.trim() ? 'open' : ''}><summary>${label}</summary><input type="text" maxlength="200" data-d="${k}" id="d-${k}" value="${esc(v)}" placeholder="Type your own" aria-label="My own"></details>`; }
 
 'use strict';
 // =====================================================================
@@ -3395,7 +3418,7 @@ function shareText() {
   if (o.parts.daily) {
     const rows = dates.filter(checkedIn);
     L.push('', 'DAILY CHECK-INS'); if (!rows.length) L.push('None recorded.');
-    for (const d of rows) { const f = daily(d); L.push(`${pretty(d)}: ${[f.sleep && `Sleep ${f.sleep} h`, f.mood && `Mood ${f.mood}/10`, f.energy && `Energy ${f.energy}/10`, f.steps && `Steps ${f.steps}`, listOf(f.feelings).join(', '), f.dayScore && `Day ${f.dayScore}/10`, listOf(f.wellTags).length && `Went well: ${listOf(f.wellTags).join(', ')}`].filter(Boolean).join(' · ') || '—'}`); for (const [k, l] of [['words', 'In my words'], ['mind', 'On my mind'], ['helps', 'Might help'], ['needElse', 'Also need'], ['action', 'For myself'], ['care', 'Self-care']]) if (f[k]) L.push(`   ${l}: ${k === 'helps' ? listOf(f[k]).join(', ') : f[k]}`); }
+    for (const d of rows) { const f = daily(d); L.push(`${pretty(d)}: ${[f.sleep && `Sleep ${f.sleep} h`, f.mood && `Mood ${f.mood}/10`, f.energy && `Energy ${f.energy}/10`, f.steps && `Steps ${f.steps}`, [...listOf(f.feelings), ...listOf(f.feelingsPm)].join(', '), f.dayScore && `Day ${f.dayScore}/10`, (listOf(f.wellTags).length || f.wellOwn) && `Went well: ${[...listOf(f.wellTags), f.wellOwn].filter(Boolean).join(', ')}`].filter(Boolean).join(' · ') || '—'}`); for (const [k, l] of [['words', 'In my words'], ['mind', 'On my mind'], ['helps', 'Might help'], ['helpsOwn', 'Might also help'], ['needElse', 'Also need'], ['action', 'For myself'], ['care', 'Self-care']]) if (f[k]) L.push(`   ${l}: ${k === 'helps' ? listOf(f[k]).join(', ') : f[k]}`); }
   }
   if (o.parts.food) {
     const rows = dates.filter(dayHasFood);
