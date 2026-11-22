@@ -2588,7 +2588,6 @@ function icsText() {
 }
 // ---------------- push notifications ----------------
 const PUSH_API = ''; // set to the reminder server's address to switch push on
-const PUSH_KEY = 'BLHg1oCetZo7anZmfqhmRM9hpchq9pxVzSJzbrgiJ5dvIkkI2_qwc4nIZ2NHwL3-w8SbKVa3c-zV32my3EwAVv8';
 const pushSupported = () => 'serviceWorker' in navigator && 'PushManager' in window && 'Notification' in window && location.protocol === 'https:';
 function keyBytes(b64) { const s = atob(b64.replace(/-/g, '+').replace(/_/g, '/') + '==='.slice((b64.length + 3) % 4)); return Uint8Array.from(s, (c) => c.charCodeAt(0)); }
 function pushPost(path, body) { return fetch(PUSH_API + path, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) }).then((r) => r.json().then((j) => (r.ok ? j : Promise.reject(j)))); }
@@ -2604,7 +2603,7 @@ async function pushOn() {
   if (perm !== 'granted') { rerender(); return toast('Notifications weren’t allowed. You can still use the calendar reminders below.'); }
   try {
     const reg = await navigator.serviceWorker.ready;
-    const sub = (await reg.pushManager.getSubscription()) || (await reg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: keyBytes(PUSH_KEY) }));
+    const sub = (await reg.pushManager.getSubscription()) || (await reg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: keyBytes((await (await fetch(PUSH_API + '/key')).json()).key) }));
     U.pushId = U.pushId || (Date.now().toString(36) + Math.random().toString(36).slice(2, 12));
     await pushSync(sub);
     U.push = 1; U.remindersAdded = U.remindersAdded || today(); saveU(); rerender(); burst('#9db8ff', 60);
