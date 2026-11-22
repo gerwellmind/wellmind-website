@@ -861,6 +861,9 @@ body.tod-day #sky::after{opacity:1;background:radial-gradient(900px 520px at 70%
 .fl-nowhead .fl-q{margin-bottom:10px}
 
 </style>
+<!-- GoatCounter: cookie-free, no personal data -->
+<script>window.goatcounter={path:function(p){return p.split('?')[0]}};window.wmEv=function(n){var t=0,f=function(){if(window.goatcounter&&window.goatcounter.count){window.goatcounter.count({path:n,title:n,event:true})}else if(t++<40){setTimeout(f,250)}};f()};(function(){var q=location.search+location.hash;if(/unlock[=\/]LIFE-/.test(q))wmEv('purchase-app');else if(/unlock[=\/]GIFT-/.test(q))wmEv('gift-opened');if(/\/gift\/card-/.test(location.pathname)&&/order=/.test(location.search))wmEv('purchase-gift')})()</script>
+<script data-goatcounter="https://wellmind.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 </head>
 <body>
 <div id="sky" aria-hidden="true"></div>
@@ -2416,7 +2419,7 @@ function obFinish() {
     else if (!t.blocked && t.goal) saveTargets(t, 'auto', `Calculated at set-up for ${GOALS[t.goal][0].toLowerCase()}`);
     if (num(profile().weight) !== null) { setProfile('startWeight', profile().weight); setProfile('weightDate', today()); }
   }
-  setProfile('onboardingStep', 'done'); setProfile('onboardedAt', today());
+  setProfile('onboardingStep', 'done'); setProfile('onboardedAt', today()); try{window.wmEv&&wmEv('free-start')}catch(e){}
   U.seen = 'v6'; U.focusAsked = today(); saveAll(); burst('#ecc97f', 130); vibrate([20, 40, 30]);
   toast(`Welcome${firstName() ? ', ' + firstName() : ''}. Your home page is ready ✓`);
   go('home');
