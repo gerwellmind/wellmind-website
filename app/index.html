@@ -2587,7 +2587,7 @@ function icsText() {
   return ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//Well Mind//Reminders//EN', 'CALSCALE:GREGORIAN', ev('am'), ev('pm'), 'END:VCALENDAR'].join('\r\n');
 }
 // ---------------- push notifications ----------------
-const PUSH_API = ''; // set to the reminder server's address to switch push on
+const PUSH_API = 'https://wellmind-push.morning-k-ko-f45.workers.dev'; // set to the reminder server's address to switch push on
 const pushSupported = () => 'serviceWorker' in navigator && 'PushManager' in window && 'Notification' in window && location.protocol === 'https:';
 function keyBytes(b64) { const s = atob(b64.replace(/-/g, '+').replace(/_/g, '/') + '==='.slice((b64.length + 3) % 4)); return Uint8Array.from(s, (c) => c.charCodeAt(0)); }
 function pushPost(path, body) { return fetch(PUSH_API + path, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) }).then((r) => r.json().then((j) => (r.ok ? j : Promise.reject(j)))); }
