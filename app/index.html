@@ -2586,10 +2586,52 @@ function icsText() {
   const ev = (w) => { const [s, e] = calDates(rhythm()[w]); return ['BEGIN:VEVENT', `UID:wellmind-${w}-${Date.now()}@wellmind.ie`, `DTSTAMP:${new Date().toISOString().replace(/[-:]/g, '').slice(0, 15)}Z`, `DTSTART:${s}`, `DTEND:${e}`, 'RRULE:FREQ=DAILY', `SUMMARY:${REM[w][0]}`, `DESCRIPTION:${REM[w][1]} ${appUrl()}#today`, `URL:${appUrl()}#today`, 'BEGIN:VALARM', 'ACTION:DISPLAY', `DESCRIPTION:${REM[w][0]}`, 'TRIGGER:-PT1M', 'END:VALARM', 'END:VEVENT'].join('\r\n'); };
   return ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//Well Mind//Reminders//EN', 'CALSCALE:GREGORIAN', ev('am'), ev('pm'), 'END:VCALENDAR'].join('\r\n');
 }
+// ---------------- push notifications ----------------
+const PUSH_API = ''; // set to the reminder server's address to switch push on
+const PUSH_KEY = 'BLHg1oCetZo7anZmfqhmRM9hpchq9pxVzSJzbrgiJ5dvIkkI2_qwc4nIZ2NHwL3-w8SbKVa3c-zV32my3EwAVv8';
+const pushSupported = () => 'serviceWorker' in navigator && 'PushManager' in window && 'Notification' in window && location.protocol === 'https:';
+function keyBytes(b64) { const s = atob(b64.replace(/-/g, '+').replace(/_/g, '/') + '==='.slice((b64.length + 3) % 4)); return Uint8Array.from(s, (c) => c.charCodeAt(0)); }
+function pushPost(path, body) { return fetch(PUSH_API + path, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) }).then((r) => r.json().then((j) => (r.ok ? j : Promise.reject(j)))); }
+async function pushSync(sub) {
+  if (!sub) { const reg = await navigator.serviceWorker.ready; sub = await reg.pushManager.getSubscription(); }
+  if (!sub) { U.push = 0; saveU(); return false; }
+  const r = rhythm();
+  await pushPost('/subscribe', { id: U.pushId, endpoint: sub.endpoint, am: r.am, pm: r.pm, tz: Intl.DateTimeFormat().resolvedOptions().timeZone || 'Europe/Dublin' });
+  U.pushSynced = today(); saveU(); return true;
+}
+async function pushOn() {
+  const perm = await Notification.requestPermission();
+  if (perm !== 'granted') { rerender(); return toast('Notifications weren’t allowed. You can still use the calendar reminders below.'); }
+  try {
+    const reg = await navigator.serviceWorker.ready;
+    const sub = (await reg.pushManager.getSubscription()) || (await reg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: keyBytes(PUSH_KEY) }));
+    U.pushId = U.pushId || (Date.now().toString(36) + Math.random().toString(36).slice(2, 12));
+    await pushSync(sub);
+    U.push = 1; U.remindersAdded = U.remindersAdded || today(); saveU(); rerender(); burst('#9db8ff', 60);
+    toast('Notifications are on ✦ See you in the morning.');
+  } catch (e) { toast('Couldn’t turn notifications on just now. Please try again in a moment.'); }
+}
+async function pushOff() {
+  try { const reg = await navigator.serviceWorker.ready, sub = await reg.pushManager.getSubscription(); if (sub) await sub.unsubscribe(); } catch (e) {}
+  if (U.pushId) pushPost('/unsubscribe', { id: U.pushId }).catch(() => {});
+  U.push = 0; saveU(); rerender(); toast('Notifications are off.');
+}
+function pushTest() { pushPost('/test', { id: U.pushId }).then(() => toast('Sent! It should arrive in a few seconds.')).catch(() => toast('Couldn’t send a test just now. Try turning notifications off and on again.')); }
+function pushHtml() {
+  if (!PUSH_API) return '';
+  const r = rhythm(), head = '<h3 class="ph" style="margin-top:20px">📲 App notifications</h3>';
+  let inner;
+  if (isIOS() && !isStandalone()) inner = `<p class="small" style="color:#6b7a73">On iPhone, notifications work once Well Mind is on your home screen: tap <b>Share</b> <span aria-hidden="true">⎋</span> → <b>Add to Home Screen</b>, then open Well Mind from your home screen and come back here.</p><div class="remrow"><button class="btn small" data-act="install">📲 Show me how</button></div>`;
+  else if (!pushSupported()) inner = `<p class="small" style="color:#6b7a73">This browser can’t show notifications. Use the calendar reminders below instead.</p>`;
+  else if (Notification.permission === 'denied') inner = `<p class="small" style="color:#6b7a73">Notifications are blocked for Well Mind. Allow them in your phone or browser settings, then come back here.</p>`;
+  else if (U.push && Notification.permission === 'granted') inner = `<p class="small" style="color:#6b7a73">✓ <b>Notifications are on</b>: every morning at ${r.am} and evening at ${r.pm}. Change the times above and they update automatically.</p><div class="remrow"><button class="btn small ghost" ${DARK_BTN} data-act="push-test">Send me a test</button><button class="btn small ghost" ${DARK_BTN} data-act="push-off">Turn off</button></div>`;
+  else inner = `<p class="small" style="color:#6b7a73">Get a gentle notification on this phone at your morning and evening times.</p><div class="remrow"><button class="btn small" data-act="push-on">🔔 Turn on notifications</button></div>`;
+  return head + inner + '<h3 class="ph">📅 Or use your calendar</h3>';
+}
 function reminderHtml() {
   const r = rhythm();
   return `<div class="grid2"><div class="field"><label for="r-am">Morning check-in</label><input type="time" id="r-am" data-rhythm="am" value="${r.am}"></div><div class="field"><label for="r-pm">Evening check-in</label><input type="time" id="r-pm" data-rhythm="pm" value="${r.pm}"></div></div>
-  <p class="small" style="color:#6b7a73">Your phone’s calendar will remind you every day at these times. Tap the reminder to open Well Mind.</p>
+  ${pushHtml()}<p class="small" style="color:#6b7a73">Your phone’s calendar can remind you every day at these times. Tap the reminder to open Well Mind.</p>
   <div class="remrow"><button class="btn small" data-act="ics">📅 Add both to my phone calendar</button></div>
   <p class="small" style="color:#6b7a73;margin:12px 0 4px">Use Google Calendar? Add each one:</p><div class="remrow"><a class="btn small ghost" ${DARK_BTN} href="${gcalLink('am')}" target="_blank" rel="noopener" data-gcal="am">Morning in Google Calendar</a><a class="btn small ghost" ${DARK_BTN} href="${gcalLink('pm')}" target="_blank" rel="noopener" data-gcal="pm">Evening in Google Calendar</a></div>
   <details class="gcal-tip"><summary>Using Google Calendar? Make sure it pings you</summary><p>Google adds the reminder with <b>your own default alert</b>, so you may need to switch one on once:</p><ol><li>Open the Well Mind event in Google Calendar and tap <b>Edit</b> (the pencil).</li><li>Tap <b>Add notification</b> → choose <b>1 minute before</b> (or “Custom”).</li><li>Choose <b>All events</b> when asked, then <b>Save</b>.</li></ol><p>To make 1 minute the default for every new event: Google Calendar <b>Settings</b> → your calendar → <b>Default notifications</b> → 1 minute. Also check notifications are allowed for the Google Calendar app in your phone’s settings.</p></details>
@@ -2602,7 +2644,7 @@ function downloadIcs() {
   U.remindersAdded = today(); saveU(); toast('Open the file to add the reminders to your calendar.');
 }
 function remindersView() {
-  return page('me', `${hero('Daily rhythm', 'Your <em>reminders</em>', 'A gentle nudge, morning and evening. Choose your times, then add them to your phone’s calendar.')}<article class="cardx" style="--c:#9db8ff">${reminderHtml()}</article>`);
+  return page('me', `${hero('Daily rhythm', 'Your <em>reminders</em>', 'A gentle nudge, morning and evening. Choose your times, then turn on notifications or add them to your calendar.')}<article class="cardx" style="--c:#9db8ff">${reminderHtml()}</article>`);
 }
 
 // ---------------- booking ----------------
@@ -2704,6 +2746,8 @@ let installEvt = null;
 window.addEventListener('beforeinstallprompt', (e) => { e.preventDefault(); installEvt = e; if (route() === 'home' || route() === 'me') rerender(); });
 window.addEventListener('appinstalled', () => { installEvt = null; U.installed = today(); saveU(); toast('Well Mind is on your home screen ✦'); });
 try { if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {}); } catch (e) {}
+// keep this phone's notification address and times fresh (once a day)
+try { if (PUSH_API && U.push && U.pushId && U.pushSynced !== today() && pushSupported() && Notification.permission === 'granted') pushSync().catch(() => {}); } catch (e) {}
 const isStandalone = () => { try { return matchMedia('(display-mode: standalone)').matches || navigator.standalone === true; } catch (e) { return false; } };
 const isIOS = () => /iphone|ipad|ipod/i.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
 const isSamsungBrowser = () => /SamsungBrowser/i.test(navigator.userAgent);
@@ -3553,7 +3597,7 @@ function afterRender(app, r, P) {
   $$('[data-d]', app).forEach((t) => t.addEventListener('input', () => { if (t.tagName === 'TEXTAREA') autosize(t); const before = checkedIn(tDate); setDaily(tDate, t.dataset.d, t.value.slice(0, 4000)); t.closest('.field')?.classList.toggle('answered', !!t.value.trim()); if (!before && checkedIn(tDate)) { floater(t, '+3 ✦'); updateChrome(); } }));
   $$('[data-dslider]', app).forEach((s) => s.addEventListener('input', () => { const before = checkedIn(tDate); setDaily(tDate, s.dataset.dslider, s.value); s.classList.remove('unset'); $(`[data-dval="${s.dataset.dslider}"]`, app).textContent = s.value; s.closest('.field').classList.add('answered'); if (!before) { floater(s, '+3 ✦'); updateChrome(); } }));
   $$('[data-dnum]', app).forEach((i) => i.addEventListener('change', () => { const k = i.dataset.dnum, v = i.value.trim(), b = DAILY_BOUNDS[k]; if (v !== '' && !(Number(v) >= b[0] && Number(v) <= b[1])) { i.value = daily(tDate)[k] ?? ''; return toast(`Please enter a number between ${b[0]} and ${b[1]}.`); } if (k === 'screenHours' || k === 'screenMinutes') { const h = Number(k === 'screenHours' ? v || 0 : daily(tDate).screenHours || 0), m = Number(k === 'screenMinutes' ? v || 0 : daily(tDate).screenMinutes || 0); if (h * 60 + m > 1440) { i.value = daily(tDate)[k] ?? ''; return toast('Screen time can’t be more than 24 hours.'); } } setDaily(tDate, k, v); updateChrome(); }));
-  $$('[data-rhythm]', app).forEach((i) => i.addEventListener('change', () => { if (!/^\d\d:\d\d$/.test(i.value)) return; U.rhythm = { ...rhythm(), [i.dataset.rhythm]: i.value }; saveU(); $$('[data-gcal]', app).forEach((a) => (a.href = gcalLink(a.dataset.gcal))); }));
+  $$('[data-rhythm]', app).forEach((i) => i.addEventListener('change', () => { if (!/^\d\d:\d\d$/.test(i.value)) return; U.rhythm = { ...rhythm(), [i.dataset.rhythm]: i.value }; saveU(); if (U.push && PUSH_API) pushSync().then(() => toast('Notification times updated.')).catch(() => {}); $$('[data-gcal]', app).forEach((a) => (a.href = gcalLink(a.dataset.gcal))); }));
   $$('[data-gcal]', app).forEach((a) => a.addEventListener('click', () => { U.remindersAdded = today(); saveU(); }));
   const code = $('[data-code]', app); if (code) code.addEventListener('keydown', (e) => { if (e.key === 'Enter') redeem(code.value).then((ok) => ok && rerender()); });
   // week
@@ -3654,6 +3698,9 @@ document.addEventListener('click', (e) => {
     case 'med': { const k = act.dataset.k, on = daily(tDate)[k] !== 'done'; setDaily(tDate, k, on ? 'done' : ''); if (on) { floater(act, '+2 ✦'); burst('#c4b2ff', 40); } return rerender(); }
     case 'yt': { const box = act.closest('[data-yt]'); box.innerHTML = `<iframe src="https://www.youtube-nocookie.com/embed/${encodeURIComponent(act.dataset.id)}?autoplay=1&rel=0" title="Meditation video" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>`; return; }
     case 'ics': return downloadIcs();
+    case 'push-on': return pushOn();
+    case 'push-off': return pushOff();
+    case 'push-test': return pushTest();
     case 'focus-save': U.focusAsked = U.focusAsked || today(); saveU(true); toast('Your focus is saved ✦'); return go('home');
     case 'focus-ask-done': U.focusAsked = today(); saveU(true); burst('#ecc97f', 90); toast(focusList().length ? 'Your home page is ready ✦' : 'You can choose a focus any time from Home.'); return render();
     case 'focus-ask-skip': U.focusAsked = today(); saveU(true); return render();
