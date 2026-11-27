@@ -3780,7 +3780,7 @@ const APP_VERSION = '2026-11-27a';
     const el = document.createElement('div');
     el.className = 'upd'; el.setAttribute('role', 'status');
     const safe = (t) => String(t || '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
-    el.innerHTML = '<div class="upd-ic">✨</div><div class="upd-tx"><b>A fresh Well Mind is ready</b><span>' + safe(note || 'New touches to make your days easier. Your answers stay safe.') + '</span></div><button class="btn" type="button">Update</button><button class="upd-x" type="button" aria-label="Later">×</button>';
+    el.innerHTML = '<div class="upd-ic">✨</div><div class="upd-tx"><b>Update available</b><span>' + safe(note || 'Tap Update to get the latest version.') + '</span></div><button class="btn" type="button">Update now</button><button class="upd-x" type="button" aria-label="Later">×</button>';
     document.body.appendChild(el);
     requestAnimationFrame(() => requestAnimationFrame(() => el.classList.add('show')));
     el.querySelector('.btn').onclick = () => { el.querySelector('.btn').textContent = 'Updating…'; location.replace(location.pathname + '?u=' + encodeURIComponent(v) + location.hash); };
