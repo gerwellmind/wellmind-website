@@ -2462,8 +2462,13 @@ function minuteView() { return page('tools', `${hero('A one-minute pause', 'Just
 
 // ---------------- settings Ger/Kora may change ----------------
 const BOOK_URL = 'https://app.studioninja.co/booking//63F591LAVM261H5Q4YGP1KUR0';
-const PAY = { lifetime: 'https://buy.stripe.com/8x2bJ0dHj7si8eP2zy1kA02' }; // Stripe Payment Link (Therapy account, 12 Nov 2026)
-const PRICE = { lifetime: '€30' };
+// Pricing: €40 normally; €30 in the sale windows below (dates inclusive, Dublin time).
+// Keep in step with WM_PRICING in /script.js. Preview a date with ?wmdate=YYYY-MM-DD
+const WM_SALES = [['2026-11-01','2026-12-25','Launch price'],['2027-01-02','2027-01-12','January sale'],['2027-02-10','2027-02-15','Valentine’s sale'],['2027-03-04','2027-03-08','Mother’s Day sale'],['2027-03-14','2027-03-18','Paddy’s Day sale']];
+const WM_TODAY = (() => { try { const q = new URLSearchParams(location.search).get('wmdate'); if (q && /^\d{4}-\d{2}-\d{2}$/.test(q)) return q; } catch (e) {} try { return new Intl.DateTimeFormat('en-CA', { timeZone: 'Europe/Dublin', year: 'numeric', month: '2-digit', day: '2-digit' }).format(new Date()); } catch (e) { return new Date().toISOString().slice(0, 10); } })();
+const WM_SALE = WM_SALES.find(w => WM_TODAY >= w[0] && WM_TODAY <= w[1]) || null;
+const PAY = { lifetime: WM_SALE ? 'https://buy.stripe.com/8x2bJ0dHj7si8eP2zy1kA02' : 'https://buy.stripe.com/8x214m32F13UfHh4HG1kA04' }; // Stripe Payment Links (Therapy account)
+const PRICE = { lifetime: WM_SALE ? '€30' : '€40', tag: WM_SALE ? WM_SALE[2] + ' · one-off' : 'One-off payment' };
 const PREVIEW_CARDS = 1; // in a locked chapter, the intro plus this many cards are free to try
 const MEDS = {
   am: { id: 'FGO8IWiusJo', title: 'Guided morning meditation', len: '10 min' },
@@ -2723,7 +2728,7 @@ async function redeem(code, quiet) {
   return true;
 }
 function unlockHtml(ch) {
-  const pay = PAY.lifetime ? `<a class="plan best" href="${esc(PAY.lifetime)}" rel="noopener"><span class="tag">Launch price · one-off</span><b>Unlock for ${PRICE.lifetime}</b><small>Pay once — yours to keep, including all future updates.</small></a>` : `<button class="plan best" data-act="pay-soon"><span class="tag">Launch price · one-off</span><b>Unlock for ${PRICE.lifetime}</b><small>Pay once — yours to keep, including all future updates.</small></button>`;
+  const pay = PAY.lifetime ? `<a class="plan best" href="${esc(PAY.lifetime)}" rel="noopener"><span class="tag">${PRICE.tag}</span><b>Unlock for ${PRICE.lifetime}</b><small>Pay once — yours to keep, including all future updates.</small></a>` : `<button class="plan best" data-act="pay-soon"><span class="tag">${PRICE.tag}</span><b>Unlock for ${PRICE.lifetime}</b><small>Pay once — yours to keep, including all future updates.</small></button>`;
   return `<div class="unlock"><div class="lock-orb">🔒</div><h2>${ch ? `Keep going with “${esc(ch.title)}”` : 'Unlock all of Well Mind'}</h2><p>${ch ? 'You’ve seen a preview of this chapter. ' : ''}Unlock all 25 chapters across both journeys, every tool and game, and everything Ger adds in future.</p>
   <ul class="ticks"><li>Everyday Wellbeing and Understanding Yourself — every chapter</li><li>Boundary builder, values sort, calm plan, Wheel of Life and more</li><li>Your journal stays private on your phone</li></ul>
   <div class="plans one">${pay}</div>

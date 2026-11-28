@@ -164,3 +164,9 @@ footer a{color:#f7e2ad}
 #christmas-gift{border-top:0}
 #christmas-gift::after{content:"";position:absolute;left:50%;top:0;width:min(1100px,90vw);transform:translateX(-50%);height:1px;background:linear-gradient(90deg,transparent,#ecc97f88,transparent)}
 @media(max-width:640px){.xmas-bar .xb-flake{display:none}}
+/* pricing (script.js) */
+.price-card.full .button [data-wm-price]{color:inherit!important}
+.button>[data-wm-price]{margin-left:.28em}
+.wm-was{font-family:var(--sans);font-size:.42em;color:var(--muted);margin-left:.35em;vertical-align:middle}
+.price-card.full .wm-was{color:#b9c6c0!important}
+.wm-note{font-size:.9rem;font-weight:600;color:#465f54;margin:0}
