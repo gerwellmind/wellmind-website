@@ -170,3 +170,6 @@ footer a{color:#f7e2ad}
 .wm-was{font-family:var(--sans);font-size:.42em;color:var(--muted);margin-left:.35em;vertical-align:middle}
 .price-card.full .wm-was{color:#b9c6c0!important}
 .wm-note{font-size:.9rem;font-weight:600;color:#465f54;margin:0}
+
+/* Ger photo in About */
+.about-photo{padding:0}.about-photo img{width:100%;height:100%;object-fit:cover;display:block}
